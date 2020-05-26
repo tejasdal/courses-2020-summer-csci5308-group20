@@ -7,8 +7,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ProjectApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProjectApplication.class, args);
-		System.out.println("Started");
+		try {
+			AppProperties.fetchProperties();
+			Factory.getDbUtilInstance().initializeDb();
+			SpringApplication.run(ProjectApplication.class, args);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
