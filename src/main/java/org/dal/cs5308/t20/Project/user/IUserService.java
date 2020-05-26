@@ -13,7 +13,9 @@ public interface IUserService {
 
 	public String changePassword(String emailId, String oldPassword, String newPassword) throws Exception;
 
-	public User resetPassword(String emailId);
+	public String resetPassword(String emailId);
 	
 	public User addAdminUser() throws Exception;
+	
+	public boolean verifyUser(String emailId, String password) throws Exception;
 }

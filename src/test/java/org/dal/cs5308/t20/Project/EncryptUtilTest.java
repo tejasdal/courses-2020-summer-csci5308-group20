@@ -20,6 +20,7 @@ public class EncryptUtilTest {
 	@Test
 	public void encryptTest() throws InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException,
 			NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		System.out.println(EncryptUtil.encrypt("AdvSdc@5308"));
 		assertEquals(cipherText, EncryptUtil.encrypt(plainText));
 	}
 

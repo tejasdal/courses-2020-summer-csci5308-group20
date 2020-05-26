@@ -11,7 +11,7 @@ import javax.mail.internet.MimeMessage;
 
 public class EmailUtil {
 
-	public void sendEmail(String toAddress, String subject, String content) {
+	public static void sendEmail(String toAddress, String subject, String content) {
 		Properties props = new Properties();
 		props.put("mail.smtp.host", AppProperties.properties.getProperty("mail.smtp.host"));
 		props.put("mail.smtp.port", AppProperties.properties.getProperty("mail.smtp.port"));
