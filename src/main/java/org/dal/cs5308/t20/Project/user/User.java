@@ -15,6 +15,22 @@ public class User {
 		this.emailId = emailId;
 	}
 	
+	public User(Long id, IUserService userService) throws Exception {
+		User user = userService.getUserById(id);
+		this.firstName = user.getFirstName();
+		this.lastName = user.getLastName();
+		this.bannerId = user.getBannerId();
+		this.emailId = user.getEmailId();
+	}
+	
+	public User(String emailId, IUserService userService) throws Exception {
+		User user = userService.getUserByEmail(emailId);
+		this.firstName = user.getFirstName();
+		this.lastName = user.getLastName();
+		this.bannerId = user.getBannerId();
+		this.id = user.getId();
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -33,5 +49,17 @@ public class User {
 	
 	public String getBannerId() {
 		return bannerId;
+	}
+	
+	public User addUser(IUserService userService, String password) throws Exception {
+		return userService.addUser(firstName, lastName, emailId, bannerId, password);
+	}
+	
+	public String changePassword(IUserService userService, String oldPassword, String newPassword) throws Exception {
+		return userService.changePassword(emailId, oldPassword, newPassword);
+	}
+	
+	public String resetPassword(IUserService userService) throws Exception {
+		return userService.resetPassword(emailId);
 	}
 }
