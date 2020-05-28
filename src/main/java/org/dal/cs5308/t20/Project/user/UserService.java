@@ -24,7 +24,7 @@ public class UserService implements IUserService {
 			+ "into User(ID, BANNER_ID, FIRST_NAME, LAST_NAME, EMAIL_ID, PASSWORD) " + "values(?, ?, ?, ?, ?, ?)";
 	private static final String GET_USER_BY_ID = "select *from User where ID = ?";
 	private static final String GET_USER_BY_EMAIL_ID = "select *from User where EMAIL_ID = ?";
-	private static final String GET_PASSWORD_FOR_EMAIL_ID = "select PASSWORD from user where EMAIL_ID = ?";
+	private static final String VERIFY_USER_CREDENTIALS = "select *from User where EMAIL_ID = ? and PASSWORD = ?";
 	private static final String UPDATE_PASSWORD_FOR_EMAIL_ID = "update User set PASSWORD = ? where EMAIL_ID = ?";
 
 	@Override
@@ -113,25 +113,12 @@ public class UserService implements IUserService {
 			throws SQLException, UserNotFoundException, PasswordChangeFailedException, InvalidKeyException,
 			UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException,
 			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
-		PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
-				.prepareStatement(GET_PASSWORD_FOR_EMAIL_ID);
-		pstatement.setString(1, emailId);
-		ResultSet rs = null;
-		try {
-			rs = pstatement.executeQuery();
-			if (!rs.next()) {
-				throw new UserNotFoundException("User with Email ID '" + emailId + "' not found");
-			}
-			String existingPassword = rs.getString(org.dal.cs5308.t20.Project.dd.User.PASSWORD);
-			String encodedOldPassword = EncryptUtil.encrypt(oldPassword);
-			if (!existingPassword.equals(encodedOldPassword)) {
-				throw new PasswordChangeFailedException("Old password does not match the password in the database");
-			}
-		} finally {
-			rs.close();
+		if (!verifyUser(emailId, oldPassword)) {
+			throw new PasswordChangeFailedException("Old password does not match the password in the database");
 		}
 		String encodedNewPassword = EncryptUtil.encrypt(newPassword);
-		pstatement = Factory.getDbUtilInstance().getConnection().prepareStatement(UPDATE_PASSWORD_FOR_EMAIL_ID);
+		PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
+				.prepareStatement(UPDATE_PASSWORD_FOR_EMAIL_ID);
 		pstatement.setString(1, encodedNewPassword);
 		pstatement.setString(2, emailId);
 		pstatement.execute();
@@ -167,7 +154,7 @@ public class UserService implements IUserService {
 			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 		final String adminEmailId = AppProperties.properties.getProperty("admin.emailId");
 		if (!isUserExistByEmailId(adminEmailId)) {
-			final String adminPassword = EncryptUtil.encrypt("AdvSdc@5308");
+			final String adminPassword = AppProperties.properties.getProperty("admin.password");
 			final User adminUser = new User(1L, "B00ADMIN", "Admin", "Admin", adminEmailId);
 			addUser(adminUser.getFirstName(), adminUser.getLastName(), adminUser.getEmailId(), adminUser.getBannerId(),
 					adminPassword);
@@ -182,23 +169,19 @@ public class UserService implements IUserService {
 			InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException,
 			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 		PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
-				.prepareStatement(GET_PASSWORD_FOR_EMAIL_ID);
+				.prepareStatement(VERIFY_USER_CREDENTIALS);
 		pstatement.setString(1, emailId);
+		pstatement.setString(2, EncryptUtil.encrypt(password));
 		ResultSet rs = null;
 		try {
 			rs = pstatement.executeQuery();
 			if (!rs.next()) {
-				throw new UserNotFoundException("User with Email ID '" + emailId + "' not found");
+				return false;
 			}
-			String existingPassword = rs.getString(org.dal.cs5308.t20.Project.dd.User.PASSWORD);
-			String encodedPassword = EncryptUtil.encrypt(password);
-			if (existingPassword.equals(encodedPassword)) {
-				return true;
-			}
+			return true;
 		} finally {
 			rs.close();
 		}
-		return false;
 	}
 
 	private static String generateRandomPassword() {
