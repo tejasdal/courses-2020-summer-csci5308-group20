@@ -178,7 +178,7 @@ public class UserService implements IUserService {
 		PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
 				.prepareStatement(VERIFY_USER_CREDENTIALS);
 		pstatement.setString(1, emailId);
-		pstatement.setString(2, CryptoUtil.encrypt(password));
+		pstatement.setString(2, CryptoUtil.encodePassword(password));
 		ResultSet rs = null;
 		try {
 			rs = pstatement.executeQuery();

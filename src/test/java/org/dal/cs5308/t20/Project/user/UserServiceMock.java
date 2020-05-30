@@ -48,7 +48,7 @@ public class UserServiceMock implements IUserService {
 
 	@Override
 	public String changePassword(String emailId, String oldPassword, String newPassword) throws Exception {
-		return CryptoUtil.encrypt(newPassword);
+		return CryptoUtil.encodePassword(newPassword);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class UserServiceMock implements IUserService {
 	@Override
 	public boolean verifyUser(String emailId, String password) throws Exception {
 		if (DEFAULT_USER.getEmailId().equals(emailId)) {
-			final String existingPassword = CryptoUtil.encrypt(AppProperties.properties.getProperty("admin.password"));
+			final String existingPassword = CryptoUtil.encodePassword(AppProperties.properties.getProperty("admin.password"));
 			if (password.equals(existingPassword)) {
 				return true;
 			}

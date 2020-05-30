@@ -61,7 +61,7 @@ public class UserTest {
 		final String newPassword = "Hello@123";
 		IUserService userService = new UserServiceMock();
 		String changePassword = DEFAULT_USER.changePassword(userService, DEFAULT_RESET_PASSWORD, newPassword);
-		assertEquals(CryptoUtil.encrypt(newPassword), changePassword);
+		assertEquals(CryptoUtil.encodePassword(newPassword), changePassword);
 	}
 
 	@Test
