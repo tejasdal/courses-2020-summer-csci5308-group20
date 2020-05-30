@@ -15,7 +15,7 @@ import javax.crypto.NoSuchPaddingException;
 
 import org.dal.cs5308.t20.Project.AppProperties;
 import org.dal.cs5308.t20.Project.EmailUtil;
-import org.dal.cs5308.t20.Project.EncryptUtil;
+import org.dal.cs5308.t20.Project.CryptoUtil;
 import org.dal.cs5308.t20.Project.Factory;
 
 public class UserService implements IUserService {
@@ -32,7 +32,7 @@ public class UserService implements IUserService {
 			throws SQLException, InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException,
 			NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 		final Long id = System.currentTimeMillis();
-		final String encodedPassword = EncryptUtil.encrypt(password);
+		final String encodedPassword = CryptoUtil.encodePassword(password);
 		final PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
 				.prepareStatement(INSERT_USER_QUERY);
 		pstatement.setLong(1, id);
@@ -113,10 +113,13 @@ public class UserService implements IUserService {
 			throws SQLException, UserNotFoundException, PasswordChangeFailedException, InvalidKeyException,
 			UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException,
 			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		if (AppProperties.properties.getProperty("admin.emailId").equals(emailId)) {
+			throw new PasswordChangeFailedException("Password cannot be changed for admin account.");
+		}
 		if (!verifyUser(emailId, oldPassword)) {
 			throw new PasswordChangeFailedException("Old password does not match the password in the database");
 		}
-		String encodedNewPassword = EncryptUtil.encrypt(newPassword);
+		String encodedNewPassword = CryptoUtil.encodePassword(newPassword);
 		PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
 				.prepareStatement(UPDATE_PASSWORD_FOR_EMAIL_ID);
 		pstatement.setString(1, encodedNewPassword);
@@ -126,14 +129,18 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public String resetPassword(String emailId) throws UserNotFoundException, SQLException, InvalidKeyException,
-			UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException,
-			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+	public String resetPassword(String emailId)
+			throws UserNotFoundException, SQLException, InvalidKeyException, UnsupportedEncodingException,
+			NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException,
+			IllegalBlockSizeException, BadPaddingException, PasswordChangeFailedException {
+		if (AppProperties.properties.getProperty("admin.emailId").equals(emailId)) {
+			throw new PasswordChangeFailedException("Password cannot be reset for admin account");
+		}
 		if (!isUserExistByEmailId(emailId)) {
 			throw new UserNotFoundException("User with email ID '" + emailId + "' not found");
 		}
 		String newPassword = generateRandomPassword();
-		String encodedNewPassword = EncryptUtil.encrypt(newPassword);
+		String encodedNewPassword = CryptoUtil.encodePassword(newPassword);
 		PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
 				.prepareStatement(UPDATE_PASSWORD_FOR_EMAIL_ID);
 		pstatement.setString(1, encodedNewPassword);
@@ -171,7 +178,7 @@ public class UserService implements IUserService {
 		PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
 				.prepareStatement(VERIFY_USER_CREDENTIALS);
 		pstatement.setString(1, emailId);
-		pstatement.setString(2, EncryptUtil.encrypt(password));
+		pstatement.setString(2, CryptoUtil.encodePassword(password));
 		ResultSet rs = null;
 		try {
 			rs = pstatement.executeQuery();

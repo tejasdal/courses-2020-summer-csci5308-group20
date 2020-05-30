@@ -2,7 +2,7 @@ package org.dal.cs5308.t20.Project.user;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.dal.cs5308.t20.Project.EncryptUtil;
+import org.dal.cs5308.t20.Project.CryptoUtil;
 import org.junit.jupiter.api.Test;
 
 public class UserTest {
@@ -61,7 +61,7 @@ public class UserTest {
 		final String newPassword = "Hello@123";
 		IUserService userService = new UserServiceMock();
 		String changePassword = DEFAULT_USER.changePassword(userService, DEFAULT_RESET_PASSWORD, newPassword);
-		assertEquals(EncryptUtil.encrypt(newPassword), changePassword);
+		assertEquals(CryptoUtil.encodePassword(newPassword), changePassword);
 	}
 
 	@Test

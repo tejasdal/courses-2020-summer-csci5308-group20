@@ -1,8 +1,10 @@
 package org.dal.cs5308.t20.Project;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
@@ -13,7 +15,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class EncryptUtil {
+public class CryptoUtil {
 
 	private static final String KEY = "a!s@d#f$g%h^j&k&";
 	private static final String SALT = "advancedsdccsci1";
@@ -42,5 +44,25 @@ public class EncryptUtil {
 		byte[] original = cipher.doFinal(Base64.getDecoder().decode(cipherText));
 
 		return new String(original);
+	}
+
+	public static String md5Hash(String input) throws NoSuchAlgorithmException {
+		MessageDigest md = MessageDigest.getInstance("MD5");
+
+		byte[] messageDigest = md.digest(input.getBytes());
+
+		BigInteger no = new BigInteger(1, messageDigest);
+
+		String hashtext = no.toString(16);
+		while (hashtext.length() < 32) {
+			hashtext = "0" + hashtext;
+		}
+		return hashtext;
+	}
+
+	public static String encodePassword(String password)
+			throws InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException, NoSuchPaddingException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		return md5Hash(encrypt(password));
 	}
 }
