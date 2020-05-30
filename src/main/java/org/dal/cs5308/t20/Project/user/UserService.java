@@ -23,8 +23,8 @@ public class UserService implements IUserService {
 	private static final String INSERT_USER_QUERY = "insert "
 			+ "into User(ID, BANNER_ID, FIRST_NAME, LAST_NAME, EMAIL_ID, PASSWORD) " + "values(?, ?, ?, ?, ?, ?)";
 	private static final String GET_USER_BY_ID = "select *from User where ID = ?";
-	private static final String GET_USER_BY_EMAIL_ID = "select *from User where EMAIL_ID = ?";
-	private static final String VERIFY_USER_CREDENTIALS = "select *from User where EMAIL_ID = ? and PASSWORD = ?";
+	private static final String GET_USER_BY_EMAIL_ID = "select * from User where EMAIL_ID = ?";
+	private static final String VERIFY_USER_CREDENTIALS = "select * from User where EMAIL_ID = ? and PASSWORD = ?";
 	private static final String UPDATE_PASSWORD_FOR_EMAIL_ID = "update User set PASSWORD = ? where EMAIL_ID = ?";
 
 	@Override

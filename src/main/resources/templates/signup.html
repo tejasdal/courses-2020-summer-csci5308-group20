@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+</head>
+<body>
+<h1>Sign Up</h1>
+<form name="f" th:action="@{/signup}" method="post" th:object="${signupmodel}">
+    <fieldset>
+        <legend>Enter Details</legend>
+
+        <label for="bannerid">Banner ID:</label>
+        <input type="text" id="bannerid" placeholder="Banner ID" th:field="*{bannerId}"><br>
+
+        <label for="firstname">First Name:</label>
+        <input type="text" id="firstname" placeholder="First Name" th:field="*{firstName}"><br>
+
+        <label for="lastname">Last Name:</label>
+        <input type="text" id="lastname" placeholder="Last Name" th:field="*{lastName}"><br>
+
+        <label for="mailaddress">Email Address:</label>
+        <input type="email" id="mailaddress" placeholder="Email Address" th:field="*{emailId}"><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="Password" th:field="*{password}"><br>
+
+        <button type="submit" class="btn">Log in</button>
+        <button type="reset">Clear Field</button>
+    </fieldset>
+</form>
+</body>
+</html>

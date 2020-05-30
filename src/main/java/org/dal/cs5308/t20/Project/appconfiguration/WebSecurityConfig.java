@@ -23,12 +23,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/all").hasRole("ADMIN")
-                .antMatchers("/", "/home").permitAll().anyRequest().authenticated()
+                .antMatchers("/forgotpass")
+                    .hasRole("ADMIN")
+                .antMatchers("/", "/home","signup")
+                    .permitAll().anyRequest().authenticated()
                 .and()
-                .formLogin().permitAll()
+                .formLogin()
+                    .loginPage("/login")
+                    .permitAll()
                 .and()
-                .logout().permitAll()
-                .and().exceptionHandling().accessDeniedPage("/accessdenied");
+                .logout()
+                    .permitAll()
+                .and()
+                .exceptionHandling()
+                    .accessDeniedPage("/accessdenied");
     }
 }
