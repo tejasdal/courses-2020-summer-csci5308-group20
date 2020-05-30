@@ -13,20 +13,32 @@ import javax.crypto.NoSuchPaddingException;
 
 import org.junit.jupiter.api.Test;
 
-public class EncryptUtilTest {
-	final String plainText = "helloworld";
-	final String cipherText = "rL7IpQ2a5WRuytiOgiTjhQ==";
+public class CryptoUtilTest {
+	private static final String PLAIN_TEXT = "helloworld";
+	private static final String CIPHER_TEXT = "rL7IpQ2a5WRuytiOgiTjhQ==";
+	private static final String MD5_HASH = "fc5e038d38a57032085441e7fe7010b0";
+	private static final String ENCODED_PASSWORD = "044fb40d0b95872a6ba6ff7bd546436f";
 
 	@Test
 	public void encryptTest() throws InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException,
 			NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
-		System.out.println(EncryptUtil.encrypt("AdvSdc@5308"));
-		assertEquals(cipherText, EncryptUtil.encrypt(plainText));
+		assertEquals(CIPHER_TEXT, CryptoUtil.encrypt(PLAIN_TEXT));
 	}
 
 	@Test
 	public void decryptTest() throws InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException,
 			NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
-		assertEquals(plainText, EncryptUtil.decrypt(cipherText));
+		assertEquals(PLAIN_TEXT, CryptoUtil.decrypt(CIPHER_TEXT));
+	}
+
+	@Test
+	public void md5HashTest() throws NoSuchAlgorithmException {
+		assertEquals(MD5_HASH, CryptoUtil.md5Hash(PLAIN_TEXT));
+	}
+
+	@Test
+	public void encodePasswordTest() throws InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException,
+			NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		assertEquals(ENCODED_PASSWORD, CryptoUtil.encodePassword(PLAIN_TEXT));
 	}
 }
