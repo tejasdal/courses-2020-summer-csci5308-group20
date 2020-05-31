@@ -1,7 +1,7 @@
-package org.dal.cs5308.t20.Project.logintest;
+package org.dal.cs5308.t20.Project.forgotpasstest;
 
 
-import org.dal.cs5308.t20.Project.login.EmailModel;
+import org.dal.cs5308.t20.Project.forgotpass.EmailModel;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,4 +1,4 @@
-package org.dal.cs5308.t20.Project.login;
+package org.dal.cs5308.t20.Project.forgotpass;
 
 import org.dal.cs5308.t20.Project.Factory;
 import org.dal.cs5308.t20.Project.user.User;

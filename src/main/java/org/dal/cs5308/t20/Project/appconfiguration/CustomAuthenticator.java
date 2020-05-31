@@ -26,7 +26,7 @@ public class CustomAuthenticator implements AuthenticationProvider {
             if (userService.verifyUser(username, password)) {
                 //fetch roles here and add to the list
                 ArrayList<GrantedAuthority> roles = new ArrayList<>();
-                roles.add(new SimpleGrantedAuthority("ROLE_USER"));
+                roles.add(new SimpleGrantedAuthority("USER"));
                 //roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
                 return new UsernamePasswordAuthenticationToken(username, password, roles);
             } else {

@@ -1,6 +1,5 @@
 package org.dal.cs5308.t20.Project.appconfigurationtest;
 
-import org.dal.cs5308.t20.Project.AppProperties;
 import org.dal.cs5308.t20.Project.user.UserServiceMock;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CustomAuthenticatorTest {
     String email = "sanjay.m@dal.ca";
-    String password = AppProperties.properties.getProperty("admin.password");
+    String password = "AdvSdc@5308";
 
     @Test
     public void authenticationTest() throws Exception {
