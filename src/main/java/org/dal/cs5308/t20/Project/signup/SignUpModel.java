@@ -3,13 +3,14 @@ package org.dal.cs5308.t20.Project.signup;
 import org.dal.cs5308.t20.Project.Factory;
 import org.dal.cs5308.t20.Project.user.User;
 
-public class SignUpModel {
+public class SignUpModel implements ISignUpModel {
     private String bannerId = null;
     private String firstName = null;
     private String lastName = null;
     private String emailId = null;
     private String password = null;
 
+    @Override
     public User createUser() {
         if (!(bannerId == null || firstName == null || lastName == null || emailId == null || password == null)) {
             User user = new User(0L, bannerId, firstName, lastName, emailId);
@@ -54,10 +55,12 @@ public class SignUpModel {
         this.emailId = emailId;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
+    @Override
     public void setPassword(String password) {
         this.password = password;
     }

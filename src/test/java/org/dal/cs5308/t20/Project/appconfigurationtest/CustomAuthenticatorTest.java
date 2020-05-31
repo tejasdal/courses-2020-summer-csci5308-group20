@@ -1,5 +1,6 @@
 package org.dal.cs5308.t20.Project.appconfigurationtest;
 
+import org.dal.cs5308.t20.Project.user.IUserService;
 import org.dal.cs5308.t20.Project.user.UserServiceMock;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,7 +17,7 @@ public class CustomAuthenticatorTest {
 
     @Test
     public void authenticationTest() throws Exception {
-        UserServiceMock userService = new UserServiceMock();
+        IUserService userService = new UserServiceMock();
         if (userService.verifyUser(email, password)) {
             ArrayList<GrantedAuthority> roles = new ArrayList<>();
             roles.add(new SimpleGrantedAuthority("ROLE_USER"));

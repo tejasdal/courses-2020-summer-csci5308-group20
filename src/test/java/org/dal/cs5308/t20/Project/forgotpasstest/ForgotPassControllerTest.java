@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class SignUpControllerTest {
+public class ForgotPassControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -28,18 +28,6 @@ public class SignUpControllerTest {
     public void forgotPassPostTest() throws Exception {
         this.mockMvc.perform(get("/forgotpass"))
                 .andDo(print()).andExpect(status().isOk()).andExpect(model().attributeExists("emailModel"));
-    }
-
-    @Test
-    public void singUpGetTest() throws Exception {
-        this.mockMvc.perform(get("/signup")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("signup")));
-    }
-
-    @Test
-    public void singUpPostTest() throws Exception {
-        this.mockMvc.perform(get("/signup"))
-                .andDo(print()).andExpect(status().isOk()).andExpect(model().attributeExists("signupmodel"));
     }
 
 }

@@ -1,5 +1,6 @@
 package org.dal.cs5308.t20.Project.signup;
 
+import org.dal.cs5308.t20.Project.user.DuplicateUserException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,20 +11,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class SignUpController {
 
     @GetMapping("/signup")
-    public String forgotpass(Model model) {
+    public String signup(Model model) {
         model.addAttribute("signupmodel", new SignUpModel());
+        model.addAttribute("duplicateUser", false);
         return "signup";
     }
 
     @PostMapping("/signup")
-    public String resetpass(@ModelAttribute SignUpModel signUpModel, Model model) {
+    public String signupRequest(@ModelAttribute SignUpModel signUpModel, Model model) {
         try {
             if (signUpModel.createUser() == null) {
-                throw new Exception();
+                throw new DuplicateUserException("Duplicate User");
             }
-        } catch (Exception e) {
+        } catch (DuplicateUserException e) {
             e.printStackTrace();
-            return "error";
+            model.addAttribute("signupmodel", new SignUpModel());
+            model.addAttribute("duplicateUser", true);
+            return "signup";
         }
         return "signup";
     }
