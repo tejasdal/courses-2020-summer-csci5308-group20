@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Student Registration: Upload CSV</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script type="text/javascript" th:src="@{/js/UploadCsv.js}"></script>
+
+    <div class="container">
+
+        <div class="col-md-8 order-md-1">
+            <h4 class="mb-3">Upload CSV file to Register Students.</h4>
+            <form  action="#" th:action="@{/course/__(${courseId})__/students/register/upload-csv}" th:object="${fileName}"
+                   enctype="multipart/form-data" method="post">
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label for="fileName">File Name</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="fileName" th:field="${fileName}" placeholder="File Name"
+                                    required="" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <br>
+                        <label class="btn btn-primary btn-lg btn-block" for="chooseFile">Browse Files</label>
+                        <div class="input-group">
+                            <input type="file"
+                                   name="file"
+                                   accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                   class="form-control" id="chooseFile"
+                                   onchange="uploadOnChange(this)"
+                                   hidden required="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <button class="btn btn-primary btn-lg btn-block" type="submit">Upload CSV File</button>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <button class="btn btn-primary btn-lg btn-block" type="reset" onclick="clear()">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
