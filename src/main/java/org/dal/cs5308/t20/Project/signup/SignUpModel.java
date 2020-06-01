@@ -4,11 +4,19 @@ import org.dal.cs5308.t20.Project.Factory;
 import org.dal.cs5308.t20.Project.user.User;
 
 public class SignUpModel implements ISignUpModel {
-    private String bannerId = null;
-    private String firstName = null;
-    private String lastName = null;
-    private String emailId = null;
-    private String password = null;
+    private String bannerId;
+    private String firstName;
+    private String lastName;
+    private String emailId;
+    private String password;
+
+    public SignUpModel() {
+        bannerId = null;
+        firstName = null;
+        lastName = null;
+        emailId = null;
+        password = null;
+    }
 
     @Override
     public User createUser() {
