@@ -29,6 +29,6 @@ public class SignUpController {
             model.addAttribute("duplicateUser", true);
             return "signup";
         }
-        return "signup";
+        return "login";
     }
 }
