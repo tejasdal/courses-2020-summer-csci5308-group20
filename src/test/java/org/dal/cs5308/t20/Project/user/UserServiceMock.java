@@ -77,7 +77,7 @@ public class UserServiceMock implements IUserService {
 
 	@Override
 	public String generateRandomPassword() {
-		return null;
+		return DEFAULT_RESET_PASSWORD;
 	}
 
 }
