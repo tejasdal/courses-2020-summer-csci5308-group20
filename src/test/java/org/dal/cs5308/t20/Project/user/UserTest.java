@@ -1,9 +1,9 @@
 package org.dal.cs5308.t20.Project.user;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.dal.cs5308.t20.Project.CryptoUtil;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UserTest {
 	private static final String bannerId = "B00ADMIN";

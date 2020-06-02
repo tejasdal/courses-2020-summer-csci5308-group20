@@ -31,7 +31,6 @@ public class MySqlDbUtil implements IDbUtil {
 		String dbUser = AppProperties.properties.getProperty("mysql." + environment + ".user");
 		String dbPassword = AppProperties.properties.getProperty("mysql." + environment + ".password");
 		String dbName = AppProperties.properties.getProperty("mysql." + environment + ".dbName");
-
 		connection = DriverManager.getConnection("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName
 				+ "?createDatabaseIfNotExist=true&serverTimezone=UTC", dbUser, dbPassword);
 		System.out.println("MySQL connection established.");

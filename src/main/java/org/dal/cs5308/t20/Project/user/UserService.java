@@ -1,5 +1,13 @@
 package org.dal.cs5308.t20.Project.user;
 
+import org.dal.cs5308.t20.Project.AppProperties;
+import org.dal.cs5308.t20.Project.CryptoUtil;
+import org.dal.cs5308.t20.Project.EmailUtil;
+import org.dal.cs5308.t20.Project.Factory;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -9,22 +17,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
-import org.dal.cs5308.t20.Project.AppProperties;
-import org.dal.cs5308.t20.Project.EmailUtil;
-import org.dal.cs5308.t20.Project.CryptoUtil;
-import org.dal.cs5308.t20.Project.Factory;
-
 public class UserService implements IUserService {
 
 	private static final String INSERT_USER_QUERY = "insert "
 			+ "into User(ID, BANNER_ID, FIRST_NAME, LAST_NAME, EMAIL_ID, PASSWORD) " + "values(?, ?, ?, ?, ?, ?)";
 	private static final String GET_USER_BY_ID = "select *from User where ID = ?";
-	private static final String GET_USER_BY_EMAIL_ID = "select *from User where EMAIL_ID = ?";
-	private static final String VERIFY_USER_CREDENTIALS = "select *from User where EMAIL_ID = ? and PASSWORD = ?";
+	private static final String GET_USER_BY_EMAIL_ID = "select * from User where EMAIL_ID = ?";
+	private static final String VERIFY_USER_CREDENTIALS = "select * from User where EMAIL_ID = ? and PASSWORD = ?";
 	private static final String UPDATE_PASSWORD_FOR_EMAIL_ID = "update User set PASSWORD = ? where EMAIL_ID = ?";
 
 	@Override

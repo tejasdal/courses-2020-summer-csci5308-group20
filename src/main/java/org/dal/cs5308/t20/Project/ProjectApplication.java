@@ -11,6 +11,7 @@ public class ProjectApplication {
 			AppProperties.fetchProperties();
 			Factory.getDbUtilInstance().initializeDb();
 			Factory.getUserService().addAdminUser();
+
 			SpringApplication.run(ProjectApplication.class, args);
 		} catch (Exception e) {
 			e.printStackTrace();
