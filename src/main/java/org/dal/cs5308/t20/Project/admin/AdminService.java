@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class AdminService implements IAdminService {
 	
 	@Autowired
-	ICourseDAO dao;
+	private ICourseDAO dao;
 
 	@Override
 	public String addCourse(Course course) {

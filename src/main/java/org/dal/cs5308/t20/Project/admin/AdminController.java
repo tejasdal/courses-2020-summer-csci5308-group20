@@ -17,7 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AdminController{
 	
 	@Autowired
-	IAdminService adminService;
+	private IAdminService adminService;
 
 	@RequestMapping("/admin")
 	public String displayCourses(Model model) {

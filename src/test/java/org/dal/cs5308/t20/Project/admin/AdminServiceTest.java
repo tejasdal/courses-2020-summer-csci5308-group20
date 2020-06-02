@@ -102,7 +102,7 @@ public class AdminServiceTest {
 	}
 
 	@Test
-	public void delCourse(){
+	public void delCourseTest(){
 
 
 		try {
@@ -116,7 +116,7 @@ public class AdminServiceTest {
 	}
 
 	@Test
-	public void delCourseIdNull(){
+	public void delCourseTestIdNull(){
 
 		try {
 			when(dao.delCourse(null)).thenReturn(1);
@@ -129,7 +129,7 @@ public class AdminServiceTest {
 	}
 
 	@Test
-	public void getAllCourse(){
+	public void getAllCourseTest(){
     	List<Course> list = new ArrayList<Course>();
     	Course c1=new Course();
     	c1.setId(123);
@@ -156,7 +156,7 @@ public class AdminServiceTest {
 	}
 	
 	@Test
-	public void addInstructor() {
+	public void addInstructorTest() {
 		
 		try {
 			when(dao.addInstructor("acc@dal.ca", 111)).thenReturn(1);
@@ -169,7 +169,7 @@ public class AdminServiceTest {
 	}
 
 	@Test
-	public void addInstructorEmailNull() {
+	public void addInstructorTestEmailNull() {
 
 		try {
 			when(dao.addInstructor(null, 111)).thenReturn(0);
@@ -182,7 +182,7 @@ public class AdminServiceTest {
 	}
 
 	@Test
-	public void addInstructorEmailEmpty() {
+	public void addInstructorTestEmailEmpty() {
 
 		try {
 			when(dao.addInstructor("", 111)).thenReturn(0);
@@ -195,7 +195,7 @@ public class AdminServiceTest {
 	}
 
 	@Test
-	public void addInstructorEmailNotFound() {
+	public void addInstructorEmailTestNotFound() {
 
 		try {
 			when(dao.addInstructor("test", 111)).thenReturn(0);
