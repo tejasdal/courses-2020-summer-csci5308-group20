@@ -190,7 +190,8 @@ public class UserService implements IUserService {
 		}
 	}
 
-	private static String generateRandomPassword() {
+	@Override
+	public String generateRandomPassword() {
 		final char[] specialCharacters = { '!', '@', '#', '$', '%', '^', '&', '*' };
 		final Random random = new Random();
 		final StringBuilder password = new StringBuilder();
@@ -212,4 +213,5 @@ public class UserService implements IUserService {
 		password.append(partA.toString().toLowerCase()).append(specialChar).append(integer).append(partB.toString());
 		return password.toString();
 	}
+
 }

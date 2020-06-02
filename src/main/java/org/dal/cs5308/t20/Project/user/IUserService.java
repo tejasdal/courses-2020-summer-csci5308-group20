@@ -18,4 +18,6 @@ public interface IUserService {
 	public User addAdminUser() throws Exception;
 	
 	public boolean verifyUser(String emailId, String password) throws Exception;
+
+	String generateRandomPassword();
 }
