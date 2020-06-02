@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Search Inst</title>
+</head>
+<body>
+<form th:action="@{/addinstructor}" method="post">
+<p>Enter Email-ID<input type="text" name="emailId"/></p>
+<p th:text="${id}"></p>
+<input type="hidden" th:value="${id}" name="id"/>
+ <p><input type="submit" value="Submit" /></p>
+</form>
+
+</body>
+</html>
