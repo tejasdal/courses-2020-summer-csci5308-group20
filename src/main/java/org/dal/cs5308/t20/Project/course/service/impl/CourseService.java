@@ -5,6 +5,8 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import org.dal.cs5308.t20.Project.EmailUtil;
 import org.dal.cs5308.t20.Project.Factory;
+import org.dal.cs5308.t20.Project.course.Course;
+import org.dal.cs5308.t20.Project.course.ICourseDAO;
 import org.dal.cs5308.t20.Project.course.bo.Student;
 import org.dal.cs5308.t20.Project.course.exception.CourseException;
 import org.dal.cs5308.t20.Project.course.repo.ICourseRepo;
@@ -37,6 +39,9 @@ public class CourseService implements ICourseService {
 
     @Autowired
     private IUserRepo userRepo;
+
+    @Autowired
+    private ICourseDAO courseDAO;
 
     @Override
     public void registerUploadedStudent(Long courseId, MultipartFile file, String fileName) throws CourseException {
@@ -123,6 +128,7 @@ public class CourseService implements ICourseService {
         }
         return new ArrayList<>();
     }
+
 
     private List<Student> parseCsvFileToRead(MultipartFile file) throws CourseException {
         try {
