@@ -126,6 +126,7 @@ class CourseServiceImplTest {
             List<User> users = Arrays.asList(new User(1L,"B00846296","Tejas", "Patel", "tejas.patel@dal.ca"),
                     new User(2L,"B00846297","Rob", "H", "robh@dal.ca"),
                     new User(3L,"B00846298","Krutarth", "Patel", "krutarth.patel@dal.ca"));
+            doReturn(true).when(courseRepo).isValidCourse(anyLong());
             doReturn(users).when(courseRepo)
                     .getCourseTAs(anyLong());
             assertEquals(users.size(), this.courseService.getCourseTAs((long)1).size(), "Failed to fetch registered student list.");
