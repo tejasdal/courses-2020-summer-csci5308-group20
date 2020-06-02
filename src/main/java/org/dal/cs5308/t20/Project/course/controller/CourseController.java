@@ -105,4 +105,13 @@ public class CourseController {
         model.addAttribute("users",this.courseService.searchUser(bannerId, emailId));
         return "userSearch";
     }
+
+    @RequestMapping(value="/courses/{id}",method= RequestMethod.GET)
+    public String getCoursePage(Model model, @PathVariable("id") int course_id, @RequestParam(value="cname") String course_name)
+    {
+        model.addAttribute("course_id",course_id);
+        model.addAttribute("course_name",course_name);
+        return "coursepage";
+    }
+
 }
