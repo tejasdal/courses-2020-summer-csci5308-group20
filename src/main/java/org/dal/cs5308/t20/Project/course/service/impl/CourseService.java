@@ -9,12 +9,15 @@ import org.dal.cs5308.t20.Project.course.bo.Student;
 import org.dal.cs5308.t20.Project.course.exception.CourseException;
 import org.dal.cs5308.t20.Project.course.repo.ICourseRepo;
 import org.dal.cs5308.t20.Project.course.service.ICourseService;
+import org.dal.cs5308.t20.Project.dd.Role;
 import org.dal.cs5308.t20.Project.user.IUserService;
 import org.dal.cs5308.t20.Project.user.User;
 import org.dal.cs5308.t20.Project.user.repo.IUserRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -122,6 +125,36 @@ public class CourseService implements ICourseService {
             log.error("Error while searching users with bannerId: {} and emailId: {}: ",bannerId, emailId, e);
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public boolean isStudentForCourse(Long courseId) {
+        return this.checkForRole(Role.ROLE_STUDENT, courseId);
+    }
+
+    @Override
+    public boolean isTAorCourse(Long courseId) {
+        return this.checkForRole(Role.ROLE_TA, courseId);
+    }
+
+    @Override
+    public boolean isInstructorForCourse(Long courseId) {
+        return this.checkForRole(Role.ROLE_INSTRUCTOR, courseId);
+    }
+
+    private boolean checkForRole(String exprectedRole, Long courseId){
+        log.debug("Checking whether current logged in user is {} for course with ID: {}.", exprectedRole, courseId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        try {
+            List<String> roles = this.courseRepo.getCourseRolesByUserNameAndCourseId(authentication.getName(), courseId);
+            for (String role: roles) {
+                if (role.equals(exprectedRole))
+                    return true;
+            }
+        } catch (Exception e) {
+            log.error("Failed to authorize user: {}", authentication.getName(), e);
+        }
+        return false;
     }
 
     private List<Student> parseCsvFileToRead(MultipartFile file) throws CourseException {

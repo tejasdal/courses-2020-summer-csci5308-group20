@@ -19,4 +19,6 @@ public interface ICourseRepo {
     void assignCourseTA(Long courseId, Long userId) throws SQLException;
 
     boolean isValidCourse(Long courseId) throws CourseException;
+
+    List<String> getCourseRolesByUserNameAndCourseId(String name, Long courseId) throws CourseException;
 }

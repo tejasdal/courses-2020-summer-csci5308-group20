@@ -19,4 +19,10 @@ public interface ICourseService {
     boolean isValidCourse(Long courseId) throws CourseException;
 
     List<User> searchUser(String bannerId, String emailId);
+
+    boolean isStudentForCourse(Long courseId);
+
+    boolean isTAorCourse(Long courseId);
+
+    boolean isInstructorForCourse(Long courseId);
 }

@@ -84,8 +84,32 @@ public class CourseRepo implements ICourseRepo {
                 return true;
             return false;
         } catch (Exception e) {
-            throw new CourseException("Course with ID: "+ courseId+ " does not exists.");
+            throw new CourseException("Course with ID: " + courseId + " does not exists.");
         }
+    }
+
+    @Override
+    public List<String> getCourseRolesByUserNameAndCourseId(String username, Long courseId) throws CourseException {
+        try {
+            final PreparedStatement statement;
+            statement = Factory.getDbUtilInstance().getConnection()
+                    .prepareStatement(GET_COURSE_ROLES_BY_USERID_AND_COURSEID);
+            statement.setString(1, username);
+            statement.setLong(2, courseId);
+            ResultSet resultSet = statement.executeQuery();
+            return parseResultSetToRole(resultSet);
+        } catch (Exception e) {
+            log.error("Failed to get roles for user: {} for course with ID: {}", username, courseId);
+            throw new CourseException("Failed to get roles for user: " + username + " for course with ID: " + courseId);
+        }
+    }
+
+    private List<String> parseResultSetToRole(ResultSet resultSet) throws Exception {
+        List<String> roles = new ArrayList<>();
+        while (resultSet.next()) {
+            roles.add(resultSet.getString(1));
+        }
+        return roles;
     }
 
     private List<String> parseResultSetToId(ResultSet resultSet) throws Exception {
@@ -100,10 +124,10 @@ public class CourseRepo implements ICourseRepo {
         List<User> students = new ArrayList<>();
         while (resultSet.next()) {
             User student = new User(0L,
-            resultSet.getString(org.dal.cs5308.t20.Project.dd.User.FIRST_NAME),
-            resultSet.getString(org.dal.cs5308.t20.Project.dd.User.LAST_NAME),
-            resultSet.getString(org.dal.cs5308.t20.Project.dd.User.EMAIL_ID),
-            resultSet.getString(org.dal.cs5308.t20.Project.dd.User.BANNER_ID));
+                    resultSet.getString(org.dal.cs5308.t20.Project.dd.User.FIRST_NAME),
+                    resultSet.getString(org.dal.cs5308.t20.Project.dd.User.LAST_NAME),
+                    resultSet.getString(org.dal.cs5308.t20.Project.dd.User.EMAIL_ID),
+                    resultSet.getString(org.dal.cs5308.t20.Project.dd.User.BANNER_ID));
             students.add(student);
         }
         return students;
@@ -123,4 +147,7 @@ public class CourseRepo implements ICourseRepo {
     private static final String ASSIGN_TA_FOR_COURSE = "call sp_assign_ta(?, ?)";
 
     private static final String IS_VALID_COURSE = "SELECT id FROM course WHERE id = ?";
+
+    private static final String GET_COURSE_ROLES_BY_USERID_AND_COURSEID = "SELECT r.role FROM role r, coursetouser uc, user u " +
+            "WHERE r.id = uc.role_id AND u.email_id = ? AND uc.user_id = u.id AND uc.course_id = ?";
 }
