@@ -16,13 +16,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+//    @Autowired
+//    private UserDetailsService userDetailService;
+
     @Autowired
-    private UserDetailsService userDetailService;
+    private CustomAuthenticator customAuthenticator;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.authenticationProvider(customAuthenticator);
-        auth.userDetailsService(userDetailService);
+        auth.authenticationProvider(customAuthenticator);
+//        auth.userDetailsService(userDetailService);
     }
 
     @Override
@@ -33,20 +36,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/course/{id}/user/search", "/course/{id}/ta", "/course/{id}/ta/{userId}/assign")
                     .access("@courseService.isInstructorForCourse(#id)")
                 .antMatchers("/admin", "/courseform", "/addcourse", "/delcourse", "/instructF", "/addinstructor")
-                    .hasRole(Role.ROLE_ADMIN)
+                    .hasAuthority(Role.ROLE_ADMIN)
                 .antMatchers("/","/login", "/forgotpass", "/signup")
                     .permitAll()
                 .anyRequest()
                     .authenticated()
+//                .and()
+//                    .formLogin();
                 .and()
-                    .formLogin();
-//                .and()
-//                .formLogin()
-//                .loginPage("/login").permitAll()
-//                .and()
-//                .logout().permitAll()
-//                .and()
-//                .exceptionHandling().accessDeniedPage("/accessdenied");
+                .formLogin()
+                .loginPage("/login").permitAll()
+                .and()
+                .logout().permitAll()
+                .and()
+                .exceptionHandling().accessDeniedPage("/accessdenied");
     }
 
     @Bean
