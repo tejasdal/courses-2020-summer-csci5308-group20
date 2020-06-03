@@ -22,7 +22,7 @@ public interface ICourseService {
 
     boolean isStudentForCourse(Long courseId);
 
-    boolean isTAorCourse(Long courseId);
+    boolean isTAForCourse(Long courseId);
 
     boolean isInstructorForCourse(Long courseId);
 }

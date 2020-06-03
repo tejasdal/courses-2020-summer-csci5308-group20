@@ -4,6 +4,7 @@ import org.dal.cs5308.t20.Project.course.bo.Student;
 import org.dal.cs5308.t20.Project.course.exception.CourseException;
 import org.dal.cs5308.t20.Project.course.repo.impl.CourseRepo;
 import org.dal.cs5308.t20.Project.course.service.impl.CourseService;
+import org.dal.cs5308.t20.Project.dd.Role;
 import org.dal.cs5308.t20.Project.user.User;
 import org.dal.cs5308.t20.Project.user.UserNotFoundException;
 import org.dal.cs5308.t20.Project.user.UserService;
@@ -14,6 +15,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.SQLException;
@@ -40,10 +44,19 @@ class CourseServiceImplTest {
     @Mock
     UserService userService;
 
+    SecurityContext securityContext;
+
+    Authentication authentication;
+
     @BeforeEach
     void setUp() {
 
         MockitoAnnotations.initMocks(this);
+        //Mock SecurityContext in order to mock current logged in user.
+        authentication = mock(Authentication.class);
+        securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
         try {
             /** Mock isUserExistByEmailId repo method such that it always returns true. */
             doReturn(true).when(userService).isUserExistByEmailId("test.exists@dal.ca");
@@ -156,5 +169,35 @@ class CourseServiceImplTest {
 
         assertEquals(1, this.courseService.searchUser("B00846296","").size());
         assertEquals(1, this.courseService.searchUser("","tejas.patel@dal.ca").size());
+    }
+
+    @Test
+    void isStudentForCourseTest() throws CourseException {
+        //Mock getCourseRolesByUserNameAndCourseId method of CourseRepo class.
+        List<String> dbRoles = Arrays.asList(Role.ROLE_STUDENT);
+        doReturn(dbRoles).when(this.courseRepo).getCourseRolesByUserNameAndCourseId("tejas.patel@dal.ca", 1L);
+        //Mock getAuthentication.getName method to mock current logged in user.
+        when(this.securityContext.getAuthentication().getName()).thenReturn("tejas.patel@dal.ca");
+        assertTrue(this.courseService.isStudentForCourse(1L), "Failed to authorize valid student of course.");
+    }
+
+    @Test
+    void isInstructorForCourseTest() throws CourseException {
+        //Mock getCourseRolesByUserNameAndCourseId method of CourseRepo class.
+        List<String> dbRoles = Arrays.asList(Role.ROLE_INSTRUCTOR);
+        doReturn(dbRoles).when(this.courseRepo).getCourseRolesByUserNameAndCourseId("robh@dal.ca", 1L);
+        //Mock getAuthentication.getName method to mock current logged in user.
+        when(this.securityContext.getAuthentication().getName()).thenReturn("robh@dal.ca");
+        assertTrue(this.courseService.isInstructorForCourse(1L), "Failed to authorize valid instructor of course.");
+    }
+
+    @Test
+    void isTAForCourseTest() throws CourseException {
+        //Mock getCourseRolesByUserNameAndCourseId method of CourseRepo class.
+        List<String> dbRoles = Arrays.asList(Role.ROLE_TA);
+        doReturn(dbRoles).when(this.courseRepo).getCourseRolesByUserNameAndCourseId("krutarth.patel@dal.ca", 1L);
+        //Mock getAuthentication.getName method to mock current logged in user.
+        when(this.securityContext.getAuthentication().getName()).thenReturn("krutarth.patel@dal.ca");
+        assertTrue(this.courseService.isTAForCourse(1L), "Failed to authorize valid TA of course.");
     }
 }

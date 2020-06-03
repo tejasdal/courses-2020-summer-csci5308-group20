@@ -20,6 +20,4 @@ public interface IUserService {
 	public boolean verifyUser(String emailId, String password) throws Exception;
 
 	String generateRandomPassword();
-
-	String getPasswordByEmailId(String email);
 }

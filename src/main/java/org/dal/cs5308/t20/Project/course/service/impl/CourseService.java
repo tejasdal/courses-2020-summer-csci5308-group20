@@ -133,7 +133,7 @@ public class CourseService implements ICourseService {
     }
 
     @Override
-    public boolean isTAorCourse(Long courseId) {
+    public boolean isTAForCourse(Long courseId) {
         return this.checkForRole(Role.ROLE_TA, courseId);
     }
 
@@ -145,6 +145,7 @@ public class CourseService implements ICourseService {
     private boolean checkForRole(String exprectedRole, Long courseId){
         log.debug("Checking whether current logged in user is {} for course with ID: {}.", exprectedRole, courseId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info(authentication.getName());
         try {
             List<String> roles = this.courseRepo.getCourseRolesByUserNameAndCourseId(authentication.getName(), courseId);
             for (String role: roles) {

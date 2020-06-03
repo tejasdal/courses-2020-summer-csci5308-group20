@@ -218,21 +218,4 @@ public class UserService implements IUserService {
         password.append(partA.toString().toLowerCase()).append(specialChar).append(integer).append(partB.toString());
         return password.toString();
     }
-
-    @Override
-    public String getPasswordByEmailId(String emailId) {
-        try (PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
-                .prepareStatement(GET_PASSWORD_BY_EMAI_ID)) {
-            pstatement.setString(1, emailId);
-            try (ResultSet rs = pstatement.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString(1);
-                }
-                return null;
-            }
-        } catch (SQLException throwables) {
-            log.error("Error while fetching password for user with emailId: {]", emailId);
-        }
-        return null;
-    }
 }

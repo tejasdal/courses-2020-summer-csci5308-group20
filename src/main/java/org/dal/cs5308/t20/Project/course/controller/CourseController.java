@@ -19,7 +19,7 @@ public class CourseController {
     private ICourseService courseService;
 
     @GetMapping("/course/{id}/students/register/upload-csv")
-    public String getIndex(Model model, @PathVariable("id") Long courseId) {
+    public String getUploadCsvToRegisterStudent(Model model, @PathVariable("id") Long courseId) {
         try {
             this.courseService.isValidCourse(courseId);
         } catch (CourseException e) {
