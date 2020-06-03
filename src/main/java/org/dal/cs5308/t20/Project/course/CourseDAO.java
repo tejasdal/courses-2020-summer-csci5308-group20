@@ -18,6 +18,7 @@ public class CourseDAO implements ICourseDAO {
 	private static final String del_course_mapping = "delete from CourseToUser where COURSE_ID=?";
 	private static final String get_all_course = "select * from Course";
 	private static final String search_user="select ID from User where EMAIL_ID=?";
+	private static final String get_role_id="select ID from Role where ROLE=?";
 	private static final String insert_instructor = "insert into CourseToUser(COURSE_ID,USER_ID,ROLE_ID) values(?,?,?)";
 	
 
@@ -78,20 +79,31 @@ public class CourseDAO implements ICourseDAO {
 		{
 			user_id=rs.getInt("ID");
 		}
-		rs.close();
 		if(user_id==null)
+			return -1;
+
+		pstatement = Factory.getDbUtilInstance().getConnection()
+				.prepareStatement(get_role_id);
+		pstatement.setString(1, "Instructor");
+		rs = pstatement.executeQuery();
+		Integer role_id=null;
+		while(rs.next())
+		{
+			role_id=rs.getInt("ID");
+		}
+
+		if(role_id==null)
 			return 0;
-		
+		rs.close();
+
 		pstatement = Factory.getDbUtilInstance().getConnection()
 				.prepareStatement(insert_instructor);
 		pstatement.setInt(1, course_id);
 		pstatement.setInt(2, user_id);
-		pstatement.setInt(3, 1);
+		pstatement.setInt(3, role_id);
 		int status = pstatement.executeUpdate();
 		pstatement.close();
 		return status;
 	}
-	
-	
 
 }

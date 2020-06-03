@@ -1,5 +1,7 @@
 package org.dal.cs5308.t20.Project.course;
 
+import org.dal.cs5308.t20.Project.user.User;
+
 import java.sql.SQLException;
 import java.util.List;
 

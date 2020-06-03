@@ -7,7 +7,6 @@
 <body>
 <form th:action="@{/addinstructor}" method="post">
 <p>Enter Email-ID<input type="text" name="emailId"/></p>
-<p th:text="${id}"></p>
 <input type="hidden" th:value="${id}" name="id"/>
  <p><input type="submit" value="Submit" /></p>
 </form>
