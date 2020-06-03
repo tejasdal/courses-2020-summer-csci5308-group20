@@ -198,9 +198,8 @@ public class AdminServiceTest {
 	public void addInstructorEmailTestNotFound() {
 
 		try {
-			when(dao.addInstructor("test", 111)).thenReturn(0);
+			when(dao.addInstructor("test", 111)).thenReturn(-1);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		assertEquals("User not found Try Again", adminService.addInstructor("test", 111));
