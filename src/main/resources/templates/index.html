@@ -1,5 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Homepage</title>
@@ -8,5 +9,8 @@
 <h1>Welcome to Advance Software Development</h1>
 <button onclick="location.href='/login'">Login</button>
 <button onclick="location.href='/signup'">SignUp</button>
+<div th:if="${isAdmin} == true">
+    <button onclick="location.href='/admin'">Admin Page</button>
+</div>
 </body>
 </html>

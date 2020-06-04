@@ -10,7 +10,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +20,7 @@ import java.util.List;
 public class CustomAuthenticator implements AuthenticationProvider {
 
     Logger log = LoggerFactory.getLogger(CustomAuthenticator.class);
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
@@ -32,14 +32,10 @@ public class CustomAuthenticator implements AuthenticationProvider {
                 User user = userService.getUserByEmail(username);
                 log.info("user with username: {} and password: {} and bannerid: {} is fetched from db.", username, password, user.getBannerId());
                 List<SimpleGrantedAuthority> roles = new ArrayList<>();
-                if ("B00ADMIN".equalsIgnoreCase(user.getBannerId())){
+                if ("B00ADMIN".equalsIgnoreCase(user.getBannerId())) {
                     roles.add(new SimpleGrantedAuthority(Role.ROLE_ADMIN));
                 }
                 roles.add(new SimpleGrantedAuthority(Role.ROLE_GUEST));
-//                //fetch roles here and add to the list
-//                ArrayList<GrantedAuthority> roles = new ArrayList<>();
-//                roles.add(new SimpleGrantedAuthority("USER"));
-//                //roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
                 return new UsernamePasswordAuthenticationToken(username, password, roles);
             } else {
                 throw new BadCredentialsException("1000");

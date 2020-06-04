@@ -42,7 +42,6 @@ public class AdminController{
 	@RequestMapping(value = "/delcourse", method = RequestMethod.POST)
 	public String delCourse(@RequestParam(name="reg_no",required=true) Integer id, RedirectAttributes redirectAttribute) {
 		String status=adminService.delCourse(id);
-		//System.out.print(status);
 		redirectAttribute.addFlashAttribute("statusdel",status);
 		return "redirect:/admin";
 		
