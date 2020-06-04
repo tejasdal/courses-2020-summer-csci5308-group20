@@ -154,7 +154,7 @@ public class CourseRepo implements ICourseRepo {
     public static final String IS_STUDENT_ALREADY_REGISTERED = "SELECT cu.user_id FROM CourseToUser as cu, User as u " +
             "WHERE u.banner_id = ? AND cu.course_id = ? AND cu.user_id = u.id";
 
-    public static final String GET_TA_FOR_COURSE = "SELECT u.first_name, u.last_name, u.email_id, u.banner_id FROM User as u, CourseToUser uc, Role as r" +
+    public static final String GET_TA_FOR_COURSE = "SELECT u.first_name, u.last_name, u.email_id, u.banner_id FROM User as u, CourseToUser uc, Role as r " +
             "WHERE uc.course_id = ? AND u.id = uc.user_id AND r.role = 'TA' AND uc.role_id = r.id";
 
     private static final String ASSIGN_TA_FOR_COURSE = "call sp_assign_ta(?, ?)";
