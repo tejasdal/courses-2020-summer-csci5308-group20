@@ -8,11 +8,11 @@ public interface IAdminService {
 	
 	public String addCourse(Course course);
 	
-	public String delCourse(Integer course_id);
+	public String delCourse(Long course_id);
 	
 	public List<Course> getAllCourse();
 	
-	public String addInstructor(String emailId, Integer course_id);
+	public String addInstructor(String emailId, Long course_id);
 	
 
 }

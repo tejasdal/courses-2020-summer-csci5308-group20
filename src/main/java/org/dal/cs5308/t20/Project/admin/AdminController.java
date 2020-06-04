@@ -40,7 +40,7 @@ public class AdminController{
 	}
 	
 	@RequestMapping(value = "/delcourse", method = RequestMethod.POST)
-	public String delCourse(@RequestParam(name="reg_no",required=true) Integer id, RedirectAttributes redirectAttribute) {
+	public String delCourse(@RequestParam(name="reg_no",required=true) Long id, RedirectAttributes redirectAttribute) {
 		String status=adminService.delCourse(id);
 		//System.out.print(status);
 		redirectAttribute.addFlashAttribute("statusdel",status);
@@ -49,13 +49,13 @@ public class AdminController{
 	}
 	
 	@RequestMapping(value = "/instructF", method=RequestMethod.POST)
-	public String addInstructPage(Model model,@RequestParam(name="id",required=true) Integer id) {
+	public String addInstructPage(Model model,@RequestParam(name="id",required=true) Long id) {
 		model.addAttribute("id",id);
 		return "instructSearch";
 	}
 	
 	@RequestMapping(value = "/addinstructor", method=RequestMethod.POST)
-	public String addInstructor(@RequestParam(name="id",required=true) Integer id,
+	public String addInstructor(@RequestParam(name="id",required=true) Long id,
 			@RequestParam(name="emailId",required=true) String emailId, RedirectAttributes redirectAttribute) {
 		String status=adminService.addInstructor(emailId, id);
 		redirectAttribute.addFlashAttribute("statusInst",status);

@@ -37,7 +37,7 @@ public class AdminServiceTest {
     @Test
     public void addCourseTest() {
     	Course course = new Course();
-    	course.setId(1234);
+    	course.setId(1234L);
     	course.setName("TestCourse");
     	
 		try {
@@ -71,7 +71,7 @@ public class AdminServiceTest {
 	public void addCourseTestNameNull()
 	{
 		Course course = new Course();
-		course.setId(12324);
+		course.setId(12324L);
 		course.setName(null);
 
 		try {
@@ -88,7 +88,7 @@ public class AdminServiceTest {
 	public void addCourseTestNameEmpty()
 	{
 		Course course = new Course();
-		course.setId(12324);
+		course.setId(12324L);
 		course.setName("");
 
 		try {
@@ -106,13 +106,13 @@ public class AdminServiceTest {
 
 
 		try {
-			when(dao.delCourse(1)).thenReturn(1);
+			when(dao.delCourse(1L)).thenReturn(1);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		assertEquals("Successfully Deleted the Course", adminService.delCourse(1));
+		assertEquals("Successfully Deleted the Course", adminService.delCourse((long) 1));
 	}
 
 	@Test
@@ -132,10 +132,10 @@ public class AdminServiceTest {
 	public void getAllCourseTest(){
     	List<Course> list = new ArrayList<Course>();
     	Course c1=new Course();
-    	c1.setId(123);
+    	c1.setId(123L);
     	c1.setName("Test1");
 		Course c2=new Course();
-		c2.setId(12345);
+		c2.setId(12345L);
 		c2.setName("Test2");
 
     	list.add(c1);
@@ -159,12 +159,12 @@ public class AdminServiceTest {
 	public void addInstructorTest() {
 		
 		try {
-			when(dao.addInstructor("acc@dal.ca", 111)).thenReturn(1);
+			when(dao.addInstructor("acc@dal.ca", 111L)).thenReturn(1);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertEquals("Instructor Added", adminService.addInstructor("acc@dal.ca", 111));		
+		assertEquals("Instructor Added", adminService.addInstructor("acc@dal.ca", 111L));
 		
 	}
 
@@ -172,12 +172,12 @@ public class AdminServiceTest {
 	public void addInstructorTestEmailNull() {
 
 		try {
-			when(dao.addInstructor(null, 111)).thenReturn(0);
+			when(dao.addInstructor(null, 111L)).thenReturn(0);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertEquals("EmailID cannot be empty", adminService.addInstructor(null, 111));
+		assertEquals("EmailID cannot be empty", adminService.addInstructor(null, 111L));
 
 	}
 
@@ -185,12 +185,12 @@ public class AdminServiceTest {
 	public void addInstructorTestEmailEmpty() {
 
 		try {
-			when(dao.addInstructor("", 111)).thenReturn(0);
+			when(dao.addInstructor("", 111L)).thenReturn(0);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertEquals("EmailID cannot be empty", adminService.addInstructor("", 111));
+		assertEquals("EmailID cannot be empty", adminService.addInstructor("", 111L));
 
 	}
 
@@ -198,11 +198,11 @@ public class AdminServiceTest {
 	public void addInstructorEmailTestNotFound() {
 
 		try {
-			when(dao.addInstructor("test", 111)).thenReturn(-1);
+			when(dao.addInstructor("test", 111L)).thenReturn(-1);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		assertEquals("User not found Try Again", adminService.addInstructor("test", 111));
+		assertEquals("User not found Try Again", adminService.addInstructor("test", 111L));
 
 	}
 

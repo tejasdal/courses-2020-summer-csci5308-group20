@@ -21,4 +21,6 @@ public interface ICourseService {
 
     List<User> searchUser(String bannerId, String emailId);
 
+    List<Course> getUserCourses(String emailId);
+
 }

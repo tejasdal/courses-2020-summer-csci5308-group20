@@ -16,7 +16,7 @@
         <tr th:each="course : ${courses}">
             <td th:text="${course.id}"></td>
             <td>
-                <a th:href="@{'/courses/' + ${course.id} + '?cname='+ ${course.name}}" th:text="${course.name}"></a>
+                <a th:href="@{'/course/' + ${course.id} + '?cname='+ ${course.name}}" th:text="${course.name}"></a>
             </td>
         </tr>
     </table>

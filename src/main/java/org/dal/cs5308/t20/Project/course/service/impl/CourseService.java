@@ -129,6 +129,18 @@ public class CourseService implements ICourseService {
         return new ArrayList<>();
     }
 
+    @Override
+    public List<Course> getUserCourses(String emailId) {
+        List<Course> course_list = null;
+        try {
+            course_list = courseDAO.getUserCourses(emailId);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return course_list;
+    }
+
 
     private List<Student> parseCsvFileToRead(MultipartFile file) throws CourseException {
         try {

@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.dal.cs5308.t20.Project.Factory;
 import org.dal.cs5308.t20.Project.user.User;
+import org.dal.cs5308.t20.Project.user.UserService;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,6 +21,9 @@ public class CourseDAO implements ICourseDAO {
 	private static final String search_user="select ID from User where EMAIL_ID=?";
 	private static final String get_role_id="select ID from Role where ROLE=?";
 	private static final String insert_instructor = "insert into CourseToUser(COURSE_ID,USER_ID,ROLE_ID) values(?,?,?)";
+	private static final String get_user_course_id="Select COURSE_ID from CourseToUser where USER_ID=?";
+	private static final String get_user_courses="Select * from Course where ID=?";
+	private static final String get_userId="Select ID from User where EMAIL_ID=?";
 	
 
 	@Override
@@ -27,7 +31,7 @@ public class CourseDAO implements ICourseDAO {
 
 		PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
 					.prepareStatement(insert_course);
-		pstatement.setInt(1, course.getId());
+		pstatement.setLong(1, course.getId());
 		pstatement.setString(2, course.getName());
 		int status = pstatement.executeUpdate();
 		pstatement.close();
@@ -35,15 +39,15 @@ public class CourseDAO implements ICourseDAO {
 	}
 
 	@Override
-	public int delCourse(Integer course_id) throws SQLException {
+	public int delCourse(Long course_id) throws SQLException {
 	
 		PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
 					.prepareStatement(del_course_mapping);
-		pstatement.setInt(1, course_id);
+		pstatement.setLong(1, course_id);
 		pstatement.executeUpdate();
 		pstatement = Factory.getDbUtilInstance().getConnection()
 					.prepareStatement(del_course);
-		pstatement.setInt(1, course_id);
+		pstatement.setLong(1, course_id);
 		int status = pstatement.executeUpdate();
 		pstatement.close();
 		return status;
@@ -59,7 +63,7 @@ public class CourseDAO implements ICourseDAO {
 		{
 			Course course = new Course();
 			course.setName(rs.getString("name"));
-			course.setId(rs.getInt("id"));
+			course.setId(rs.getLong("id"));
 			course_list.add(course);
 		}
 		pstatement.close();
@@ -68,16 +72,16 @@ public class CourseDAO implements ICourseDAO {
 	}
 
 	@Override
-	public int addInstructor(String email_id,Integer course_id) throws SQLException  {
+	public int addInstructor(String email_id,Long course_id) throws SQLException  {
 		
 		PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
 				.prepareStatement(search_user);
 		pstatement.setString(1, email_id);
 		ResultSet rs = pstatement.executeQuery();
-		Integer user_id=null;
+		Long user_id=null;
 		while(rs.next())
 		{
-			user_id=rs.getInt("ID");
+			user_id=rs.getLong("ID");
 		}
 		if(user_id==null)
 			return -1;
@@ -86,10 +90,10 @@ public class CourseDAO implements ICourseDAO {
 				.prepareStatement(get_role_id);
 		pstatement.setString(1, "Instructor");
 		rs = pstatement.executeQuery();
-		Integer role_id=null;
+		Long role_id=null;
 		while(rs.next())
 		{
-			role_id=rs.getInt("ID");
+			role_id=rs.getLong("ID");
 		}
 
 		if(role_id==null)
@@ -98,12 +102,59 @@ public class CourseDAO implements ICourseDAO {
 
 		pstatement = Factory.getDbUtilInstance().getConnection()
 				.prepareStatement(insert_instructor);
-		pstatement.setInt(1, course_id);
-		pstatement.setInt(2, user_id);
-		pstatement.setInt(3, role_id);
+		pstatement.setLong(1, course_id);
+		pstatement.setLong(2, user_id);
+		pstatement.setLong(3, role_id);
 		int status = pstatement.executeUpdate();
 		pstatement.close();
 		return status;
+	}
+
+	@Override
+	public List<Course> getUserCourses(String emailId) throws SQLException {
+
+		PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
+				.prepareStatement(get_userId);
+		pstatement.setString(1,emailId);
+		ResultSet rs=pstatement.executeQuery();
+		Long UserId=null;
+		while(rs.next()){
+			UserId=rs.getLong("ID");
+		}
+
+		pstatement = Factory.getDbUtilInstance().getConnection()
+				.prepareStatement(get_user_course_id);
+		pstatement.setLong(1,UserId);
+		rs = pstatement.executeQuery();
+		List<Long> cIdList=new ArrayList<Long>();
+		while(rs.next())
+		{
+			Long cid=rs.getLong("COURSE_ID");
+			cIdList.add(cid);
+		}
+
+		List<Course> course_list = new ArrayList<Course>();
+		if(cIdList.size()==0){
+			course_list=getAllCourses();
+			return  course_list;
+		}
+		else{
+			pstatement=Factory.getDbUtilInstance().getConnection()
+					.prepareStatement(get_user_courses);
+			for (Long i : cIdList){
+				pstatement.setLong(1,i);
+				rs = pstatement.executeQuery();
+				while(rs.next()){
+					Course course = new Course();
+					course.setName(rs.getString("name"));
+					course.setId(rs.getLong("id"));
+					course_list.add(course);
+				}
+
+			}
+			return course_list;
+		}
+
 	}
 
 }
