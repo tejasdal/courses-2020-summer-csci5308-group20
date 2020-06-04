@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.Collection;
 
 @Controller
-public class indexController {
+public class IndexController {
     @GetMapping({"/", "/index"})
     public String index(Model model, Authentication authentication) {
         if (authentication != null) {
