@@ -1,5 +1,8 @@
 package org.dal.cs5308.t20.Project.user;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.dal.cs5308.t20.Project.CryptoUtil;
 
 /* default user
@@ -77,6 +80,16 @@ public class UserServiceMock implements IUserService {
 	@Override
 	public String generateRandomPassword() {
 		return DEFAULT_RESET_PASSWORD;
+	}
+
+	@Override
+	public Set<User> searchUsers(String emailIdPattern, String bannerIdPattern) throws Exception {
+		if (DEFAULT_USER.getEmailId().contains(emailIdPattern) || DEFAULT_USER.getBannerId().contains(bannerIdPattern)) {
+			Set<User> users = new HashSet<>();
+			users.add(DEFAULT_USER);
+			return users;
+		}
+		return null;
 	}
 
 }
