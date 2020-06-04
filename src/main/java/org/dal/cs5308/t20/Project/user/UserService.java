@@ -30,11 +30,16 @@ public class UserService implements IUserService {
 	private static final String UPDATE_PASSWORD_FOR_EMAIL_ID = "update User set PASSWORD = ? where EMAIL_ID = ?";
 	private static final String SEARCH_USERS_BY_BANNER_ID_PATTERN = "select * from User where BANNER_ID like ?";
 	private static final String SEARCH_USERS_BY_EMAIL_ID_PATTERN = "select * from User where EMAIL_ID like ?";
+	private static final String GET_USER_BY_BANNER_ID = "select * from User where BANNER_ID = ?";
 
 	@Override
 	public User addUser(String firstName, String lastName, String emailId, String bannerId, String password)
 			throws SQLException, InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException,
-			NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+			NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException,
+			DuplicateUserException {
+		if (isUserExistByBannerId(bannerId) || isUserExistByEmailId(emailId)) {
+			throw new DuplicateUserException("User with credentials already exist");
+		}
 		final Long id = System.currentTimeMillis();
 		final String encodedPassword = CryptoUtil.encodePassword(password);
 		final PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
@@ -162,7 +167,7 @@ public class UserService implements IUserService {
 	@Override
 	public User addAdminUser() throws SQLException, UserNotFoundException, InvalidKeyException,
 			UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException,
-			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, DuplicateUserException {
 		final String adminEmailId = AppProperties.properties.getProperty("admin.emailId");
 		if (!isUserExistByEmailId(adminEmailId)) {
 			final String adminPassword = AppProperties.properties.getProperty("admin.password");
@@ -230,7 +235,7 @@ public class UserService implements IUserService {
 		}
 		return users;
 	}
-	
+
 	private static Set<User> searchUsersByBannerId(String bannerIdPattern) throws SQLException {
 		final PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
 				.prepareStatement(SEARCH_USERS_BY_BANNER_ID_PATTERN);
@@ -239,7 +244,7 @@ public class UserService implements IUserService {
 		ResultSet rs = null;
 		try {
 			rs = pstatement.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				String emailId = rs.getString(org.dal.cs5308.t20.Project.dd.User.EMAIL_ID);
 				if (AppProperties.properties.getProperty("admin.emailId").equals(emailId)) {
 					continue;
@@ -256,7 +261,47 @@ public class UserService implements IUserService {
 		}
 		return users;
 	}
-	
+
+	@Override
+	public boolean isUserExistByBannerId(String bannerId) throws SQLException {
+		final PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
+				.prepareStatement(GET_USER_BY_BANNER_ID);
+		pstatement.setString(1, bannerId);
+		ResultSet rs = null;
+		try {
+			rs = pstatement.executeQuery();
+			if (rs.next()) {
+				return true;
+			}
+		} finally {
+			rs.close();
+		}
+		return false;
+	}
+
+	@Override
+	public User getUserByBannerId(String bannerId) throws SQLException, UserNotFoundException {
+		final PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
+				.prepareStatement(GET_USER_BY_BANNER_ID);
+		pstatement.setString(1, bannerId);
+		ResultSet rs = null;
+		User user = null;
+		try {
+			rs = pstatement.executeQuery();
+			while (rs.next()) {
+				String firstName = rs.getString(org.dal.cs5308.t20.Project.dd.User.FIRST_NAME);
+				String lastName = rs.getString(org.dal.cs5308.t20.Project.dd.User.LAST_NAME);
+				String emailId = rs.getString(org.dal.cs5308.t20.Project.dd.User.EMAIL_ID);
+				Long userId = rs.getLong(org.dal.cs5308.t20.Project.dd.User.ID);
+				user = new User(userId, bannerId, firstName, lastName, emailId);
+				return user;
+			}
+		} finally {
+			rs.close();
+		}
+		throw new UserNotFoundException("User with Banner ID '" + bannerId + "' not found");
+	}
+
 	private static Set<User> searchUsersByEmailIdPattern(String emailIdPattern) throws SQLException {
 		final PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
 				.prepareStatement(SEARCH_USERS_BY_EMAIL_ID_PATTERN);
@@ -265,7 +310,7 @@ public class UserService implements IUserService {
 		ResultSet rs = null;
 		try {
 			rs = pstatement.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				String emailId = rs.getString(org.dal.cs5308.t20.Project.dd.User.EMAIL_ID);
 				if (AppProperties.properties.getProperty("admin.emailId").equals(emailId)) {
 					continue;

@@ -1,9 +1,6 @@
 package org.dal.cs5308.t20.Project.signup;
 
-import org.dal.cs5308.t20.Project.Factory;
-import org.dal.cs5308.t20.Project.user.User;
-
-public class SignUpModel implements ISignUpModel {
+public class SignUpModel {
     private String bannerId;
     private String firstName;
     private String lastName;
@@ -16,19 +13,6 @@ public class SignUpModel implements ISignUpModel {
         lastName = null;
         emailId = null;
         password = null;
-    }
-
-    @Override
-    public User createUser() {
-        if (!(bannerId == null || firstName == null || lastName == null || emailId == null || password == null)) {
-            User user = new User(0L, bannerId, firstName, lastName, emailId);
-            try {
-                return user.addUser(Factory.getUserService(), password);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
     }
 
     public String getBannerId() {
@@ -63,12 +47,10 @@ public class SignUpModel implements ISignUpModel {
         this.emailId = emailId;
     }
 
-    @Override
     public String getPassword() {
         return password;
     }
 
-    @Override
     public void setPassword(String password) {
         this.password = password;
     }

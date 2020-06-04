@@ -92,4 +92,20 @@ public class UserServiceMock implements IUserService {
 		return null;
 	}
 
+	@Override
+	public boolean isUserExistByBannerId(String bannerId) throws Exception {
+		if (DEFAULT_USER.getBannerId().equals(bannerId)) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public User getUserByBannerId(String bannerId) throws Exception {
+		if (DEFAULT_USER.getBannerId().equals(bannerId)) {
+			return DEFAULT_USER;
+		}
+		return null;
+	}
+
 }

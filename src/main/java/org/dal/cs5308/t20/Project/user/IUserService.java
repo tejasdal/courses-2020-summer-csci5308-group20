@@ -10,6 +10,8 @@ public interface IUserService {
 	public User getUserById(Long userId) throws Exception;
 
 	public boolean isUserExistByEmailId(String emailId) throws Exception;
+	
+	public boolean isUserExistByBannerId(String bannerId) throws Exception;
 
 	public User getUserByEmail(String emailId) throws Exception;
 
@@ -24,4 +26,6 @@ public interface IUserService {
 	public String generateRandomPassword();
 	
 	public Set<User> searchUsers(String emailIdPattern, String bannerIdPattern) throws Exception;
+	
+	public User getUserByBannerId(String bannerId) throws Exception;
 }

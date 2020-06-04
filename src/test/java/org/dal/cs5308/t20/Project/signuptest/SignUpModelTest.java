@@ -11,17 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class SignUpModelTest {
 
     @Test
-    public void createUserTest() throws Exception {
-        IUserService userService = new UserServiceMock();
-        User user = new User(0l, "B00ADMIN", "Admin", "Admin", "sanjay.m@dal.ca");
-        User assertUser = user.addUser(userService, "Test");
-        assertEquals(user.getBannerId(), assertUser.getBannerId());
-        assertEquals(user.getFirstName(), assertUser.getFirstName());
-        assertEquals(user.getLastName(), assertUser.getLastName());
-        assertEquals(user.getEmailId(), assertUser.getEmailId());
-    }
-
-    @Test
     public void bannerIdTest() {
         SignUpModel signUpModel = new SignUpModel();
         signUpModel.setBannerId("B0000");

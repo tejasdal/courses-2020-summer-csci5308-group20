@@ -55,10 +55,6 @@ public class User {
         return bannerId;
     }
 
-    public User addUser(IUserService userService, String password) throws Exception {
-        return userService.addUser(firstName, lastName, emailId, bannerId, password);
-    }
-
     public String changePassword(IUserService userService, String oldPassword, String newPassword) throws Exception {
         return userService.changePassword(emailId, oldPassword, newPassword);
     }

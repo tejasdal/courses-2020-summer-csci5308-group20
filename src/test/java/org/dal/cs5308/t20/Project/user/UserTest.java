@@ -46,17 +46,6 @@ public class UserTest {
 	}
 
 	@Test
-	public void addUserTest() throws Exception {
-		IUserService userService = new UserServiceMock();
-		User newUser = DEFAULT_USER.addUser(userService, DEFAULT_RESET_PASSWORD);
-		assertEquals(DEFAULT_USER.getBannerId(), newUser.getBannerId());
-		assertEquals(DEFAULT_USER.getEmailId(), newUser.getEmailId());
-		assertEquals(DEFAULT_USER.getFirstName(), newUser.getFirstName());
-		assertEquals(DEFAULT_USER.getLastName(), newUser.getLastName());
-		assertEquals(DEFAULT_USER.getId(), newUser.getId());
-	}
-
-	@Test
 	public void changePasswordTest() throws Exception {
 		final String newPassword = "Hello@123";
 		IUserService userService = new UserServiceMock();
