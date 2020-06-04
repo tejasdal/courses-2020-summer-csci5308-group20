@@ -12,16 +12,16 @@
         <legend>Enter Details</legend>
         <h2 th:if="${duplicateUser}">BannedId or Email Address is already in use.</h2>
         <label for="bannerid">Banner ID:</label>
-        <input type="text" id="bannerid" placeholder="Banner ID" th:field="*{bannerId}" required><br>
+        <input type="text" id="bannerid" placeholder="Banner ID" th:field="*{bannerId}" maxlength="10" required><br>
 
         <label for="firstname">First Name:</label>
-        <input type="text" id="firstname" placeholder="First Name" th:field="*{firstName}" required><br>
+        <input type="text" id="firstname" placeholder="First Name" th:field="*{firstName}" maxlength="100" required><br>
 
         <label for="lastname">Last Name:</label>
-        <input type="text" id="lastname" placeholder="Last Name" th:field="*{lastName}" required><br>
+        <input type="text" id="lastname" placeholder="Last Name" th:field="*{lastName}" maxlength="100" required><br>
 
         <label for="mailaddress">Email Address:</label>
-        <input type="email" id="mailaddress" placeholder="Email Address" th:field="*{emailId}" required><br>
+        <input type="email" id="mailaddress" placeholder="Email Address" th:field="*{emailId}" maxlength="50" required><br>
 
         <label for="password">Password:</label>
         <input type="password" id="password" placeholder="Password" th:field="*{password}" required><br>
