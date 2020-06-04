@@ -111,11 +111,20 @@ public class CourseController {
     }
 
     @RequestMapping(value="/courses/{id}",method= RequestMethod.GET)
-    public String getCoursePage(Model model, @PathVariable("id") int course_id, @RequestParam(value="cname") String course_name)
+    public String getCoursePage(Model model, @PathVariable("id") Long courseId, @RequestParam(value="cname") String course_name)
     {
-        model.addAttribute("course_id",course_id);
+        model.addAttribute("course_id",courseId);
         model.addAttribute("course_name",course_name);
+        model.addAttribute("isAuthorize", (this.courseService.isInstructorForCourse(courseId) || this.courseService.isTAForCourse(courseId)));
         return "coursepage";
+    }
+
+    @GetMapping(value="/course/{id}/administration")
+    public String getCourseAdministration(Model model, @PathVariable("id") Long courseId) {
+        model.addAttribute("courseId",courseId);
+        model.addAttribute("isAuthorizeTA", this.courseService.isTAForCourse(courseId));
+        model.addAttribute("isAuthorizeInstructor", this.courseService.isInstructorForCourse(courseId));
+        return "courseAdminPage";
     }
 
     @RequestMapping("/home")
