@@ -1,5 +1,6 @@
 package org.dal.cs5308.t20.Project.course.service;
 
+import org.dal.cs5308.t20.Project.course.Course;
 import org.dal.cs5308.t20.Project.course.exception.CourseException;
 import org.dal.cs5308.t20.Project.user.User;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,4 +26,6 @@ public interface ICourseService {
     boolean isTAForCourse(Long courseId);
 
     boolean isInstructorForCourse(Long courseId);
+
+    List<Course> getUserCourses(String emailId);
 }

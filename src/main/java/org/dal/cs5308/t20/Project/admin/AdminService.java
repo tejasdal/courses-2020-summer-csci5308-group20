@@ -47,7 +47,7 @@ public class AdminService implements IAdminService {
 	}
 
 	@Override
-	public String delCourse(Integer course_id) {
+	public String delCourse(Long course_id) {
 		int status=0;
 		
 		if(course_id==null) {
@@ -83,7 +83,7 @@ public class AdminService implements IAdminService {
 	}
 
 	@Override
-	public String addInstructor(String emailId, Integer course_id) {
+	public String addInstructor(String emailId, Long course_id) {
 		
 		int status=0;
 		if(emailId==null || emailId.equals(""))

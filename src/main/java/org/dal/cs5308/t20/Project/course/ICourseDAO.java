@@ -9,10 +9,12 @@ public interface ICourseDAO {
 	
 	public int addCourse(Course course) throws SQLException;
 	
-	public int delCourse(Integer course_id) throws SQLException;
+	public int delCourse(Long course_id) throws SQLException;
 	
 	public List<Course> getAllCourses() throws SQLException;
 	
-	public int addInstructor(String email_id,Integer course_id) throws SQLException;
+	public int addInstructor(String email_id,Long course_id) throws SQLException;
+
+	public List<Course> getUserCourses(String emailId) throws SQLException;
 
 }

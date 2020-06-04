@@ -5,12 +5,16 @@ import org.dal.cs5308.t20.Project.course.bo.Student;
 import org.dal.cs5308.t20.Project.course.exception.CourseException;
 import org.dal.cs5308.t20.Project.course.service.ICourseService;
 import org.dal.cs5308.t20.Project.user.User;
+import org.dal.cs5308.t20.Project.user.UserNotFoundException;
+import org.dal.cs5308.t20.Project.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Controller
@@ -18,9 +22,6 @@ public class CourseController {
 
     @Autowired
     private ICourseService courseService;
-
-    @Autowired
-    private IAdminService adminService;
 
     @GetMapping("/course/{id}/students/register/upload-csv")
     public String getUploadCsvToRegisterStudent(Model model, @PathVariable("id") Long courseId) {
@@ -110,9 +111,9 @@ public class CourseController {
         return "userSearch";
     }
 
-    @RequestMapping(value="/courses/{id}",method= RequestMethod.GET)
-    public String getCoursePage(Model model, @PathVariable("id") Long courseId, @RequestParam(value="cname") String course_name)
-    {
+    @RequestMapping(value="/course/{id}",method= RequestMethod.GET)
+    public String getCoursePage(Model model, @PathVariable("id") Long courseId,
+                                @RequestParam(value="cname") String course_name) {
         model.addAttribute("course_id",courseId);
         model.addAttribute("course_name",course_name);
         model.addAttribute("isAuthorize", (this.courseService.isInstructorForCourse(courseId) || this.courseService.isTAForCourse(courseId)));
@@ -128,8 +129,9 @@ public class CourseController {
     }
 
     @RequestMapping("/home")
-    public String viewAllCourses(Model model){
-        model.addAttribute("courses", adminService.getAllCourse());
+    public String viewUserCourses(Model model, Authentication authentication) throws SQLException, UserNotFoundException {
+        String email=authentication.getPrincipal().toString();
+        model.addAttribute("courses", courseService.getUserCourses(email));
         return "userHome";
     }
 

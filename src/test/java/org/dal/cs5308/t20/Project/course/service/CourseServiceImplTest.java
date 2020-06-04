@@ -1,5 +1,8 @@
 package org.dal.cs5308.t20.Project.course.service;
 
+import org.dal.cs5308.t20.Project.course.Course;
+import org.dal.cs5308.t20.Project.course.CourseDAO;
+import org.dal.cs5308.t20.Project.course.ICourseDAO;
 import org.dal.cs5308.t20.Project.course.bo.Student;
 import org.dal.cs5308.t20.Project.course.exception.CourseException;
 import org.dal.cs5308.t20.Project.course.repo.impl.CourseRepo;
@@ -47,6 +50,9 @@ class CourseServiceImplTest {
     SecurityContext securityContext;
 
     Authentication authentication;
+
+    @Mock
+    CourseDAO courseDAO;
 
     @BeforeEach
     void setUp() {
@@ -199,5 +205,26 @@ class CourseServiceImplTest {
         //Mock getAuthentication.getName method to mock current logged in user.
         when(this.securityContext.getAuthentication().getName()).thenReturn("krutarth.patel@dal.ca");
         assertTrue(this.courseService.isTAForCourse(1L), "Failed to authorize valid TA of course.");
+    }
+
+    void getUserCoursesTest(){
+        List<Course> list = new ArrayList<Course>();
+        Course c1=new Course();
+        c1.setId(1235L);
+        c1.setName("Testing1");
+        Course c2=new Course();
+        c2.setId(123456L);
+        c2.setName("Testing2");
+
+        list.add(c1);
+        list.add(c2);
+
+        try {
+            when(courseDAO.getUserCourses("jk@gmail.com")).thenReturn(list);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        List<Course> courselist=courseService.getUserCourses("jk@gmail.com");
+        assertEquals(2,courselist.size());
     }
 }
