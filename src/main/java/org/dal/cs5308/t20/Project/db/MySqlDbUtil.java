@@ -52,7 +52,7 @@ public class MySqlDbUtil implements IDbUtil {
 			System.out.println("DD Queries executed");
 			for (int i = 0; i < dmlQueries.length(); i++) {
 				query = dmlQueries.getString(i);
-				executeQuery(query);
+				executeUpdate(query);
 			}
 			System.out.println("Executed " + dmlQueries.length() + " DML queries");
 		}
@@ -66,6 +66,11 @@ public class MySqlDbUtil implements IDbUtil {
 	private ResultSet executeQuery(String query) throws SQLException {
 		Statement statement = connection.createStatement();
 		return statement.executeQuery(query);
+	}
+
+	private int executeUpdate(String query) throws SQLException {
+		Statement statement = connection.createStatement();
+		return statement.executeUpdate(query);
 	}
 
 	public Connection getConnection() {
