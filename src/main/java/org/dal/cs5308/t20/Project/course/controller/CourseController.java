@@ -1,5 +1,6 @@
 package org.dal.cs5308.t20.Project.course.controller;
 
+import org.dal.cs5308.t20.Project.admin.IAdminService;
 import org.dal.cs5308.t20.Project.course.bo.Student;
 import org.dal.cs5308.t20.Project.course.exception.CourseException;
 import org.dal.cs5308.t20.Project.course.service.ICourseService;
@@ -17,6 +18,9 @@ public class CourseController {
 
     @Autowired
     private ICourseService courseService;
+
+    @Autowired
+    private IAdminService adminService;
 
     @GetMapping("/course/{id}/students/register/upload-csv")
     public String getUploadCsvToRegisterStudent(Model model, @PathVariable("id") Long courseId) {
@@ -105,4 +109,19 @@ public class CourseController {
         model.addAttribute("users",this.courseService.searchUser(bannerId, emailId));
         return "userSearch";
     }
+
+    @RequestMapping(value="/courses/{id}",method= RequestMethod.GET)
+    public String getCoursePage(Model model, @PathVariable("id") int course_id, @RequestParam(value="cname") String course_name)
+    {
+        model.addAttribute("course_id",course_id);
+        model.addAttribute("course_name",course_name);
+        return "coursepage";
+    }
+
+    @RequestMapping("/home")
+    public String viewAllCourses(Model model){
+        model.addAttribute("courses", adminService.getAllCourse());
+        return "userHome";
+    }
+
 }

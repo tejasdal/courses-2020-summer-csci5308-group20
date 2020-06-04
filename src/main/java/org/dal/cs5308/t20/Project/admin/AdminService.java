@@ -1,6 +1,7 @@
 package org.dal.cs5308.t20.Project.admin;
 
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import org.dal.cs5308.t20.Project.course.Course;
@@ -26,12 +27,16 @@ public class AdminService implements IAdminService {
 		{
 			return "Unable to Add Course! Name cannot be empty";
 		}
+
 		try {
 			status = dao.addCourse(course);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		} catch (SQLIntegrityConstraintViolationException e) {
+			return "Course with same ID already exists";
+		}
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 
 		if(status>0) {
 			return "Successfully Added Course";
@@ -84,24 +89,24 @@ public class AdminService implements IAdminService {
 		if(emailId==null || emailId.equals(""))
 			return "EmailID cannot be empty";
 
-		
 		try {
 			status = dao.addInstructor(emailId, course_id);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		} catch (SQLIntegrityConstraintViolationException e) {
+			return "User is already an instructor for this course";
+		}
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 		if(status>0) {
 			return "Instructor Added";
 		}
-		else {
-			return"User not found Try Again";
+		else if(status==-1) {
+			return "User not found Try Again";
 		}
+		else{
+			return "Failed to add instructor try again";
+		}
+
 	}
-	
-	
-
-
-
 
 }
