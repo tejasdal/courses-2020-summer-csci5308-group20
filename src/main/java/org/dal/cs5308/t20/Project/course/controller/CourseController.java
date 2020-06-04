@@ -1,5 +1,6 @@
 package org.dal.cs5308.t20.Project.course.controller;
 
+import org.dal.cs5308.t20.Project.Factory;
 import org.dal.cs5308.t20.Project.admin.IAdminService;
 import org.dal.cs5308.t20.Project.course.bo.Student;
 import org.dal.cs5308.t20.Project.course.exception.CourseException;
@@ -103,10 +104,14 @@ public class CourseController {
     public String searchUser(Model model, @RequestParam(value = "bannerId", required = false) String bannerId,
                              @RequestParam(value = "emailId", required = false) String emailId,
                              @RequestParam(value = "courseId", required = false) Long courseId){
+    	try {
+    		model.addAttribute("users", Factory.getUserService().searchUsers(bannerId, emailId));
+    	} catch(Exception e) {
+    		model.addAttribute("errorMsg", e.getMessage());
+    	}
         model.addAttribute("courseId",courseId);
         model.addAttribute("emailId",emailId);
         model.addAttribute("bannerId", bannerId);
-        model.addAttribute("users",this.courseService.searchUser(bannerId, emailId));
         return "userSearch";
     }
 

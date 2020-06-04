@@ -13,7 +13,6 @@ import org.dal.cs5308.t20.Project.course.repo.ICourseRepo;
 import org.dal.cs5308.t20.Project.course.service.ICourseService;
 import org.dal.cs5308.t20.Project.user.IUserService;
 import org.dal.cs5308.t20.Project.user.User;
-import org.dal.cs5308.t20.Project.user.repo.IUserRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +36,8 @@ public class CourseService implements ICourseService {
     @Autowired
     private ICourseRepo courseRepo;
 
-    @Autowired
-    private IUserRepo userRepo;
+//    @Autowired
+//    private IUserRepo userRepo;
 
     @Autowired
     private ICourseDAO courseDAO;
@@ -118,16 +117,16 @@ public class CourseService implements ICourseService {
         return true;
     }
 
-    @Override
-    public List<User> searchUser(String bannerId, String emailId) {
-        log.debug("Start searching users with bannerId: {} and emailId: {}", bannerId, emailId);
-        try{
-            return this.userRepo.searchUser(bannerId, emailId);
-        }catch (SQLException e){
-            log.error("Error while searching users with bannerId: {} and emailId: {}: ",bannerId, emailId, e);
-        }
-        return new ArrayList<>();
-    }
+//    @Override
+//    public List<User> searchUser(String bannerId, String emailId) {
+//        log.debug("Start searching users with bannerId: {} and emailId: {}", bannerId, emailId);
+//        try{
+//            return this.userRepo.searchUser(bannerId, emailId);
+//        }catch (SQLException e){
+//            log.error("Error while searching users with bannerId: {} and emailId: {}: ",bannerId, emailId, e);
+//        }
+//        return new ArrayList<>();
+//    }
 
 
     private List<Student> parseCsvFileToRead(MultipartFile file) throws CourseException {
