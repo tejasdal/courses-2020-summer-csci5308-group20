@@ -13,5 +13,8 @@
 <div th:if="${isAdmin} == true">
     <button onclick="location.href='/admin'">Admin Page</button>
 </div>
+<div th:if="${isLoggedIn} == true">
+    <button onclick="location.href='/logout'">Logout</button>
+</div>
 </body>
 </html>
