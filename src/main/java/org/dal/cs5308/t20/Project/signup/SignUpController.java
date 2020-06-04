@@ -15,7 +15,7 @@ import java.util.Collection;
 @Controller
 public class SignUpController {
 
-    @GetMapping({"/", "/home"})
+    @GetMapping("/")
     public String index(Model model, Authentication authentication) {
         if (authentication != null) {
             Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();

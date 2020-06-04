@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         CustomAuthenticator customAuthenticator = new CustomAuthenticator();
         auth.authenticationProvider(customAuthenticator);
     }
@@ -20,17 +20,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                //for Instructor
-                .antMatchers("/course/{id}/students/register/upload-csv", "/course/{id}/students")
-                .access("@courseService.isInstructorForCourse(#id) or @courseService.isInstructorForCourse(#id)")
-                //for TA
-                .antMatchers("/course/{id}/user/search", "/course/{id}/ta", "/course/{id}/ta/{userId}/assign")
+                //roles for TA and Instructor
+                .antMatchers("/course/{id}/students/register/upload-csv", "/course/{id}/ta", "/course/{id}/students")
+                .access("@courseService.isTAForCourse(#id) or @courseService.isInstructorForCourse(#id)")
+                //roles for Instructor
+                .antMatchers("/course/{id}/user/search", "/course/{id}/ta/{userId}/assign")
                 .access("@courseService.isInstructorForCourse(#id)")
-                //for Admin
+                //roles for Admin
                 .antMatchers("/admin", "/courseform", "/addcourse", "/delcourse", "/instructF", "/addinstructor")
                 .hasAuthority(Role.ROLE_ADMIN)
-                //for All
-                .antMatchers("/", "/home", "/forgotpass", "/signup")
+                //roles for All
+                .antMatchers("/", "/index", "/forgotpass", "/signup")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
