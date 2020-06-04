@@ -66,4 +66,18 @@ public class User {
     public String resetPassword(IUserService userService) throws Exception {
         return userService.resetPassword(emailId);
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+    	if (obj instanceof User) {
+    		User user = (User) obj;
+    		if (user.getBannerId().equals(bannerId)) {
+    			return true;
+    		}
+    		if (user.getEmailId().equals(emailId)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
 }

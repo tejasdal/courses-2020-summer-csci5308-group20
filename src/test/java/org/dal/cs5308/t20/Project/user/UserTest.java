@@ -70,4 +70,14 @@ public class UserTest {
 		String resetPassword = DEFAULT_USER.resetPassword(userService);
 		assertEquals(resetPassword, DEFAULT_RESET_PASSWORD);
 	}
+	
+	@Test
+	public void equalsTest() {
+		User user1 = new User(1L, "banner1", "user1f", "user1l", "email1");
+		User user2 = new User(2L, "banner2", "user2f", "user2l", "email1");
+		assertEquals(user1, user2);
+		user1 = new User(1L, "banner1", "user1f", "user1l", "email1");
+		user2 = new User(2L, "banner1", "user2f", "user2l", "email2");
+		assertEquals(user1, user2);
+	}
 }

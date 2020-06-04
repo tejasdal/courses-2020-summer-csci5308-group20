@@ -1,13 +1,5 @@
 package org.dal.cs5308.t20.Project.user;
 
-import org.dal.cs5308.t20.Project.AppProperties;
-import org.dal.cs5308.t20.Project.CryptoUtil;
-import org.dal.cs5308.t20.Project.EmailUtil;
-import org.dal.cs5308.t20.Project.Factory;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -15,7 +7,18 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
+import org.dal.cs5308.t20.Project.AppProperties;
+import org.dal.cs5308.t20.Project.CryptoUtil;
+import org.dal.cs5308.t20.Project.EmailUtil;
+import org.dal.cs5308.t20.Project.Factory;
 
 public class UserService implements IUserService {
 
@@ -25,6 +28,8 @@ public class UserService implements IUserService {
 	private static final String GET_USER_BY_EMAIL_ID = "select * from User where EMAIL_ID = ?";
 	private static final String VERIFY_USER_CREDENTIALS = "select * from User where EMAIL_ID = ? and PASSWORD = ?";
 	private static final String UPDATE_PASSWORD_FOR_EMAIL_ID = "update User set PASSWORD = ? where EMAIL_ID = ?";
+	private static final String SEARCH_USERS_BY_BANNER_ID_PATTERN = "select * from User where BANNER_ID like ?";
+	private static final String SEARCH_USERS_BY_EMAIL_ID_PATTERN = "select * from User where EMAIL_ID like ?";
 
 	@Override
 	public User addUser(String firstName, String lastName, String emailId, String bannerId, String password)
@@ -214,4 +219,67 @@ public class UserService implements IUserService {
 		return password.toString();
 	}
 
+	@Override
+	public Set<User> searchUsers(String emailIdPattern, String bannerIdPattern) throws SQLException {
+		final Set<User> users = new HashSet<>();
+		if (emailIdPattern != null && !emailIdPattern.isEmpty()) {
+			users.addAll(searchUsersByEmailIdPattern(emailIdPattern));
+		}
+		if (bannerIdPattern != null && !bannerIdPattern.isEmpty()) {
+			users.addAll(searchUsersByBannerId(bannerIdPattern));
+		}
+		return users;
+	}
+	
+	private static Set<User> searchUsersByBannerId(String bannerIdPattern) throws SQLException {
+		final PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
+				.prepareStatement(SEARCH_USERS_BY_BANNER_ID_PATTERN);
+		final Set<User> users = new HashSet<>();
+		pstatement.setString(1, bannerIdPattern);
+		ResultSet rs = null;
+		try {
+			rs = pstatement.executeQuery();
+			while(rs.next()) {
+				String emailId = rs.getString(org.dal.cs5308.t20.Project.dd.User.EMAIL_ID);
+				if (AppProperties.properties.getProperty("admin.emailId").equals(emailId)) {
+					continue;
+				}
+				String firstName = rs.getString(org.dal.cs5308.t20.Project.dd.User.FIRST_NAME);
+				String lastName = rs.getString(org.dal.cs5308.t20.Project.dd.User.LAST_NAME);
+				Long userId = rs.getLong(org.dal.cs5308.t20.Project.dd.User.ID);
+				String bannerId = rs.getString(org.dal.cs5308.t20.Project.dd.User.BANNER_ID);
+				User user = new User(userId, bannerId, firstName, lastName, emailId);
+				users.add(user);
+			}
+		} finally {
+			rs.close();
+		}
+		return users;
+	}
+	
+	private static Set<User> searchUsersByEmailIdPattern(String emailIdPattern) throws SQLException {
+		final PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection()
+				.prepareStatement(SEARCH_USERS_BY_EMAIL_ID_PATTERN);
+		final Set<User> users = new HashSet<>();
+		pstatement.setString(1, emailIdPattern);
+		ResultSet rs = null;
+		try {
+			rs = pstatement.executeQuery();
+			while(rs.next()) {
+				String emailId = rs.getString(org.dal.cs5308.t20.Project.dd.User.EMAIL_ID);
+				if (AppProperties.properties.getProperty("admin.emailId").equals(emailId)) {
+					continue;
+				}
+				String firstName = rs.getString(org.dal.cs5308.t20.Project.dd.User.FIRST_NAME);
+				String lastName = rs.getString(org.dal.cs5308.t20.Project.dd.User.LAST_NAME);
+				Long userId = rs.getLong(org.dal.cs5308.t20.Project.dd.User.ID);
+				String bannerId = rs.getString(org.dal.cs5308.t20.Project.dd.User.BANNER_ID);
+				User user = new User(userId, bannerId, firstName, lastName, emailId);
+				users.add(user);
+			}
+		} finally {
+			rs.close();
+		}
+		return users;
+	}
 }
