@@ -1,63 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
 <head>
-<meta charset="ISO-8859-1">
-<title>Admin Page</title>
+    <meta charset="ISO-8859-1">
+    <title>Admin Page</title>
 
 </head>
 <body>
 <div th:if="${statusInst}">
-<script th:inline="javascript">
+    <script th:inline="javascript">
 /*<![CDATA[*/
 
 var message = /*[[${statusInst}]]*/ 'default';
 alert(message);
 
 /*]]>*/
-</script>
+
+    </script>
 </div>
 <div th:if="${statusdel}">
-<script th:inline="javascript">
+    <script th:inline="javascript">
 /*<![CDATA[*/
 
 var message = /*[[${statusdel}]]*/ 'default';
 alert(message);
 
 /*]]>*/
-</script>
+
+    </script>
 </div>
-<h2>Courses</h2><form id = "redirect" th:action = "@{/courseform}">
+<h2>Courses</h2>
+<form id="redirect" th:action="@{/courseform}">
 
     <input type="submit" value="Add course"/>
 
 </form>
 <div th:if="${not #lists.isEmpty(courses)}">
-<table>
-<tr>
-<th>ID</th>
-<th>Course-Name</th>
-</tr>
-<tr th:each="course : ${courses}">
-<td th:text="${course.id}"></td>
-<td th:text="${course.name}"></td>
-<td>
-<form action="#" th:action="@{/delcourse}" method="post">
-<input type="hidden" th:value="${course.id}" name="reg_no"/>
-                <button type="submit" value="Delete">Delete
-                </button>
-</form>
-</td>
-<td>
-<form th:action="@{/instructF}" method="post">
-<input type="hidden" th:value="${course.id}" name="id"/>
-<button type="submit" value="AddInst">Add Instructor</button>
-</form>
-</td>
-</tr>
-</table>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Course-Name</th>
+        </tr>
+        <tr th:each="course : ${courses}">
+            <td th:text="${course.id}"></td>
+            <td th:text="${course.name}"></td>
+            <td>
+                <form action="#" th:action="@{/delcourse}" method="post">
+                    <input type="hidden" th:value="${course.id}" name="reg_no"/>
+                    <button type="submit" value="Delete">Delete
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/instructF}" method="post">
+                    <input type="hidden" th:value="${course.id}" name="id"/>
+                    <button type="submit" value="AddInst">Add Instructor</button>
+                </form>
+            </td>
+        </tr>
+    </table>
 </div>
 <div th:if="${#lists.isEmpty(courses)}">
-<h5>No Courses Found</h5>
+    <h5>No Courses Found</h5>
+</div>
+<div>
+    <button onclick="location.href='/logout'">Logout</button>
 </div>
 </body>
 </html>

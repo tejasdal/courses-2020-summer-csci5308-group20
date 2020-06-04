@@ -5,9 +5,14 @@
     <title>Course</title>
 </head>
 <body>
-<h2>Welcome To   <th:block th:text="${course_name}"/></h2>
-<form id = "adminButton" >
+<h2>Welcome To
+    <th:block th:text="${course_name}"/>
+</h2>
+<form id="adminButton">
     <input type="submit" value="Administration"/>
 </form>
+<div>
+    <button onclick="location.href='/logout'">Logout</button>
+</div>
 </body>
 </html>
