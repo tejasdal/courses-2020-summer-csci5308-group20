@@ -43,6 +43,6 @@ public class UserRepo implements IUserRepo {
     }
 
 
-    private static final String REGISTER_STUDENT_TO_COURSE = "SELECT id, first_name, last_name, email_id, banner_id FROM user " +
+    private static final String REGISTER_STUDENT_TO_COURSE = "SELECT id, first_name, last_name, email_id, banner_id FROM User " +
             "WHERE banner_Id LIKE ? AND email_Id LIKE ? AND banner_id <> \"B00ADMIN\"";
 }

@@ -148,19 +148,19 @@ public class CourseRepo implements ICourseRepo {
 
     private static final String REGISTER_STUDENT_TO_COURSE = "call sp_register_student_to_course(?, ?)";
 
-    private static final String GET_REGISTERED_STUDENTS_FOR_COURSE = "SELECT u.first_name, u.last_name, u.email_id, u.banner_id FROM user as u, coursetouser as cu " +
+    private static final String GET_REGISTERED_STUDENTS_FOR_COURSE = "SELECT u.first_name, u.last_name, u.email_id, u.banner_id FROM User as u, CourseToUser as cu " +
             "WHERE cu.course_id = ? AND u.id = cu.user_id";
 
-    public static final String IS_STUDENT_ALREADY_REGISTERED = "SELECT cu.user_id FROM coursetouser as cu, user as u " +
+    public static final String IS_STUDENT_ALREADY_REGISTERED = "SELECT cu.user_id FROM CourseToUser as cu, User as u " +
             "WHERE u.banner_id = ? AND cu.course_id = ? AND cu.user_id = u.id";
 
-    public static final String GET_TA_FOR_COURSE = "SELECT u.first_name, u.last_name, u.email_id, u.banner_id FROM user as u, coursetouser uc " +
+    public static final String GET_TA_FOR_COURSE = "SELECT u.first_name, u.last_name, u.email_id, u.banner_id FROM User as u, CourseToUser uc " +
             "WHERE uc.course_id = ? AND u.id = uc.user_id";
 
     private static final String ASSIGN_TA_FOR_COURSE = "call sp_assign_ta(?, ?)";
 
-    private static final String IS_VALID_COURSE = "SELECT id FROM course WHERE id = ?";
+    private static final String IS_VALID_COURSE = "SELECT id FROM Course WHERE id = ?";
 
-    private static final String GET_COURSE_ROLES_BY_USERID_AND_COURSEID = "SELECT r.role FROM role r, coursetouser uc, user u " +
+    private static final String GET_COURSE_ROLES_BY_USERID_AND_COURSEID = "SELECT r.role FROM Role r, CourseToUser uc, User u " +
             "WHERE r.id = uc.role_id AND u.email_id = ? AND uc.user_id = u.id AND uc.course_id = ?";
 }
