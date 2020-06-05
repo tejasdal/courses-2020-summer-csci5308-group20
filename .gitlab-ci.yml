@@ -1,0 +1,36 @@
+before_script:
+  - export GRADLE_USER_HOME='pwd'/.gradle
+
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  image: gradle:alpine
+  stage: build
+  tags:
+    - dalfcs_gitlab_docker_ci
+  script:
+    - ./gradlew assemble
+
+test:
+  stage: test
+  image: gradle:alpine
+  tags:
+    - dalfcs_gitlab_docker_ci
+  script:
+    - ./gradlew check
+
+
+deploy_develop:
+  stage: deploy
+  image: ruby:2.3
+  tags:
+    - dalfcs_gitlab_docker_ci
+
+  script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=$app --api-key=$api

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Course Add</title>
+</head>
+<body>
+<div th:if="${status}">
+    <script th:inline="javascript">
+/*<![CDATA[*/
+
+var message = /*[[${status}]]*/ 'default';
+alert(message);
+
+/*]]>*/
+
+    </script>
+</div>
+<form action="#" th:action="@{/addcourse}" th:object="${course}" method="post">
+    <p>Id: <input type="number" th:field="*{id}"/></p>
+    <p>Name: <input type="text" th:field="*{name}"/></p>
+    <p><input type="submit" value="Submit"/></p>
+</form>
+<div>
+    <form th:action="@{/admin}">
+        <p><input type="submit" value="Back"/></p>
+    </form>
+</div>
+<div>
+    <button onclick="location.href='/logout'">Logout</button>
+</div>
+</body>
+</html>

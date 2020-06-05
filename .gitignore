@@ -1,0 +1,8 @@
+/.gradle/
+/build/
+application-tejas.properties
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr

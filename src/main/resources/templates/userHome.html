@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>User Home</title>
+
+</head>
+<body>
+<h2>Courses</h2>
+<div th:if="${not #lists.isEmpty(courses)}">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Course-Name</th>
+        </tr>
+        <tr th:each="course : ${courses}">
+            <td th:text="${course.id}"></td>
+            <td>
+                <a th:href="@{'/course/' + ${course.id} + '?cname='+ ${course.name}}" th:text="${course.name}"></a>
+            </td>
+        </tr>
+    </table>
+</div>
+<div th:if="${#lists.isEmpty(courses)}">
+    <h5>No Courses Found</h5>
+</div>
+<div>
+    <button onclick="location.href='/logout'">Logout</button>
+</div>
+</body>
+</html>

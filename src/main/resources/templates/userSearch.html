@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>User Search</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{/js/UploadCSV.js}"></script>
+
+<div class="container">
+    <h5 class="mb-3 alert alert-dark" role="alert" th:if="${invalidCourse != null && invalidCourse != ''}"
+        th:text="${invalidCourse}">Invalid course...</h5>
+</div>
+<div class="container" th:if="${invalidCourse == null || invalidCourse == ''}">
+    <div class="col-md-8 order-md-1">
+        <h4 class="mb-3" align="center">Search Users</h4>
+    </div>
+    <form action="#" th:action="@{/user/search}" method="post">
+        <div class="row">
+            <div class="col-md-4 input-group">
+                <input type="text" class="form-control" id="bannerId" th:name="bannerId" th:value="${bannerId}"
+                       placeholder="Banner ID">
+            </div>
+            <div class="col-md-4 input-group">
+                <input type="text" class="form-control" id="emailId" th:name="emailId" th:value="${emailId}"
+                       placeholder="Email ID">
+                <input type="text" class="form-control" id="courseId" th:name="courseId" th:value="${courseId}"
+                       placeholder="courseId" hidden>
+            </div>
+            <div class="col-md-4 input-group">
+                <button class="btn btn-primary btn-md btn-block" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+    <br><br>
+
+    <div class="row col-md-12" th:each="user : ${users}">
+        <div class="col-md-2 input-group">
+            <p class="mb-3" th:text="${user.bannerId}">BannerId</p>
+        </div>
+        <div class="col-md-2 input-group">
+            <p class="mb-3" th:text="${user.firstName}">First Name</p>
+        </div>
+        <div class="col-md-2 input-group">
+            <p class="mb-3" th:text="${user.lastName}">Last Name</p>
+        </div>
+        <div class="col-md-2 input-group">
+            <p class="mb-3" th:text="${user.emailId}">Email</p>
+        </div>
+
+        <div class="col-md-2 input-group">
+            <form action="#" th:action="@{/course/{id}/ta/{userId}/assign(id=${courseId}, userId=${user.id})}"
+                  method="post">
+                <button class="btn btn-primary btn-sm " type="submit">Assign as TA</button>
+            </form>
+        </div>
+    </div>
+    <a th:href="@{/course/{id}/ta(id=${courseId})}">List all TAs></a>
+</div>
+<div>
+    <button onclick="location.href='/logout'">Logout</button>
+</div>
+</body>
+</html>
