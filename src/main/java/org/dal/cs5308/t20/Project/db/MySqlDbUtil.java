@@ -1,7 +1,5 @@
 package org.dal.cs5308.t20.Project.db;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +11,7 @@ import org.dal.cs5308.t20.Project.AppProperties;
 import org.dal.cs5308.t20.Project.StreamUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.util.ResourceUtils;
+import org.springframework.core.io.ClassPathResource;
 
 public class MySqlDbUtil implements IDbUtil {
 
@@ -40,8 +38,8 @@ public class MySqlDbUtil implements IDbUtil {
 		String query = "show tables";
 		ResultSet rs = executeQuery(query);
 		if (!rs.next()) {
-			File queriesFile = ResourceUtils.getFile("classpath:sql-queries.json");
-			JSONObject json = new JSONObject(StreamUtil.readFromInputStream(new FileInputStream(queriesFile)));
+			ClassPathResource file = new ClassPathResource("sql-queries.json");
+			JSONObject json = new JSONObject(StreamUtil.readFromInputStream(file.getInputStream()));
 			JSONArray ddQueries = json.getJSONObject("queries").getJSONArray("dd");
 			JSONArray dmlQueries = json.getJSONObject("queries").getJSONArray("dml");
 			for (int i = 0; i < ddQueries.length(); i++) {
@@ -77,3 +75,4 @@ public class MySqlDbUtil implements IDbUtil {
 		return connection;
 	}
 }
+

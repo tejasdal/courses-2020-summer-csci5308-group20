@@ -104,8 +104,8 @@ public class CourseService implements ICourseService {
             this.userService.getUserById(userId);
             this.courseRepo.assignCourseTA(courseId, userId);
         } catch (SQLException e) {
-            log.error("User with ID: {} is already TA of the course with ID: {}", userId, courseId);
-            throw new CourseException("User with ID: " + userId + " is already TA of the course with ID: " + courseId);
+            log.error("User with ID: {} is already Student or TA of the course with ID: {}", userId, courseId);
+            throw new CourseException("User with ID: " + userId + " is already Student or TA of the course with ID: " + courseId);
         } catch (Exception e) {
             log.error("User with not found in the database.");
             throw new CourseException("User with ID: " + userId + " not found.", e);
