@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UserTest {
 	private static final String bannerId = "B00ADMIN";
-	private static final Long id = 1L;
+	public static final Long id = 1L;
 	private static final String fName = "Admin";
 	private static final String lName = "Admin";
 	private static final String emailId = "sanjay.m@dal.ca";
