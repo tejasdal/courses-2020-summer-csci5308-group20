@@ -8,10 +8,17 @@
             "DROP PROCEDURE IF EXISTS sp_register_student_to_course;",
             "create procedure sp_register_student_to_course (IN in_course_id bigint, IN in_banner_id varchar(10)) begin DECLARE local_user_id bigint DEFAULT 0;  DECLARE local_role_id bigint DEFAULT 0; SELECT u.id INTO local_user_id FROM User as u WHERE u.banner_id = in_banner_id; SELECT r.id INTO local_role_id FROM Role as r WHERE r.role = \"STUDENT\"; INSERT INTO CourseToUser(user_id, course_id, role_id) VALUE(local_user_id, in_course_id, local_role_id); end",
             "DROP PROCEDURE IF EXISTS sp_assign_ta;",
-            "create procedure sp_assign_ta (IN in_course_id bigint, IN in_user_id bigint) begin     DECLARE local_role_id bigint DEFAULT 0;     SELECT r.id INTO local_role_id FROM Role as r WHERE r.role = \"TA\"; INSERT INTO CourseToUser(user_id, course_id, role_id) VALUE(in_user_id, in_course_id, local_role_id); end"
+            "create procedure sp_assign_ta (IN in_course_id bigint, IN in_user_id bigint) begin     DECLARE local_role_id bigint DEFAULT 0;     SELECT r.id INTO local_role_id FROM Role as r WHERE r.role = \"TA\"; INSERT INTO CourseToUser(user_id, course_id, role_id) VALUE(in_user_id, in_course_id, local_role_id); end",
+            "create table QuestionType(ID int not null, TYPE varchar(50) not null, primary key(ID))",
+            "create table Question(ID bigint not null, TITLE varchar(100) not null, DESCRIPTION varchar(100) not null, TYPE_ID int not null, USER_ID bigint not null, primary key(ID), foreign key(TYPE_ID) references QuestionType(ID), foreign key(USER_ID) references User(ID))",
+            "create table QuestionAnswer(ID bigint not null, QUESTION_ID bigint not null, ANSWER varchar(100) not null, VALUE int not null, primary key(ID), foreign key(QUESTION_ID) references Question(ID))"
         ],
         "dml": [
-            "Insert into Role values (1, \"INSTRUCTOR\"), (2, \"STUDENT\"), (3, \"ADMIN\"), (4, \"TA\"), (5, \"GUEST\");"
+            "Insert into Role values (1, \"INSTRUCTOR\"), (2, \"STUDENT\"), (3, \"ADMIN\"), (4, \"TA\"), (5, \"GUEST\");",
+            "insert into QuestionType values(1, 'numeric')",
+            "insert into QuestionType values(2, 'multiple-choice-choose-one')",
+            "insert into QuestionType values(3, 'multiple-choice-choose-many')",
+            "insert into QuestionType values(4, 'free-text')"
         ]
     }
 }
