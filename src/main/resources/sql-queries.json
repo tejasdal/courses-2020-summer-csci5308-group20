@@ -10,7 +10,11 @@
             "DROP PROCEDURE IF EXISTS sp_assign_ta;",
             "create procedure sp_assign_ta (IN in_course_id bigint, IN in_user_id bigint) begin     DECLARE local_role_id bigint DEFAULT 0;     SELECT r.id INTO local_role_id FROM Role as r WHERE r.role = \"TA\"; INSERT INTO CourseToUser(user_id, course_id, role_id) VALUE(in_user_id, in_course_id, local_role_id); end",
             "create table QuestionType(ID int not null, TYPE varchar(50) not null, primary key(ID))",
+<<<<<<< HEAD
+            "create table Question(ID bigint not null, TITLE varchar(100) not null, DESCRIPTION varchar(100) not null, TYPE_ID int not null, USER_ID bigint not null, CREATED_AT bigint not null, primary key(ID), foreign key(TYPE_ID) references QuestionType(ID), foreign key(USER_ID) references User(ID))",
+=======
             "create table Question(ID bigint not null, TITLE varchar(100) not null, DESCRIPTION varchar(100) not null, TYPE_ID int not null, USER_ID bigint not null, primary key(ID), foreign key(TYPE_ID) references QuestionType(ID), foreign key(USER_ID) references User(ID))",
+>>>>>>> 7d279f7ba596c8299828ab8d59447c5cf5c32316
             "create table QuestionAnswer(ID bigint not null, QUESTION_ID bigint not null, ANSWER varchar(100) not null, VALUE int not null, primary key(ID), foreign key(QUESTION_ID) references Question(ID))"
         ],
         "dml": [

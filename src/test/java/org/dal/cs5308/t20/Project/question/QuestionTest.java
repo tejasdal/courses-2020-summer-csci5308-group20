@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 
 public class QuestionTest {
 	static final Question DEFAULT_QUESTION = new Question(1L, "Credit Hour",
-			"How many credit hours are you attempting this term ?", UserTest.id, Question.NUMERIC, new ArrayList<QuestionAnswer>());
+			"How many credit hours are you attempting this term ?", UserTest.id, Question.NUMERIC,
+			System.currentTimeMillis(), new ArrayList<QuestionAnswer>());
 
 	@Test
 	public void constructorTest() {
@@ -20,17 +21,20 @@ public class QuestionTest {
 		final Long userId = 1L;
 		final int questionType = Question.NUMERIC;
 		final List<QuestionAnswer> presetAnswers = new ArrayList<>();
+		final Long createdAt = System.currentTimeMillis();
 
 		presetAnswers.add(QuestionAnswerTest.BEGINNER_ANSWER);
 		presetAnswers.add(QuestionAnswerTest.INTER_ANSWER);
 		presetAnswers.add(QuestionAnswerTest.EXPERT_ANSWER);
 
-		Question testQuestion = new Question(questionId, title, description, userId, questionType, presetAnswers);
+		Question testQuestion = new Question(questionId, title, description, userId, questionType, createdAt,
+				presetAnswers);
 		assertEquals(questionId, testQuestion.getId());
 		assertEquals(title, testQuestion.getTitle());
 		assertEquals(description, testQuestion.getDescription());
 		assertEquals(userId, testQuestion.getUserId());
 		assertEquals(questionType, testQuestion.getQuestionType());
+		assertEquals(createdAt, testQuestion.getCreatedAt());
 		assertEquals(presetAnswers.size(), testQuestion.getPresetAnswers().size());
 		assertEquals(presetAnswers.get(0).getAnswer(), testQuestion.getPresetAnswers().get(0).getAnswer());
 		assertEquals(presetAnswers.get(0).getValue(), testQuestion.getPresetAnswers().get(0).getValue());
