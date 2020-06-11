@@ -1,5 +1,6 @@
 package org.dal.cs5308.t20.Project.question;
 
+import java.sql.Date;
 import java.util.List;
 
 public class Question {
@@ -13,11 +14,11 @@ public class Question {
 	private String description;
 	private Long userId;
 	private int questionType;
-	private List<QuestionAnswer> presetAnswers;
-	private Long createdAt;
+	private List<QuestionOption> presetAnswers;
+	private Date createdAt;
 
-	public Question(Long id, String title, String description, Long userId, int questionType, Long createdAt,
-			List<QuestionAnswer> presetAnswers) {
+	public Question(Long id, String title, String description, Long userId, int questionType, Date createdAt,
+			List<QuestionOption> presetAnswers) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -63,11 +64,11 @@ public class Question {
 		return questionType;
 	}
 
-	public List<QuestionAnswer> getPresetAnswers() {
+	public List<QuestionOption> getPresetAnswers() {
 		return presetAnswers;
 	}
 	
-	public Long getCreatedAt() {
+	public Date getCreatedAt() {
 		return createdAt;
 	}
 

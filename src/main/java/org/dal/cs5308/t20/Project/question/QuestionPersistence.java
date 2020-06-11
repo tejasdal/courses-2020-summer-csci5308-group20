@@ -1,5 +1,6 @@
 package org.dal.cs5308.t20.Project.question;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,7 +29,7 @@ public class QuestionPersistence implements IQuestionPersistence {
 			pstatement.setString(3, question.getDescription());
 			pstatement.setInt(4, question.getQuestionType());
 			pstatement.setLong(5, question.getUserId());
-			pstatement.setLong(6, question.getCreatedAt());
+			pstatement.setDate(6, question.getCreatedAt());
 			pstatement.execute();
 		} finally {
 			if (pstatement != null) {
@@ -41,14 +42,14 @@ public class QuestionPersistence implements IQuestionPersistence {
 		return true;
 	}
 
-	private static void addQuestionAnswers(List<QuestionAnswer> presetAnswers, Long questionId) throws SQLException {
+	private static void addQuestionAnswers(List<QuestionOption> presetAnswers, Long questionId) throws SQLException {
 		PreparedStatement pstatement = null;
 		try {
 			pstatement = Factory.getDbUtilInstance().getConnection().prepareCall(ADD_QUESTION_ANSWERS);
-			for (QuestionAnswer questionAnswer : presetAnswers) {
+			for (QuestionOption questionAnswer : presetAnswers) {
 				pstatement.setLong(1, questionAnswer.getId());
 				pstatement.setLong(2, questionId);
-				pstatement.setString(3, questionAnswer.getAnswer());
+				pstatement.setString(3, questionAnswer.getOption());
 				pstatement.setInt(4, questionAnswer.getValue());
 				pstatement.addBatch();
 			}
@@ -75,10 +76,10 @@ public class QuestionPersistence implements IQuestionPersistence {
 		return true;
 	}
 
-	private static Map<Long, List<QuestionAnswer>> getAllQuestionAnswersForUser(Long userId) throws SQLException {
+	private static Map<Long, List<QuestionOption>> getAllQuestionAnswersForUser(Long userId) throws SQLException {
 		PreparedStatement pstatement = null;
 		ResultSet rs = null;
-		final Map<Long, List<QuestionAnswer>> questionAnswers = new HashMap<>();
+		final Map<Long, List<QuestionOption>> questionAnswers = new HashMap<>();
 		try {
 			pstatement = Factory.getDbUtilInstance().getConnection()
 					.prepareStatement(GET_ALL_QUESTION_ANSWERS_FOR_USER);
@@ -89,8 +90,8 @@ public class QuestionPersistence implements IQuestionPersistence {
 				Long questionId = rs.getLong(org.dal.cs5308.t20.Project.dd.QuestionAnswer.QUESTION_ID);
 				String answer = rs.getString(org.dal.cs5308.t20.Project.dd.QuestionAnswer.ANSWER);
 				int value = rs.getInt(org.dal.cs5308.t20.Project.dd.QuestionAnswer.VALUE);
-				QuestionAnswer questionAnswer = new QuestionAnswer(id, answer, value);
-				List<QuestionAnswer> answers = questionAnswers.get(questionId);
+				QuestionOption questionAnswer = new QuestionOption(id, answer, value);
+				List<QuestionOption> answers = questionAnswers.get(questionId);
 				if (answers == null) {
 					answers = new ArrayList<>();
 					questionAnswers.put(questionId, answers);
@@ -110,7 +111,7 @@ public class QuestionPersistence implements IQuestionPersistence {
 
 	@Override
 	public List<Question> getAllQuestionsForUser(Long userId) throws SQLException {
-		Map<Long, List<QuestionAnswer>> questionAnswers = getAllQuestionAnswersForUser(userId);
+		Map<Long, List<QuestionOption>> questionAnswers = getAllQuestionAnswersForUser(userId);
 		PreparedStatement pstatement = null;
 		ResultSet rs = null;
 		final List<Question> questions = new ArrayList<>();
@@ -123,7 +124,7 @@ public class QuestionPersistence implements IQuestionPersistence {
 				String title = rs.getString(org.dal.cs5308.t20.Project.dd.Question.TITLE);
 				String description = rs.getString(org.dal.cs5308.t20.Project.dd.Question.DESCRIPTION);
 				int questionType = rs.getInt(org.dal.cs5308.t20.Project.dd.Question.TYPE_ID);
-				Long createdAt = rs.getLong(org.dal.cs5308.t20.Project.dd.Question.CREATED_AT);
+				Date createdAt = rs.getDate(org.dal.cs5308.t20.Project.dd.Question.CREATED_AT);
 				Question question = new Question(id, title, description, userId, questionType, createdAt,
 						questionAnswers.get(id));
 				questions.add(question);
