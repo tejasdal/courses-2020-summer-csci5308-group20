@@ -35,12 +35,12 @@ public class QuestionTest {
 		assertEquals(userId, testQuestion.getUserId());
 		assertEquals(questionType, testQuestion.getQuestionType());
 		assertEquals(createdAt, testQuestion.getCreatedAt());
-		assertEquals(presetAnswers.size(), testQuestion.getPresetAnswers().size());
-		assertEquals(presetAnswers.get(0).getOption(), testQuestion.getPresetAnswers().get(0).getOption());
-		assertEquals(presetAnswers.get(0).getValue(), testQuestion.getPresetAnswers().get(0).getValue());
-		assertEquals(presetAnswers.get(1).getOption(), testQuestion.getPresetAnswers().get(1).getOption());
-		assertEquals(presetAnswers.get(1).getValue(), testQuestion.getPresetAnswers().get(1).getValue());
-		assertEquals(presetAnswers.get(2).getOption(), testQuestion.getPresetAnswers().get(2).getOption());
-		assertEquals(presetAnswers.get(2).getValue(), testQuestion.getPresetAnswers().get(2).getValue());
+		assertEquals(presetAnswers.size(), testQuestion.getQuestionOptions().size());
+		assertEquals(presetAnswers.get(0).getOption(), testQuestion.getQuestionOptions().get(0).getOption());
+		assertEquals(presetAnswers.get(0).getValue(), testQuestion.getQuestionOptions().get(0).getValue());
+		assertEquals(presetAnswers.get(1).getOption(), testQuestion.getQuestionOptions().get(1).getOption());
+		assertEquals(presetAnswers.get(1).getValue(), testQuestion.getQuestionOptions().get(1).getValue());
+		assertEquals(presetAnswers.get(2).getOption(), testQuestion.getQuestionOptions().get(2).getOption());
+		assertEquals(presetAnswers.get(2).getValue(), testQuestion.getQuestionOptions().get(2).getValue());
 	}
 }

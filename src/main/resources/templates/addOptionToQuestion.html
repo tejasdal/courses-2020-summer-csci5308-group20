@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Course TAs</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{/js/AddOptionToQuestion.js}"></script>
+
+<div class="container">
+    <form action="#" th:action="@{/question/prototype/1}" th:object="${question}" method="post">
+        <fieldset>
+            <div th:each="currentOption, stat : *{questionOptions}">
+                <div id="options" class="row my-3">
+                    <div class="col-6 input-group p-1">
+                        <label for="optionText"> Display Text</label>
+                        <input type="text" class="form-control ml-2" id="optionText" th:name="optionText"
+                               th:field="*{questionOptions[__${stat.index}__].option}" placeholder="Option Text">
+                    </div>
+                    <div class="col-6 input-group p-1">
+                        <label for="optionValue"> Stored As</label>
+                        <input type="number" class="form-control ml-2" id="optionValue" th:name="optionValue"
+                               th:field="*{questionOptions[__${stat.index}__].value}"
+                               placeholder="Option Value">
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-2 input-group">
+                        <input type="button" class="btn btn-primary btn-md" id="moreAnswers" th:name="moreAnswers"
+                               th:value="*{moreAnswers}"
+                               onclick="addOption()" value="More Answers">
+                    </div>
+                    <div class="col-2 input-group">
+                        <input type="button" class="btn btn-secondary btn-md" id="next" th:name="next"
+                               th:value="*{next}"
+                               value="Next">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+    var optionCounter = 2;
+
+function addOption(){
+
+//      Generate IDs
+      var optionTextId = "optionText"+ optionCounter;
+      var optionValueId = "optionValue"+ optionCounter;
+      optionCounter++;
+//      Display Option Text
+      var divDisplayText = document.createElement('div');
+      divDisplayText.setAttribute("class","col-6 input-group p-1");
+      var newOptionTextLabel = document.createElement('label');
+      newOptionTextLabel.setAttribute('for',optionTextId)
+      newOptionTextLabel.innerHTML = "Display Text";
+      var newOptionText = document.createElement('input');
+      newOptionText.setAttribute("type", "text");
+      newOptionText.setAttribute("class", "form-control ml-2");
+      newOptionText.setAttribute("id", optionTextId);
+      newOptionText.setAttribute("placeholder", "Option Text");
+      divDisplayText.append(newOptionTextLabel);
+      divDisplayText.append(newOptionText);
+//      Stored As for Option
+      var divOptionValue = document.createElement('div');
+      divOptionValue.setAttribute("class","col-6 input-group p-1");
+      var newOptionValueLabel = document.createElement('label');
+      newOptionValueLabel.setAttribute('for',optionTextId)
+      newOptionValueLabel.innerHTML = "Stored As";
+      var newOptionValue = document.createElement('input');
+      newOptionValue.setAttribute("type", "number");
+      newOptionValue.setAttribute("class", "form-control ml-2");
+      newOptionValue.setAttribute("id", optionValueId);
+      newOptionValue.setAttribute("placeholder", "Option Value");
+      divOptionValue.append(newOptionValueLabel);
+      divOptionValue.append(newOptionValue);
+      $('#options').append(divDisplayText);
+      $('#options').append(divOptionValue);
+    }
+function remove(){
+  var last_chq_no = $('#total_chq').val();
+  if(last_chq_no>1){
+    $('#new_'+last_chq_no).remove();
+    $('#total_chq').val(last_chq_no-1);
+  }
+}
+
+
+</script>
+
+</body>
+</html>

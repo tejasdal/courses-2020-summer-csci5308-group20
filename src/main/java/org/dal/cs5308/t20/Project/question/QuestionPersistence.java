@@ -13,51 +13,39 @@ import org.dal.cs5308.t20.Project.Factory;
 
 public class QuestionPersistence implements IQuestionPersistence {
 
-	private static final String ADD_QUESTION = "insert into Question(ID, TITLE, DESCRIPTION, TYPE_ID, USER_ID, CREATED_AT) values(?,?,?,?,?,?)";
-	private static final String ADD_QUESTION_ANSWERS = "insert into QuestionAnswer(ID, QUESTION_ID, ANSWER, VALUE) values(?, ?, ?, ?)";
+	private static final String ADD_QUESTION = "call spCreateQuestion(?,?,?,?,?,?)";
+	private static final String ADD_QUESTION_OPTIONS = "call spCreateQuestionOption(?, ?, ?, ?)";
 	private static final String DELETE_QUESTION = "delete from Question where ID = ?";
 	private static final String GET_ALL_QUESTIONS_FOR_USER = "select *from Question where USER_ID = ?";
 	private static final String GET_ALL_QUESTION_ANSWERS_FOR_USER = "select QuestionAnswer.* from QuestionAnswer inner join Question on Question.ID = QuestionAnswer.QUESTION_ID and Question.USER_ID = ?";
 
 	@Override
 	public boolean addQuestion(Question question) throws SQLException {
-		PreparedStatement pstatement = null;
-		try {
-			pstatement = Factory.getDbUtilInstance().getConnection().prepareCall(ADD_QUESTION);
+		try(PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection().prepareCall(ADD_QUESTION)){
 			pstatement.setLong(1, question.getId());
 			pstatement.setString(2, question.getTitle());
 			pstatement.setString(3, question.getDescription());
-			pstatement.setInt(4, question.getQuestionType());
-			pstatement.setLong(5, question.getUserId());
+			pstatement.setLong(4, question.getUserId());
+			pstatement.setInt(5, question.getQuestionType());
 			pstatement.setDate(6, question.getCreatedAt());
 			pstatement.execute();
-		} finally {
-			if (pstatement != null) {
-				pstatement.close();
-			}
 		}
-		if (question.getPresetAnswers() != null && question.getPresetAnswers().isEmpty()) {
-			addQuestionAnswers(question.getPresetAnswers(), question.getId());
+		if (question.getQuestionOptions() != null && !question.getQuestionOptions().isEmpty()) {
+			addQuestionOptions(question.getQuestionOptions(), question.getId());
 		}
 		return true;
 	}
 
-	private static void addQuestionAnswers(List<QuestionOption> presetAnswers, Long questionId) throws SQLException {
-		PreparedStatement pstatement = null;
-		try {
-			pstatement = Factory.getDbUtilInstance().getConnection().prepareCall(ADD_QUESTION_ANSWERS);
-			for (QuestionOption questionAnswer : presetAnswers) {
-				pstatement.setLong(1, questionAnswer.getId());
+	private static void addQuestionOptions(List<QuestionOption> questionOptions, Long questionId) throws SQLException {
+		try(PreparedStatement pstatement = Factory.getDbUtilInstance().getConnection().prepareCall(ADD_QUESTION_OPTIONS)){
+			for (QuestionOption questionOption : questionOptions) {
+				pstatement.setLong(1, questionOption.getId());
 				pstatement.setLong(2, questionId);
-				pstatement.setString(3, questionAnswer.getOption());
-				pstatement.setInt(4, questionAnswer.getValue());
+				pstatement.setString(3, questionOption.getOption());
+				pstatement.setInt(4, questionOption.getValue());
 				pstatement.addBatch();
 			}
 			pstatement.executeBatch();
-		} finally {
-			if (pstatement != null) {
-				pstatement.close();
-			}
 		}
 	}
 
@@ -86,10 +74,10 @@ public class QuestionPersistence implements IQuestionPersistence {
 			pstatement.setLong(1, userId);
 			rs = pstatement.executeQuery();
 			while (rs.next()) {
-				Long id = rs.getLong(org.dal.cs5308.t20.Project.dd.QuestionAnswer.ID);
-				Long questionId = rs.getLong(org.dal.cs5308.t20.Project.dd.QuestionAnswer.QUESTION_ID);
-				String answer = rs.getString(org.dal.cs5308.t20.Project.dd.QuestionAnswer.ANSWER);
-				int value = rs.getInt(org.dal.cs5308.t20.Project.dd.QuestionAnswer.VALUE);
+				Long id = rs.getLong(org.dal.cs5308.t20.Project.dd.QuestionOption.ID);
+				Long questionId = rs.getLong(org.dal.cs5308.t20.Project.dd.QuestionOption.QUESTION_ID);
+				String answer = rs.getString(org.dal.cs5308.t20.Project.dd.QuestionOption.OPTIONS);
+				int value = rs.getInt(org.dal.cs5308.t20.Project.dd.QuestionOption.VALUE);
 				QuestionOption questionAnswer = new QuestionOption(id, answer, value);
 				List<QuestionOption> answers = questionAnswers.get(questionId);
 				if (answers == null) {

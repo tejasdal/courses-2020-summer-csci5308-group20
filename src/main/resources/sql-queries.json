@@ -10,15 +10,16 @@
             "DROP PROCEDURE IF EXISTS sp_assign_ta;",
             "create procedure sp_assign_ta (IN in_course_id bigint, IN in_user_id bigint) begin     DECLARE local_role_id bigint DEFAULT 0;     SELECT r.id INTO local_role_id FROM Role as r WHERE r.role = \"TA\"; INSERT INTO CourseToUser(user_id, course_id, role_id) VALUE(in_user_id, in_course_id, local_role_id); end",
             "create table QuestionType(ID int not null, TYPE varchar(50) not null, primary key(ID))",
-            "create table Question(ID bigint not null, TITLE varchar(100) not null, DESCRIPTION varchar(100) not null, TYPE_ID int not null, USER_ID bigint not null, CREATED_AT date not null, primary key(ID), foreign key(TYPE_ID) references QuestionType(ID), foreign key(USER_ID) references User(ID))",
-            "create table QuestionOption(ID bigint not null, QUESTION_ID bigint not null, ANSWER varchar(100) not null, VALUE int not null, primary key(ID), foreign key(QUESTION_ID) references Question(ID))"
+            "create table Question(ID bigint not null, TITLE varchar(100) not null, DESCRIPTION varchar(300) not null, TYPE_ID int not null, USER_ID bigint not null, CREATED_AT date not null, primary key(ID), foreign key(TYPE_ID) references QuestionType(ID), foreign key(USER_ID) references User(ID))",
+            "create table QuestionOption(ID bigint not null, QUESTION_ID bigint not null, OPTIONS varchar(200) not null, VALUE int not null, primary key(ID), foreign key(QUESTION_ID) references Question(ID))",
+            "DROP PROCEDURE IF EXISTS spCreateQuestion",
+            "create procedure spCreateQuestion (IN in_id bigint, IN in_title varchar(100), IN in_description varchar(300), IN in_user_id bigint, IN in_question_type_id int, IN in_create_at date) begin     INSERT INTO Question(ID, TITLE, DESCRIPTION, TYPE_ID, USER_ID, CREATED_AT) values(in_id, in_title, in_description, in_question_type_id, in_user_id, in_create_at); end",
+            "DROP PROCEDURE IF EXISTS spCreateQuestionOption",
+            "create procedure spCreateQuestionOption (IN in_id bigint, IN in_question_id bigint, IN in_options varchar(200), IN in_value int)  begin      insert into QuestionOption(ID, QUESTION_ID, OPTIONS, VALUE) values(in_id, in_question_id, in_options, in_value);  end"
         ],
         "dml": [
             "Insert into Role values (1, \"INSTRUCTOR\"), (2, \"STUDENT\"), (3, \"ADMIN\"), (4, \"TA\"), (5, \"GUEST\");",
-            "insert into QuestionType values(1, 'numeric')",
-            "insert into QuestionType values(2, 'multiple-choice-choose-one')",
-            "insert into QuestionType values(3, 'multiple-choice-choose-many')",
-            "insert into QuestionType values(4, 'free-text')"
+            "Insert into QuestionType values(1, 'numeric'), (2, 'multiple-choice-choose-one'), (3, 'multiple-choice-choose-many'), (4, 'free-text')"
         ]
     }
 }
