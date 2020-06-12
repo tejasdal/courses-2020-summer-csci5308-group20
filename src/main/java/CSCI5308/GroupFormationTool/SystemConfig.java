@@ -2,6 +2,7 @@ package CSCI5308.GroupFormationTool;
 
 import CSCI5308.GroupFormationTool.AccessControl.IUserPersistence;
 import CSCI5308.GroupFormationTool.AccessControl.UserDB;
+import CSCI5308.GroupFormationTool.AdminConfig.AdminConfigPersistence;
 import CSCI5308.GroupFormationTool.AdminConfig.AdminConfigService;
 import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigPersistence;
 import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigService;
@@ -50,6 +51,7 @@ public class SystemConfig
 		courseDB = new CourseDB();
 		courseUserRelationshipDB = new CourseUserRelationshipDB();
 		adminConfigService = new AdminConfigService();
+		adminConfigPersistence = new AdminConfigPersistence();
 	}
 	
 	// This is the way the rest of the application gets access to the System object.
@@ -116,5 +118,9 @@ public class SystemConfig
 	
 	public IAdminConfigService getAdminConfigService() {
 		return adminConfigService;
+	}
+	
+	public IAdminConfigPersistence getAdminConfigPersistence() {
+		return adminConfigPersistence;
 	}
 }

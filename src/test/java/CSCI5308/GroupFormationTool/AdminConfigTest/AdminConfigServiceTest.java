@@ -9,29 +9,34 @@ import org.junit.jupiter.api.Test;
 
 import CSCI5308.GroupFormationTool.SystemConfig;
 import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigPersistence;
+import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigService;
 
 public class AdminConfigServiceTest {
 
 	@Test
 	public void getAllConfigTest() {
-		Map<String, String> config = SystemConfig.instance().getAdminConfigService().getAllConfig();
-		assertTrue(config.isEmpty());
+		final String key = "key", value = "value";
+		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
+		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
+		adminConfigService.updateConfig(key, value, persistence);
+		Map<String, String> config = adminConfigService.getAllConfig();
+		assertEquals(value, config.get(key));
 	}
 
 	@Test
 	public void loadAllConfigTest() {
-		IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
-		Map<String, String> config = SystemConfig.instance().getAdminConfigService().loadAllConfig(persistence);
+		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
+		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
+		Map<String, String> config = adminConfigService.loadAllConfig(persistence);
 		assertEquals("value", config.get("key"));
 	}
 
 	@Test
 	public void updateConfigTest() {
-		IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
-		SystemConfig.instance().getAdminConfigService().loadAllConfig(persistence);
+		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
+		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
 		final String key = "key", value = "value";
-		assertTrue(SystemConfig.instance().getAdminConfigService().updateConfig(key, value, persistence));
-		assertEquals(value, SystemConfig.instance().getAdminConfigService().loadAllConfig(persistence).get(key));
+		assertTrue(adminConfigService.updateConfig(key, value, persistence));
+		assertEquals(value, adminConfigService.loadAllConfig(persistence).get(key));
 	}
-
 }
