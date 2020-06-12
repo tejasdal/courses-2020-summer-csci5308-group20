@@ -1,9 +1,19 @@
 package CSCI5308.GroupFormationTool;
 
-import CSCI5308.GroupFormationTool.Security.*;
-import CSCI5308.GroupFormationTool.AccessControl.*;
-import CSCI5308.GroupFormationTool.Database.*;
-import CSCI5308.GroupFormationTool.Courses.*;
+import CSCI5308.GroupFormationTool.AccessControl.IUserPersistence;
+import CSCI5308.GroupFormationTool.AccessControl.UserDB;
+import CSCI5308.GroupFormationTool.AdminConfig.AdminConfigService;
+import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigPersistence;
+import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigService;
+import CSCI5308.GroupFormationTool.Courses.CourseDB;
+import CSCI5308.GroupFormationTool.Courses.CourseUserRelationshipDB;
+import CSCI5308.GroupFormationTool.Courses.ICoursePersistence;
+import CSCI5308.GroupFormationTool.Courses.ICourseUserRelationshipPersistence;
+import CSCI5308.GroupFormationTool.Database.DefaultDatabaseConfiguration;
+import CSCI5308.GroupFormationTool.Database.IDatabaseConfiguration;
+import CSCI5308.GroupFormationTool.Security.BCryptPasswordEncryption;
+import CSCI5308.GroupFormationTool.Security.IPasswordEncryption;
+import CSCI5308.GroupFormationTool.Security.IPasswordRulesService;
 
 /*
  * This is a singleton, we will learn about these when we learn design patterns.
@@ -23,6 +33,9 @@ public class SystemConfig
 	private IDatabaseConfiguration databaseConfiguration;
 	private ICoursePersistence courseDB;
 	private ICourseUserRelationshipPersistence courseUserRelationshipDB;
+	private IAdminConfigService adminConfigService;
+	private IAdminConfigPersistence adminConfigPersistence;
+	private IPasswordRulesService passwordRulesService;
 	
 	// This private constructor ensures that no class other than System can allocate
 	// the System object. The compiler would prevent it.
@@ -36,6 +49,7 @@ public class SystemConfig
 		databaseConfiguration = new DefaultDatabaseConfiguration();
 		courseDB = new CourseDB();
 		courseUserRelationshipDB = new CourseUserRelationshipDB();
+		adminConfigService = new AdminConfigService();
 	}
 	
 	// This is the way the rest of the application gets access to the System object.
@@ -98,5 +112,9 @@ public class SystemConfig
 	public ICourseUserRelationshipPersistence getCourseUserRelationshipDB()
 	{
 		return courseUserRelationshipDB;
+	}
+	
+	public IAdminConfigService getAdminConfigService() {
+		return adminConfigService;
 	}
 }
