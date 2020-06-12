@@ -34,3 +34,6 @@ deploy_develop:
     - apt-get install -y ruby-dev
     - gem install dpl
     - dpl --provider=heroku --app=$app --api-key=$api
+
+  only:
+    - develop

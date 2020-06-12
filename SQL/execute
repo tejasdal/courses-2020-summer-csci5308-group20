@@ -1,0 +1,6 @@
+for file in `ls sp*`:
+do
+	query=`cat $file`
+	echo $query
+	mysql -uroot -pqazwsx csci5308 -e "${query}"
+done
