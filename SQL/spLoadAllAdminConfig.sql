@@ -1,0 +1,12 @@
+DELIMITER $$
+  
+DROP PROCEDURE IF EXISTS spLoadAllAdminConfig $$
+
+CREATE PROCEDURE spLoadAllAdminConfig ()
+BEGIN
+        SELECT CONFIG_KEY, CONFIG_VALUE
+    FROM AdminConfig
+    ORDER BY CONFIG_KEY;
+END $$
+
+DELIMITER ;
