@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Map;
-
 import org.junit.jupiter.api.Test;
 
 import CSCI5308.GroupFormationTool.SystemConfig;
@@ -17,50 +15,48 @@ import CSCI5308.GroupFormationTool.AdminConfig.KeyNotFoundException;
 public class AdminConfigServiceTest {
 
 	@Test
-	public void getAllConfigTest() throws KeyNotFoundException {
-		final String key = "key", value = "value";
+	public void addConfigTest() throws DuplicateKeyException {
 		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
 		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
-		adminConfigService.addConfig(key, value, persistence);
-		Map<String, String> config = adminConfigService.getAllConfig();
-		assertEquals(value, config.get(key));
-	}
-
-	@Test
-	public void loadAllConfigTest() {
-		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
-		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
-		final String key = "key", value = "value";
-		adminConfigService.addConfig(key, value, persistence);
-		Map<String, String> config = adminConfigService.loadAllConfig(persistence);
-		assertEquals(value, config.get(key));
-	}
-
-	@Test
-	public void updateConfigTest() throws KeyNotFoundException {
-		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
-		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
-		final String key = "key", value1 = "value", value2 = "value2";
-		assertTrue(adminConfigService.addConfig(key, value1, persistence));
-		assertTrue(adminConfigService.updateConfig(key, value2, persistence));
-		assertEquals(value2, adminConfigService.loadAllConfig(persistence).get(key));
-	}
-
-	@Test
-	public void addConfigTest() throws KeyNotFoundException, DuplicateKeyException {
-		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
-		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
-		final String key = "key", value = "value";
+		final String key = "key1", value = "value1";
 		assertTrue(adminConfigService.addConfig(key, value, persistence));
 		assertEquals(value, adminConfigService.loadAllConfig(persistence).get(key));
 	}
 
 	@Test
-	public void deleteConfigTest() throws KeyNotFoundException {
+	public void getAllConfigTest() throws DuplicateKeyException {
 		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
 		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
-		final String key = "key", value = "value";
-		adminConfigService.addConfig(key, value, persistence);
+		final String key = "key2", value = "value2";
+		assertTrue(adminConfigService.addConfig(key, value, persistence));
+		assertEquals(value, adminConfigService.getAllConfig().get(key));
+	}
+
+	@Test
+	public void loadAllConfigTest() throws DuplicateKeyException {
+		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
+		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
+		final String key = "key3", value = "value3";
+		assertTrue(adminConfigService.addConfig(key, value, persistence));
+		assertEquals(value, adminConfigService.loadAllConfig(persistence).get(key));
+	}
+
+	@Test
+	public void updateConfigTest() throws KeyNotFoundException, DuplicateKeyException {
+		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
+		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
+		final String key = "key4", value = "value4", value2 = "value5";
+		assertTrue(adminConfigService.addConfig(key, value, persistence));
+		assertTrue(adminConfigService.updateConfig(key, value2, persistence));
+		assertEquals(value2, adminConfigService.getAllConfig().get(key));
+	}
+
+	@Test
+	public void deleteConfigTest() throws KeyNotFoundException, DuplicateKeyException {
+		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
+		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
+		final String key = "key5", value = "value5";
+		assertTrue(adminConfigService.addConfig(key, value, persistence));
 		assertTrue(adminConfigService.deleteConfig(key, persistence));
 		String receivedValue = adminConfigService.loadAllConfig(persistence).get(key);
 		assertNull(receivedValue);
