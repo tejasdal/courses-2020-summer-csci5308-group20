@@ -7,5 +7,5 @@ public interface IQuestionPersistence {
 
     public boolean addQuestion(Question question) throws SQLException;
     public boolean deleteQuestion(Long questionId) throws SQLException;
-    public List<Question> getAllQuestionsForUser(Long userId) throws SQLException;
+    public List<Question> getAllQuestionsForUser(Long userId);
 }

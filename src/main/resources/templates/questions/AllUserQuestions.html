@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="https://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
+<head>
+    <title>CSCI5308 - Group Formation Tool</title>
+</head>
+<body>
+<h1>Questions</h1>
+<div>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Date of Creation</th>
+        </tr>
+        <tr th:each="question : ${questions}">
+            <td th:text="${question.id}"></td>
+            <td th:text="${question.title}"></td>
+            <td th:text="${question.description}"></td>
+            <td th:text="${question.createdAt}"></td>
+<!--            <td><a th:href="">Delete</a></td>-->
+        </tr>
+    </table>
+</div>
+</body>
+</html>
