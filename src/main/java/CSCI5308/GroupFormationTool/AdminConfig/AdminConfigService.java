@@ -19,13 +19,14 @@ public class AdminConfigService implements IAdminConfigService {
 	}
 
 	@Override
-	public boolean updateConfig(String key, String value, IAdminConfigPersistence persistence) throws KeyNotFoundException {
+	public boolean updateConfig(String key, String value, IAdminConfigPersistence persistence)
+			throws KeyNotFoundException {
 		// update using persistence class, update value in 'config' map
 		if (!config.containsKey(key)) {
-			throw new KeyNotFoundException("Config with key '"+key+"' not found");
+			throw new KeyNotFoundException("Config with key '" + key + "' not found");
 		}
 		boolean result = persistence.setConfig(key, value);
-		if (result) {			
+		if (result) {
 			config.put(key, value);
 		}
 		// Logging required
@@ -33,8 +34,12 @@ public class AdminConfigService implements IAdminConfigService {
 	}
 
 	@Override
-	public boolean addConfig(String key, String value, IAdminConfigPersistence persistence) {
+	public boolean addConfig(String key, String value, IAdminConfigPersistence persistence)
+			throws DuplicateKeyException {
 		// add using persistence class, update value in 'config' map
+		if (config.containsKey(key)) {
+			throw new DuplicateKeyException("Key '" + key + "' already exists");
+		}
 		boolean result = persistence.addConfig(key, value);
 		if (result) {
 			config.put(key, value);
@@ -46,7 +51,7 @@ public class AdminConfigService implements IAdminConfigService {
 	@Override
 	public boolean deleteConfig(String key, IAdminConfigPersistence persistence) throws KeyNotFoundException {
 		if (!config.containsKey(key)) {
-			throw new KeyNotFoundException("Config with key '"+key+"' not found");
+			throw new KeyNotFoundException("Config with key '" + key + "' not found");
 		}
 		boolean result = persistence.deleteConfig(key);
 		if (result) {

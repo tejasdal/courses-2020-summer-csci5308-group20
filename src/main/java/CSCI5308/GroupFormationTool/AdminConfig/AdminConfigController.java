@@ -43,7 +43,12 @@ public class AdminConfigController {
 		}
 		IAdminConfigPersistence persistence = SystemConfig.instance().getAdminConfigPersistence();
 		IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
-		boolean result = adminConfigService.addConfig(key, value, persistence);
+		boolean result = false;
+		try {
+			result = adminConfigService.addConfig(key, value, persistence);
+		} catch (Exception e) {
+			mav.addObject("errorMessage", e.getMessage());
+		}
 		mav.addObject("result", result);
 		return mav;
 	}

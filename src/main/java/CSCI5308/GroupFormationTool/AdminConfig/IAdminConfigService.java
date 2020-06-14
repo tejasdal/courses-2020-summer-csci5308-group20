@@ -11,7 +11,7 @@ public interface IAdminConfigService {
 	
 	public boolean updateConfig(String key, String value, IAdminConfigPersistence persistence) throws KeyNotFoundException;
 	
-	public boolean addConfig(String key, String value, IAdminConfigPersistence persistence);
+	public boolean addConfig(String key, String value, IAdminConfigPersistence persistence) throws DuplicateKeyException;
 	
 	public boolean deleteConfig(String key, IAdminConfigPersistence persistence) throws KeyNotFoundException;
 }

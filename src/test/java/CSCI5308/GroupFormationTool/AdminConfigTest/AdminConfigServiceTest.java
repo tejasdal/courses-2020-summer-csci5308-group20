@@ -9,6 +9,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import CSCI5308.GroupFormationTool.SystemConfig;
+import CSCI5308.GroupFormationTool.AdminConfig.DuplicateKeyException;
 import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigPersistence;
 import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigService;
 import CSCI5308.GroupFormationTool.AdminConfig.KeyNotFoundException;
@@ -46,7 +47,7 @@ public class AdminConfigServiceTest {
 	}
 
 	@Test
-	public void addConfigTest() throws KeyNotFoundException {
+	public void addConfigTest() throws KeyNotFoundException, DuplicateKeyException {
 		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
 		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
 		final String key = "key", value = "value";
