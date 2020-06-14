@@ -37,4 +37,16 @@ public class AdminConfigPersistence implements IAdminConfigPersistence {
 		return false;
 	}
 
+	@Override
+	public boolean addConfig(String key, String value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteConfig(String key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

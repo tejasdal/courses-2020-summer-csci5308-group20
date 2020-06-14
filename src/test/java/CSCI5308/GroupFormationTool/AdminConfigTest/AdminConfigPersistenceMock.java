@@ -10,13 +10,24 @@ public class AdminConfigPersistenceMock implements IAdminConfigPersistence {
 
 	@Override
 	public Map<String, String> getAllConfig() {
-		map.put("key", "value");
 		return map;
 	}
 
 	@Override
 	public boolean setConfig(String key, String value) {
 		map.put(key, value);
+		return true;
+	}
+
+	@Override
+	public boolean addConfig(String key, String value) {
+		map.put(key, value);
+		return true;
+	}
+
+	@Override
+	public boolean deleteConfig(String key) {
+		map.remove(key);
 		return true;
 	}
 	

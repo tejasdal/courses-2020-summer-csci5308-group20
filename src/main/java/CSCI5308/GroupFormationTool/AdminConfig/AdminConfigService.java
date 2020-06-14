@@ -19,12 +19,40 @@ public class AdminConfigService implements IAdminConfigService {
 	}
 
 	@Override
-	public boolean updateConfig(String key, String value, IAdminConfigPersistence persistence) {
+	public boolean updateConfig(String key, String value, IAdminConfigPersistence persistence) throws KeyNotFoundException {
 		// update using persistence class, update value in 'config' map
+		if (!config.containsKey(key)) {
+			throw new KeyNotFoundException("Config with key '"+key+"' not found");
+		}
 		boolean result = persistence.setConfig(key, value);
 		if (result) {			
 			config.put(key, value);
 		}
+		// Logging required
+		return result;
+	}
+
+	@Override
+	public boolean addConfig(String key, String value, IAdminConfigPersistence persistence) {
+		// add using persistence class, update value in 'config' map
+		boolean result = persistence.addConfig(key, value);
+		if (result) {
+			config.put(key, value);
+		}
+		// Logging required
+		return result;
+	}
+
+	@Override
+	public boolean deleteConfig(String key, IAdminConfigPersistence persistence) throws KeyNotFoundException {
+		if (!config.containsKey(key)) {
+			throw new KeyNotFoundException("Config with key '"+key+"' not found");
+		}
+		boolean result = persistence.deleteConfig(key);
+		if (result) {
+			config.remove(key);
+		}
+		// Logging required
 		return result;
 	}
 

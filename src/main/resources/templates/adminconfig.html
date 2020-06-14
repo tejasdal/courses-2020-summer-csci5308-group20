@@ -9,6 +9,8 @@
 
     <!-- This file includes all default styles for this application. -->
     <link th:href="@{/styles/cssandjs/main.css}" rel="stylesheet" />
+    <script th:src="@{/styles/cssandjs/jquery.js}" type="text/javascript"></script>
+    <script th:src="@{/styles/cssandjs/jquery-ui.js}" type="text/javascript"></script>
 </head>
 
 <body class="bodyGridContainer">
@@ -20,24 +22,31 @@
             <h2>Welcome to the admin configuration page. Access restricted to ADMIN only !</h2>
         </aside>
 
-        <div class="mainGridCentreInfoBox" th:if="${errorMessage}">
-            <h3 class="errorInfo" th:text="${errorMessage}"></h3>
+        <div id="errorDiv" class="mainGridCentreInfoBox">
+            <h3 class="errorInfo"></h3>
         </div>
-        <div style="grid-column:1/4">
+        <div id="content" style="grid-column:1/4">
             <table style="width:100%; border-collapse: collapse;">
                 <thead>
                     <tr>
                         <th style="border:1px solid black; padding:15px">Key</th>
                         <th style="border:1px solid black; padding:15px">Value</th>
+                        <th style="border:1px solid black; width:7%"></th>
+                        <th style="border:1px solid black; width:7%"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="key: ${config.keySet()}">
                         <td style="border:1px solid black; padding:15px"><span style="margin-left:20px" th:text="${key}"></span></td>
                         <td style="border:1px solid black; padding:15px"><span style="margin-left:20px" th:text="${config.get(key)}"></span></td>
+                        <td style="text-align:center; border:1px solid black; text-decoration: underline; cursor:pointer; color: steelblue" onclick="showAddWindow(this)">Modify</td>
+                        <td style="text-align:center; border:1px solid black; text-decoration: underline; cursor:pointer; color: steelblue" onclick="deleteConfig(this)">Delete</td>
                     </tr>
                 </tbody>
             </table>
+            <div style="display:flex; margin-top:40px; color: white">
+                <button id="addBtn" onclick="showAddWindow()" style="margin:auto; width:150px; height:40px; cursor: pointer">Add Config</button>
+            </div>
         </div>
         <a class="signupLogin mainGridRow mainGridCentreCard" th:href="@{/login}">Are you an existing user? Click here to log in!</a>
     </main>
@@ -49,4 +58,85 @@
 
 </html>
 <script>
+    var addConfigDiv = '<form class="regnLoginGridContainer" action="/admin/config/add" method="post">\
+				<label class="regnLoginGridLeftCol" for="lConfigKey">Configuration Key:</label>\
+				<input id="lConfigKey" class="regnLoginGridRightCol" type="text" name="config_key"/>\
+				<label class="regnLoginGridLeftCol" for="lConfigValue">Configuration Value:</label>\
+				<input id="lConfigValue" class="regnLoginGridRightCol" type="text" name="config_value"/>\
+                <input class="regnLoginGridRightCol" type="submit" value="Submit"/>\
+            </form>';
+
+    $(document).ready(function() {
+        var args = window.location.search;
+        if (args) {
+            args = args.substr(1);
+            var eachArgs = args.split("&");
+            console.log(eachArgs);
+            for (var index in eachArgs) {
+                var arg = eachArgs[index];
+                var argKey = arg.split("=")[0];
+                var argValue = arg.split("=")[1].split("+").join(" ");
+                if (argKey == "errorMessage" && argValue) {
+                    $("#errorDiv").find("h3").html(argValue).show();
+                } else if (argKey == "result" && argValue == "false") {
+                    $("#errorDiv").find("h3").html("Try again later").show();
+                }
+            }
+        }
+    });
+
+    $("#addBtn").hover(function() {
+        $("#addBtn").css({
+            'background-color': 'white'
+        });
+        $("#addBtn").css({
+            'color': 'black'
+        });
+    }, function() {
+        $("#addBtn").css({
+            'background-color': 'steelblue'
+        });
+        $("#addBtn").css({
+            'color': 'black'
+        });
+    });
+
+    function deleteConfig(div) {
+        var key, value;
+        if (div) {
+            key = $($(div).parents('table').find("td")[0]).find("span").html();
+            value = $($(div).parents('table').find("td")[1]).find("span").html();
+            $("#content").hide().html(addConfigDiv).css({
+                'grid-column': '2/3'
+            });
+            $("#lConfigKey").val(key).attr('readonly', true).css({
+                'background-color': '#eaeaea',
+                'border': '1px solid black',
+                'cursor': 'auto'
+            });
+            $("#lConfigValue").val(value).attr('disabled', true);
+            $("form").attr('action', '/admin/config/delete');
+            $("form").submit();
+        }
+    }
+
+    function showAddWindow(div) {
+        var key, value;
+        if (div) {
+            key = $($(div).parents('table').find("td")[0]).find("span").html();
+            value = $($(div).parents('table').find("td")[1]).find("span").html();
+        }
+        $("#content").html(addConfigDiv).css({
+            'grid-column': '2/3'
+        });
+        if (div) {
+            $("#lConfigKey").val(key).attr('readonly', true).css({
+                'background-color': '#eaeaea',
+                'border': '1px solid black',
+                'cursor': 'auto'
+            });
+            $("#lConfigValue").val(value);
+            $("form").attr('action', '/admin/config/update');
+        }
+    }
 </script>
