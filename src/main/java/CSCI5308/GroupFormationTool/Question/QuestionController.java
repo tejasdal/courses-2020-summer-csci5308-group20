@@ -13,11 +13,15 @@ public class QuestionController {
 
 
     @RequestMapping(value="/instructor/questions")
-    public String getAllUserQuestions(@RequestParam(name="userId") Long userId, Model model){
+    public String getAllUserQuestions
+            (@RequestParam(name="userId") Long userId,
+             @RequestParam(name="sortBy",defaultValue="date",required=false) String sortBy,
+             Model model){
         IQuestionService questionService = SystemConfig.instance().getQuestionService();
         IQuestionPersistence questionPersistence = SystemConfig.instance().getQuestionPersistence();
-        List<Question> questions = questionService.getAllQuestionOfInstructor(userId,questionPersistence);
+        List<Question> questions = questionService.getAllQuestionOfInstructor(userId,sortBy,questionPersistence);
         model.addAttribute("questions",questions);
+        model.addAttribute("userId",userId);
         return "questions/AllUserQuestions";
     }
 }

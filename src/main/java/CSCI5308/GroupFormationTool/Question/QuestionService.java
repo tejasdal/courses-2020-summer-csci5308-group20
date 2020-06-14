@@ -12,8 +12,9 @@ public class QuestionService implements IQuestionService {
     }
 
     @Override
-    public List<Question> getAllQuestionOfInstructor(Long instructorId,IQuestionPersistence questionPersistence) {
-        return questionPersistence.getAllQuestionsForUser(instructorId);
+    public List<Question> getAllQuestionOfInstructor
+            (Long instructorId,String sortBy,IQuestionPersistence questionPersistence) {
+        return questionPersistence.getAllQuestionsForUser(instructorId,sortBy);
     }
 
     @Override

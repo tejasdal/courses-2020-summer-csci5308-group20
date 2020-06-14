@@ -5,7 +5,7 @@ import java.util.List;
 public interface IQuestionService {
 
     void createQuestion(Question question);
-    public List<Question> getAllQuestionOfInstructor(Long instructorId,IQuestionPersistence questionPersistence);
+    public List<Question> getAllQuestionOfInstructor(Long instructorId,String sortBy,IQuestionPersistence questionPersistence);
     public boolean deleteQuestion(Long questionId);
 
 }

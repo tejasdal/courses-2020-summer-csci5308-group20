@@ -40,8 +40,8 @@ public class QuestionServiceTest {
         questionList.add(q1);
         questionList.add(q2);
 
-        when(questionPersistence.getAllQuestionsForUser(2L)).thenReturn(questionList);
-        List<Question> returnedList = questionService.getAllQuestionOfInstructor(2L,questionPersistence);
+        when(questionPersistence.getAllQuestionsForUser(2L,"date")).thenReturn(questionList);
+        List<Question> returnedList = questionService.getAllQuestionOfInstructor(2L,"date",questionPersistence);
         assertEquals(2,returnedList.size());
 
 

@@ -21,23 +21,18 @@ public class QuestionPersistence implements IQuestionPersistence {
     }
 
     @Override
-    public List<Question> getAllQuestionsForUser(Long userId) {
+    public List<Question> getAllQuestionsForUser(Long userId,String sortBy) {
         List<Question> questions = new ArrayList<Question>();
         CallStoredProcedure proc = null;
         try{
-            System.out.println("aaa");
-            proc = new CallStoredProcedure("spGetAllQuestionUser(?)");
-            System.out.println("cc");
-            System.out.println("vv");
+            proc = new CallStoredProcedure("spGetAllQuestionUser(?,?)");
             proc.setParameter(1,userId);
-            System.out.println("hhh");
+            proc.setParameter(2,sortBy);
             ResultSet rs = proc.executeWithResults();
-            System.out.println("nnm");
             if(rs!=null){
                 while(rs.next()){
                     Question question = new Question();
                     Long id = rs.getLong(1);
-                    System.out.println(id);
                     String title = rs.getString(2);
                     String description = rs.getString(3);
                     int type = rs.getInt(4);
