@@ -18,7 +18,7 @@ public class QuestionService implements IQuestionService {
     }
 
     @Override
-    public boolean deleteQuestion(Long questionId) {
-        return false;
+    public boolean deleteQuestion(Long questionId,IQuestionPersistence questionPersistence) {
+        return questionPersistence.deleteQuestion(questionId);
     }
 }

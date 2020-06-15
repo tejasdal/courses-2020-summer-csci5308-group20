@@ -22,7 +22,13 @@
             <td th:text="${question.title}"></td>
             <td th:text="${question.description}"></td>
             <td th:text="${question.createdAt}"></td>
-<!--            <td><a th:href="">Delete</a></td>-->
+            <td>
+                <form th:action="@{/instructor/deletequestion}" method="post">
+                    <input type="hidden" th:value="${question.id}" name="questionId">
+                    <input type="hidden" th:value="${userId}" name="userId"></input>
+                    <button type="submit" value="Delete" onClick="return confirm('Do you want to delete?')">Delete</button>
+                </form>
+            </td>
         </tr>
     </table>
 </div>

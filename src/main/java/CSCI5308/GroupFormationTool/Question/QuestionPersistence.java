@@ -16,8 +16,25 @@ public class QuestionPersistence implements IQuestionPersistence {
     }
 
     @Override
-    public boolean deleteQuestion(Long questionId) throws SQLException {
-        return false;
+    public boolean deleteQuestion(Long questionId) {
+        CallStoredProcedure proc = null;
+        try{
+            proc = new CallStoredProcedure("spDeleteQuestion(?)");
+            proc.setParameter(1,questionId);
+            proc.execute();
+        }
+        catch(SQLException e){
+
+            return false;
+        }
+        finally
+        {
+            if (null != proc)
+            {
+                proc.cleanup();
+            }
+        }
+        return true;
     }
 
     @Override

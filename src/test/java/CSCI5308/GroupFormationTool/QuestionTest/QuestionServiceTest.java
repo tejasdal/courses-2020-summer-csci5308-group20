@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -32,7 +33,7 @@ public class QuestionServiceTest {
     }
 
     @Test
-    public void getAllUserQuestions(){
+    public void getAllUserQuestionsTest(){
         List<Question> questionList = new ArrayList<Question>();
         Date date = new Date(20200614L);
         Question q1 = new Question(1L,"TestTitle1","Testing",2L,1,date,null);
@@ -45,6 +46,12 @@ public class QuestionServiceTest {
         assertEquals(2,returnedList.size());
 
 
+    }
+
+    @Test
+    public void deleteQuestionTest(){
+        when(questionPersistence.deleteQuestion(1L)).thenReturn(true);
+        assertTrue(questionService.deleteQuestion(1L,questionPersistence));
     }
 
 }
