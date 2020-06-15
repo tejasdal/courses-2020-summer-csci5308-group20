@@ -12,7 +12,45 @@ public class QuestionPersistence implements IQuestionPersistence {
 
     @Override
     public boolean addQuestion(Question question) throws SQLException {
-        return false;
+        CallStoredProcedure proc = null;
+        try{
+            proc = new CallStoredProcedure("spCreateQuestion(?,?,?,?,?,?)");
+            proc.setParameter(1, question.getId());
+            proc.setParameter(2, question.getTitle());
+            proc.setParameter(3, question.getDescription());
+            proc.setParameter(4, question.getUserId());
+            proc.setParameter(5, question.getQuestionType());
+            proc.setParameter(6, question.getCreatedAt());
+            proc.execute();
+            if (question.getQuestionOptions() != null && !question.getQuestionOptions().isEmpty()) {
+                addQuestionOptions(question.getQuestionOptions(), question.getId());
+            }
+            return true;
+        }
+        finally {
+            if (null != proc) {
+                proc.cleanup();
+            }
+        }
+    }
+
+    private static void addQuestionOptions(List<QuestionOption> questionOptions, Long questionId) throws SQLException {
+        CallStoredProcedure proc = null;
+        try{
+            proc = new CallStoredProcedure("spCreateQuestionOption( ?, ?, ?)");
+            for (QuestionOption questionOption : questionOptions) {
+                proc.setParameter(1, questionId);
+                proc.setParameter(2, questionOption.getOption());
+                proc.setParameter(3, questionOption.getValue());
+                proc.addBatch();
+            }
+            proc.executeBatch();
+        }
+        finally {
+            if (null != proc) {
+                proc.cleanup();
+            }
+        }
     }
 
     @Override
