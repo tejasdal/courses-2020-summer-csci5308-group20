@@ -1,4 +1,4 @@
-package CSCI5308.GroupFormationTool.AdminConfig;
+package CSCI5308.GroupFormationTool.CustomExceptions;
 
 @SuppressWarnings("serial")
 public class DuplicateKeyException extends Exception {

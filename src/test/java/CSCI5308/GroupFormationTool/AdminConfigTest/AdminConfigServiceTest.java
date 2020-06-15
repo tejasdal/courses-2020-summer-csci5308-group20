@@ -1,16 +1,13 @@
 package CSCI5308.GroupFormationTool.AdminConfigTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.Test;
-
-import CSCI5308.GroupFormationTool.SystemConfig;
-import CSCI5308.GroupFormationTool.AdminConfig.DuplicateKeyException;
 import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigPersistence;
 import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigService;
-import CSCI5308.GroupFormationTool.AdminConfig.KeyNotFoundException;
+import CSCI5308.GroupFormationTool.CustomExceptions.DuplicateKeyException;
+import CSCI5308.GroupFormationTool.CustomExceptions.KeyNotFoundException;
+import CSCI5308.GroupFormationTool.SystemConfig;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AdminConfigServiceTest {
 
