@@ -14,7 +14,7 @@ public class PasswordPolicyService implements IPasswordPolicyService {
         List<IPasswordPolicy> policies = new ArrayList<>();
         for (Map.Entry<String, String> entry : allConfig.entrySet()) {
             if (entry.getKey().startsWith("PASSWORD_")) {
-                policies.add(SystemConfig.instance().getPolicy(entry.getKey()));
+                policies.add(SystemConfig.instance().getPolicy(entry.getKey(), entry.getValue()));
             }
         }
         if (policies.isEmpty()) {

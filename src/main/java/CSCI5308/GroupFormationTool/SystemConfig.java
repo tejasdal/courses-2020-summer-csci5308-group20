@@ -36,7 +36,7 @@ public class SystemConfig {
     private IAdminConfigService adminConfigService;
     private IAdminConfigPersistence adminConfigPersistence;
     private IPasswordPolicyService passwordPolicyService;
-
+    private IPasswordPersistence passwordPersistence;
     private IPasswordPolicy maxLengthPolicy;
     private IPasswordPolicy minLengthPolicy;
     private IPasswordPolicy minLowerCasePolicy;
@@ -61,13 +61,7 @@ public class SystemConfig {
         adminConfigPersistence = new AdminConfigPersistence();
 
         passwordPolicyService = new PasswordPolicyService();
-        maxLengthPolicy = new MaxLengthPolicy();
-        minLengthPolicy = new MinLengthPolicy();
-        minLowerCasePolicy = new MinLowerCasePolicy();
-        minSymbolPolicy = new MinSymbolPolicy();
-        minUpperCasePolicy = new MinUpperCasePolicy();
-        restrictedSymbolCasePolicy = new RestrictedSymbolCasePolicy();
-        rememberedPasswordPolicy = new RememberedPasswordPolicy();
+        passwordPersistence = new PasswordPolicyPersistence();
     }
 
     // This is the way the rest of the application gets access to the System object.
@@ -132,22 +126,26 @@ public class SystemConfig {
         return passwordPolicyService;
     }
 
-    public IPasswordPolicy getPolicy(String policy) {
+    public IPasswordPersistence getPasswordPersistence() {
+        return passwordPersistence;
+    }
+
+    public IPasswordPolicy getPolicy(String policy, String policyValue) {
         switch (policy) {
             case MinLengthPolicy.POLICY_NAME:
-                return minLengthPolicy;
+                return new MinLengthPolicy(policyValue);
             case MaxLengthPolicy.POLICY_NAME:
-                return maxLengthPolicy;
+                return new MaxLengthPolicy(policyValue);
             case MinLowerCasePolicy.POLICY_NAME:
-                return minLowerCasePolicy;
+                return new MinLowerCasePolicy(policyValue);
             case MinSymbolPolicy.POLICY_NAME:
-                return minSymbolPolicy;
+                return new MinSymbolPolicy(policyValue);
             case MinUpperCasePolicy.POLICY_NAME:
-                return minUpperCasePolicy;
+                return new MinUpperCasePolicy(policyValue);
             case RestrictedSymbolCasePolicy.POLICY_NAME:
-                return restrictedSymbolCasePolicy;
+                return new RestrictedSymbolCasePolicy(policyValue);
             case RememberedPasswordPolicy.POLICY_NAME:
-                return rememberedPasswordPolicy;
+                return new RememberedPasswordPolicy(policyValue);
             default:
                 return null;
         }

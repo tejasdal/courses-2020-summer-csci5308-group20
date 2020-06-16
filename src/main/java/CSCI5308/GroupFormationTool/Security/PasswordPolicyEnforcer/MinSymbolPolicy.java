@@ -1,20 +1,29 @@
 package CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer;
 
-import CSCI5308.GroupFormationTool.SystemConfig;
-
 public class MinSymbolPolicy implements IPasswordPolicy {
     public static final String POLICY_NAME = "PASSWORD_MIN_SYMBOL";
-    String policyCount = "";
+    private int minSymbol;
+
+    public MinSymbolPolicy(String value) {
+        minSymbol = Integer.parseInt(value);
+    }
+
+    public int getMinSymbol() {
+        return minSymbol;
+    }
+
+    public void setMinSymbol(int minSymbol) {
+        this.minSymbol = minSymbol;
+    }
 
     @Override
     public boolean validate(String password) {
-        policyCount = SystemConfig.instance().getAdminConfigService().getAllConfig().get(POLICY_NAME);
-        String sybmols = password.replaceAll("[a-zA-Z0-9]", "");
-        return Integer.parseInt(policyCount) <= sybmols.length();
+        String symbols = password.replaceAll("[a-zA-Z0-9]", "");
+        return minSymbol <= symbols.length();
     }
 
     @Override
     public String toString() {
-        return "Password should contain at least " + policyCount + " symbols.";
+        return "Password should contain at least " + minSymbol + " symbols.";
     }
 }
