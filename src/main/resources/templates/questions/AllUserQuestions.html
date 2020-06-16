@@ -9,7 +9,9 @@
 </head>
 <body>
 <h1>Questions</h1>
-<div>
+<a th:href="@{'/instructor/'+${userId}+'/question/create'}">Create Question</a>
+<br/>
+    <div>
     <table>
         <tr>
             <th>ID</th>

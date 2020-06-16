@@ -57,5 +57,10 @@
 		</form>
         <br/>
 		<a th:href="@{/course/enrollta(id=${course.id})}">Enroll TAs</a>
+	<br/>
+		<form th:action="@{/instructor/questions}" method="post">
+			<button type="submit" value="questions")>Questions</button>
+			<input type="hidden" th:value="${instructorId}" name="userId"></input>
+		</form>
 	</body>
 </html>

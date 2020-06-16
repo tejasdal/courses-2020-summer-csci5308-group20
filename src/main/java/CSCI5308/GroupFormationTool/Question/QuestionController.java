@@ -26,7 +26,7 @@ public class QuestionController {
         return "questions/AllUserQuestions";
     }
 
-    @RequestMapping(value="/instructor/deletequestion")
+    @RequestMapping(value="/instructor/deletequestion",method = RequestMethod.POST)
     public String deleteQuestion(@RequestParam(name="questionId") Long questionId,
                                  @RequestParam(name="userId") Long userId,
                                  RedirectAttributes redirectAttributes){
