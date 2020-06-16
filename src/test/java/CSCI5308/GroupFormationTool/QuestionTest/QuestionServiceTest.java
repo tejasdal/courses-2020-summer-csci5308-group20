@@ -9,6 +9,7 @@ import org.springframework.util.Assert;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
@@ -25,9 +26,19 @@ class QuestionServiceTest {
 
     @Test
     void getAllQuestionOfInstructor() {
+        IQuestionPersistence questionPersistence = new QuestionPersistenceMock();
+        List<Question> questionList = questionPersistence.getAllQuestionsForUser(1L,"date");
+        assertEquals(3,questionList.size());
+
     }
+
 
     @Test
     void deleteQuestion() {
+        IQuestionPersistence questionPersistence = new QuestionPersistenceMock();
+        boolean status = questionPersistence.deleteQuestion(1L);
+        assertTrue(status);
+
+
     }
 }
