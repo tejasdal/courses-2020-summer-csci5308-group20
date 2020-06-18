@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface IQuestionPersistence {
 
-    public boolean addQuestion(Question question) throws SQLException;
+    public boolean createQuestion(Question question) throws SQLException;
     public boolean deleteQuestion(Long questionId);
-    public List<Question> getAllQuestionsForUser(Long userId,String sortBy);
+    public List<Question> getAllUserQuestions(Long userId, String sortBy);
 }

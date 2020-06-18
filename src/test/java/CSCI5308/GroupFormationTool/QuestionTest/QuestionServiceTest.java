@@ -19,22 +19,22 @@ class QuestionServiceTest {
         IQuestionPersistence questionPersistence = new QuestionPersistenceMock();
         Question question = new Question(1L, "Test Question", "What is Test Question?", 1L,
                 Question.NUMERIC, new Date(System.currentTimeMillis()), new ArrayList<>());
-        boolean isCreated = questionPersistence.addQuestion(question);
+        boolean isCreated = questionPersistence.createQuestion(question);
         assertTrue(isCreated, "Test case failed!");
         assertTrue(isCreated,"Negative test case failed");
     }
 
     @Test
-    void getAllQuestionOfInstructor() {
+    void getAllUserQuestionsTest() {
         IQuestionPersistence questionPersistence = new QuestionPersistenceMock();
-        List<Question> questionList = questionPersistence.getAllQuestionsForUser(1L,"date");
+        List<Question> questionList = questionPersistence.getAllUserQuestions(1L,"date");
         assertEquals(3,questionList.size());
 
     }
 
 
     @Test
-    void deleteQuestion() {
+    void deleteQuestionTest() {
         IQuestionPersistence questionPersistence = new QuestionPersistenceMock();
         boolean status = questionPersistence.deleteQuestion(1L);
         assertTrue(status);

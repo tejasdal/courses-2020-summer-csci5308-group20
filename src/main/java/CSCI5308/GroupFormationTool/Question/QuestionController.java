@@ -4,7 +4,6 @@ import CSCI5308.GroupFormationTool.SystemConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public class QuestionController {
              Model model){
         IQuestionService questionService = SystemConfig.instance().getQuestionService();
         IQuestionPersistence questionPersistence = SystemConfig.instance().getQuestionPersistence();
-        List<Question> questions = questionService.getAllQuestionOfInstructor(userId,sortBy,questionPersistence);
+        List<Question> questions = questionService.getAllUserQuestions(userId,sortBy,questionPersistence);
         model.addAttribute("questions",questions);
         model.addAttribute("userId",userId);
         return "questions/AllUserQuestions";
