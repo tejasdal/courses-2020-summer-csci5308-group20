@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class QuestionPersistenceMock implements IQuestionPersistence {
 
     @Override
-    public boolean addQuestion(Question question) throws SQLException {
+    public boolean createQuestion(Question question) throws SQLException {
         return true;
     }
 
@@ -24,7 +24,7 @@ class QuestionPersistenceMock implements IQuestionPersistence {
     }
 
     @Override
-    public List<Question> getAllQuestionsForUser(Long userId, String sortBy) {
+    public List<Question> getAllUserQuestions(Long userId, String sortBy) {
         List<Question> questions = new ArrayList<>();
         List<QuestionOption> questionOptions = new ArrayList<>();
         questionOptions.add(new QuestionOption(1L, "Option 1", 1));

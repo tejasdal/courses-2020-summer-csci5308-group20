@@ -1,6 +1,5 @@
 package CSCI5308.GroupFormationTool.Question;
 
-import CSCI5308.GroupFormationTool.SystemConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +25,7 @@ public class QuestionService implements IQuestionService {
         question.setId(System.currentTimeMillis());
         question.setCreatedAt(new Date(System.currentTimeMillis()));
         try {
-            questionPersistence.addQuestion(question);
+            questionPersistence.createQuestion(question);
         } catch (SQLException e) {
             log.error("Failed to store question: {} in the database.",question.getTitle(), e);
             throw new QuestionException("Failed to save question:"+ question.getTitle() +". Please contact admin.");
@@ -34,9 +33,9 @@ public class QuestionService implements IQuestionService {
     }
 
     @Override
-    public List<Question> getAllQuestionOfInstructor
-            (Long instructorId,String sortBy,IQuestionPersistence questionPersistence) {
-        return questionPersistence.getAllQuestionsForUser(instructorId,sortBy);
+    public List<Question> getAllUserQuestions
+            (Long userId, String sortBy, IQuestionPersistence questionPersistence) {
+        return questionPersistence.getAllUserQuestions(userId,sortBy);
     }
 
     @Override

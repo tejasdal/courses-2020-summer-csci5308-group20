@@ -11,7 +11,7 @@ import java.util.List;
 public class QuestionPersistence implements IQuestionPersistence {
 
     @Override
-    public boolean addQuestion(Question question) throws SQLException {
+    public boolean createQuestion(Question question) throws SQLException {
         CallStoredProcedure proc = null;
         try{
             proc = new CallStoredProcedure("spCreateQuestion(?,?,?,?,?,?)");
@@ -23,7 +23,7 @@ public class QuestionPersistence implements IQuestionPersistence {
             proc.setParameter(6, question.getCreatedAt());
             proc.execute();
             if (question.getQuestionOptions() != null && !question.getQuestionOptions().isEmpty()) {
-                addQuestionOptions(question.getQuestionOptions(), question.getId());
+                createQuestionOptions(question.getQuestionOptions(), question.getId());
             }
             return true;
         }
@@ -34,7 +34,7 @@ public class QuestionPersistence implements IQuestionPersistence {
         }
     }
 
-    private static void addQuestionOptions(List<QuestionOption> questionOptions, Long questionId) throws SQLException {
+    private static void createQuestionOptions(List<QuestionOption> questionOptions, Long questionId) throws SQLException {
         CallStoredProcedure proc = null;
         try{
             proc = new CallStoredProcedure("spCreateQuestionOption( ?, ?, ?)");
@@ -76,7 +76,7 @@ public class QuestionPersistence implements IQuestionPersistence {
     }
 
     @Override
-    public List<Question> getAllQuestionsForUser(Long userId,String sortBy) {
+    public List<Question> getAllUserQuestions(Long userId, String sortBy) {
         List<Question> questions = new ArrayList<Question>();
         CallStoredProcedure proc = null;
         try{
