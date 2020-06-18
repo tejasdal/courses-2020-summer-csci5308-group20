@@ -30,13 +30,13 @@ public class RememberedPasswordPolicy implements IPasswordPolicy {
             String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
             if (!username.equals("")) {
                 List<String> list = persistence.getPasswordHistoryByUserId(username, policyCount);
-                if (list.contains(password))
-                    return false;
+                if (!list.contains(password))
+                    return true;
             }
         } catch (Exception e) {
             //
         }
-        return true;
+        return false;
     }
 
     @Override

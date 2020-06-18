@@ -1,5 +1,7 @@
 package CSCI5308.GroupFormationTool.Security;
 
+import CSCI5308.GroupFormationTool.AccessControl.IUserPersistence;
+import CSCI5308.GroupFormationTool.AccessControl.User;
 import CSCI5308.GroupFormationTool.CustomExceptions.PasswordPolicyVoidException;
 import CSCI5308.GroupFormationTool.SystemConfig;
 import org.springframework.stereotype.Controller;
@@ -35,22 +37,21 @@ public class SignupController {
         boolean success = false;
         ModelAndView m;
         try {
-//        if (User.isBannerIDValid(bannerID) &&
-//                User.isEmailValid(email) &&
-//                User.isFirstNameValid(firstName) &&
-//                User.isLastNameValid(lastName) &&
-//                password.equals(passwordConfirm) &&
-            if (SystemConfig.instance().getPasswordPolicyService().validateUsingPolicies(password)) {
-                success = true;//remove later on
-//            User u = new User();
-//            u.setBannerID(bannerID);
-//            u.setPassword(password);
-//            u.setFirstName(firstName);
-//            u.setLastName(lastName);
-//            u.setEmail(email);
-//            IUserPersistence userDB = SystemConfig.instance().getUserDB();
-//            IPasswordEncryption passwordEncryption = SystemConfig.instance().getPasswordEncryption();
-//            success = u.createUser(userDB, passwordEncryption, null);
+            if (User.isBannerIDValid(bannerID) &&
+                    User.isEmailValid(email) &&
+                    User.isFirstNameValid(firstName) &&
+                    User.isLastNameValid(lastName) &&
+                    password.equals(passwordConfirm) &&
+                    SystemConfig.instance().getPasswordPolicyService().validateUsingPolicies(password)) {
+                User u = new User();
+                u.setBannerID(bannerID);
+                u.setPassword(password);
+                u.setFirstName(firstName);
+                u.setLastName(lastName);
+                u.setEmail(email);
+                IUserPersistence userDB = SystemConfig.instance().getUserDB();
+                IPasswordEncryption passwordEncryption = SystemConfig.instance().getPasswordEncryption();
+                success = u.createUser(userDB, passwordEncryption, null);
             }
         } catch (PasswordPolicyVoidException e) {
             //add error messages in model
