@@ -62,7 +62,6 @@ public class QuestionPersistence implements IQuestionPersistence {
             proc.execute();
         }
         catch(SQLException e){
-
             return false;
         }
         finally
@@ -103,7 +102,7 @@ public class QuestionPersistence implements IQuestionPersistence {
 
         }
         catch(SQLException e){
-            System.out.println(e.getMessage());
+            //Logging
         }
         finally
         {
