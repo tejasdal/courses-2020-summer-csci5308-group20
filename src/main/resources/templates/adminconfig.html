@@ -71,7 +71,6 @@
         if (args) {
             args = args.substr(1);
             var eachArgs = args.split("&");
-            console.log(eachArgs);
             for (var index in eachArgs) {
                 var arg = eachArgs[index];
                 var argKey = arg.split("=")[0];
@@ -104,8 +103,8 @@
     function deleteConfig(div) {
         var key, value;
         if (div) {
-            key = $($(div).parents('table').find("td")[0]).find("span").html();
-            value = $($(div).parents('table').find("td")[1]).find("span").html();
+            key = $($(div).parents('tr').find("td")[0]).find("span").html();
+            value = $($(div).parents('tr').find("td")[1]).find("span").html();
             $("#content").hide().html(addConfigDiv).css({
                 'grid-column': '2/3'
             });
@@ -123,8 +122,9 @@
     function showAddWindow(div) {
         var key, value;
         if (div) {
-            key = $($(div).parents('table').find("td")[0]).find("span").html();
-            value = $($(div).parents('table').find("td")[1]).find("span").html();
+            x = div;
+            key = $($(div).parents('tr').find("td")[0]).find("span").html();
+            value = $($(div).parents('tr').find("td")[1]).find("span").html();
         }
         $("#content").html(addConfigDiv).css({
             'grid-column': '2/3'
