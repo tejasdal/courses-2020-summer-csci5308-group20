@@ -22,6 +22,7 @@
 
 <div class="container" th:object="${question}">
 
+    <br><h4>Question Preview</h4><br>
     <!--    Free text Question-->
     <form action="#" th:action="@{/question/create}" th:object="${question}" method="post">
         <fieldset>
@@ -53,6 +54,9 @@
                     </div>
                 </div>
 <!--                Actual Details to be displayed-->
+                <div class="col-12">
+                    <h5 th:text="'Title: '+ ${question.title}">What is title?</h5>
+                </div>
                 <div class="col-8">
                     <h5 th:text="${question.description}">What is question?</h5>
                 </div>

@@ -23,7 +23,10 @@
 <div class="container">
     <form action="#" th:action="@{/question/more-option}"
           th:object="${question}" method="post">
-        <h4 th:text="'Add Option for your question: '+ ${question.description}"></h4>
+        <br>
+        <h4 th:text="'Add Option for your question'"></h4><br><br>
+        <h5 th:text="'Title: '+ ${question.title}"></h5>
+        <h5 th:text="'Description: '+ ${question.description}"></h5>
         <fieldset>
             <!--            User ID-->
             <div class="col-12 input-group">

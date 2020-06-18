@@ -4,7 +4,6 @@ import CSCI5308.GroupFormationTool.Question.IQuestionPersistence;
 import CSCI5308.GroupFormationTool.Question.Question;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.Assert;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -21,7 +20,8 @@ class QuestionServiceTest {
         Question question = new Question(1L, "Test Question", "What is Test Question?", 1L,
                 Question.NUMERIC, new Date(System.currentTimeMillis()), new ArrayList<>());
         boolean isCreated = questionPersistence.addQuestion(question);
-        Assert.isTrue(isCreated, "Failed to create a new Question!");
+        assertTrue(isCreated, "Test case failed!");
+        assertTrue(isCreated,"Negative test case failed");
     }
 
     @Test
