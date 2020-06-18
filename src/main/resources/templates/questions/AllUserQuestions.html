@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="https://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
+<head>
+    <title>CSCI5308 - Group Formation Tool</title>
+</head>
+<body>
+<h1>Questions</h1>
+<a th:href="@{/instructor/{id}/question/create(id=${userId})}">Create a New Question</a>
+<div>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th><a th:href="@{/instructor/questions(userId=${userId},sortBy='Title')}"/>Title</th>
+            <th>Description</th>
+            <th><a th:href="@{/instructor/questions(userId=${userId},sortBy='date')}"/>Date of Creation</th>
+        </tr>
+        <tr th:each="question : ${questions}">
+            <td th:text="${question.id}"></td>
+            <td th:text="${question.title}"></td>
+            <td th:text="${question.description}"></td>
+            <td th:text="${question.createdAt}"></td>
+            <td>
+                <form th:action="@{/instructor/deletequestion}" method="post">
+                    <input type="hidden" th:value="${question.id}" name="questionId">
+                    <input type="hidden" th:value="${userId}" name="userId"></input>
+                    <button type="submit" value="Delete" onClick="return confirm('Do you want to delete?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

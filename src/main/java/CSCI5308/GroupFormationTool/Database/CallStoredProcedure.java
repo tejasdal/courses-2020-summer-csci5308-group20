@@ -53,6 +53,11 @@ public class CallStoredProcedure
 	{
 		statement.setString(paramIndex, value);
 	}
+
+	public void setParameter(int paramIndex, Date value) throws SQLException
+	{
+		statement.setDate(paramIndex, value);
+	}
 	
 	public void registerOutputParameterString(int paramIndex) throws SQLException
 	{
@@ -81,5 +86,13 @@ public class CallStoredProcedure
 	public void execute() throws SQLException
 	{
 		statement.execute();
+	}
+
+	public void addBatch() throws SQLException {
+		statement.addBatch();
+	}
+
+	public void executeBatch() throws SQLException {
+		statement.executeBatch();
 	}
 }

@@ -29,14 +29,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
 	public void configure(HttpSecurity http) throws Exception
 	{
 		http.authorizeRequests()
+			.antMatchers("/admin/**").hasAuthority("ADMIN")
 			.antMatchers("/public/**", "/**").permitAll()
-			.antMatchers("/admin/**").hasRole("ADMIN")
 			.anyRequest().authenticated()
 			.and().formLogin()
 				.loginPage("/login")
 				.permitAll()
 			.and().logout()
-				.permitAll();
+				.permitAll()
+			.and().httpBasic()
+	                .and().csrf().disable();;
 	}
 	
 	@Override
