@@ -9,7 +9,8 @@ import java.util.Map;
 
 public class PasswordPolicyService implements IPasswordPolicyService {
 
-    private List<IPasswordPolicy> getListOfPasswordPolicies() {
+    @Override
+    public List<IPasswordPolicy> getListOfPasswordPolicies() {
         Map<String, String> allConfig = SystemConfig.instance().getAdminConfigService().getAllConfig();
         List<IPasswordPolicy> policies = new ArrayList<>();
         for (Map.Entry<String, String> entry : allConfig.entrySet()) {
@@ -21,7 +22,6 @@ public class PasswordPolicyService implements IPasswordPolicyService {
             return null;
         }
         return policies;
-
     }
 
     @Override
