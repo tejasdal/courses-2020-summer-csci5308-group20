@@ -15,6 +15,14 @@ import CSCI5308.GroupFormationTool.Database.IDatabaseConfiguration;
 import CSCI5308.GroupFormationTool.Security.BCryptPasswordEncryption;
 import CSCI5308.GroupFormationTool.Security.IPasswordEncryption;
 import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.*;
+import CSCI5308.GroupFormationTool.Question.IQuestionPersistence;
+import CSCI5308.GroupFormationTool.Question.IQuestionService;
+import CSCI5308.GroupFormationTool.Question.QuestionPersistence;
+import CSCI5308.GroupFormationTool.Question.QuestionService;
+import CSCI5308.GroupFormationTool.Security.*;
+import CSCI5308.GroupFormationTool.AccessControl.*;
+import CSCI5308.GroupFormationTool.Database.*;
+import CSCI5308.GroupFormationTool.Courses.*;
 
 /*
  * This is a singleton, we will learn about these when we learn design patterns.
@@ -44,6 +52,8 @@ public class SystemConfig {
     private IPasswordPolicy minUpperCasePolicy;
     private IPasswordPolicy restrictedSymbolCasePolicy;
     private IPasswordPolicy rememberedPasswordPolicy;
+    private IQuestionPersistence questionPersistence;
+    private IQuestionService questionService;
 
 
     // This private constructor ensures that no class other than System can allocate
@@ -59,9 +69,10 @@ public class SystemConfig {
         courseUserRelationshipDB = new CourseUserRelationshipDB();
         adminConfigService = new AdminConfigService();
         adminConfigPersistence = new AdminConfigPersistence();
-
         passwordPolicyService = new PasswordPolicyService();
         passwordPersistence = new PasswordPolicyPersistence();
+        questionPersistence = new QuestionPersistence();
+        questionService = new QuestionService();
     }
 
     // This is the way the rest of the application gets access to the System object.
@@ -149,5 +160,13 @@ public class SystemConfig {
             default:
                 return null;
         }
+    }
+
+    public IQuestionPersistence getQuestionPersistence() {
+        return questionPersistence;
+    }
+
+    public IQuestionService getQuestionService() {
+        return questionService;
     }
 }

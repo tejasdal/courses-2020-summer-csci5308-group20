@@ -2,6 +2,8 @@ package CSCI5308.GroupFormationTool.Courses;
 
 import java.util.List;
 
+import CSCI5308.GroupFormationTool.AccessControl.CurrentUser;
+import CSCI5308.GroupFormationTool.AccessControl.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +34,11 @@ public class InstructorAdminController
 		if (course.isCurrentUserEnrolledAsRoleInCourse(Role.INSTRUCTOR) ||
 			 course.isCurrentUserEnrolledAsRoleInCourse(Role.TA))
 		{
+			User currentUser = CurrentUser.instance().getCurrentAuthenticatedUser();
+			if (null != currentUser) {
+				model.addAttribute("isInstructor", course.isCurrentUserEnrolledAsRoleInCourse(Role.INSTRUCTOR));
+				model.addAttribute("instructorId", currentUser.getID());
+			}
 			return "course/instructoradmin";
 		}
 		else
