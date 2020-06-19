@@ -12,17 +12,17 @@ import CSCI5308.GroupFormationTool.Courses.ICoursePersistence;
 import CSCI5308.GroupFormationTool.Courses.ICourseUserRelationshipPersistence;
 import CSCI5308.GroupFormationTool.Database.DefaultDatabaseConfiguration;
 import CSCI5308.GroupFormationTool.Database.IDatabaseConfiguration;
-import CSCI5308.GroupFormationTool.Security.BCryptPasswordEncryption;
-import CSCI5308.GroupFormationTool.Security.IPasswordEncryption;
-import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.*;
 import CSCI5308.GroupFormationTool.Question.IQuestionPersistence;
 import CSCI5308.GroupFormationTool.Question.IQuestionService;
 import CSCI5308.GroupFormationTool.Question.QuestionPersistence;
 import CSCI5308.GroupFormationTool.Question.QuestionService;
-import CSCI5308.GroupFormationTool.Security.*;
-import CSCI5308.GroupFormationTool.AccessControl.*;
-import CSCI5308.GroupFormationTool.Database.*;
-import CSCI5308.GroupFormationTool.Courses.*;
+import CSCI5308.GroupFormationTool.Security.BCryptPasswordEncryption;
+import CSCI5308.GroupFormationTool.Security.IPasswordEncryption;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /*
  * This is a singleton, we will learn about these when we learn design patterns.
@@ -141,25 +141,42 @@ public class SystemConfig {
         return passwordPersistence;
     }
 
-    public IPasswordPolicy getPolicy(String policy, String policyValue) {
-        switch (policy) {
-            case MinLengthPolicy.POLICY_NAME:
-                return new MinLengthPolicy(policyValue);
-            case MaxLengthPolicy.POLICY_NAME:
-                return new MaxLengthPolicy(policyValue);
-            case MinLowerCasePolicy.POLICY_NAME:
-                return new MinLowerCasePolicy(policyValue);
-            case MinSymbolPolicy.POLICY_NAME:
-                return new MinSymbolPolicy(policyValue);
-            case MinUpperCasePolicy.POLICY_NAME:
-                return new MinUpperCasePolicy(policyValue);
-            case RestrictedSymbolCasePolicy.POLICY_NAME:
-                return new RestrictedSymbolCasePolicy(policyValue);
-            case RememberedPasswordPolicy.POLICY_NAME:
-                return new RememberedPasswordPolicy(policyValue);
-            default:
-                return null;
+    public List<IPasswordPolicy> getPolicy() {
+        Map<String, String> allConfig = SystemConfig.instance().getAdminConfigService().getAllConfig();
+        List<IPasswordPolicy> policies = new ArrayList<>();
+        for (Map.Entry<String, String> entry : allConfig.entrySet()) {
+            if (entry.getKey().startsWith("PASSWORD_")) {
+                switch (entry.getKey()) {
+                    case MinLengthPolicy.POLICY_NAME:
+                        policies.add(new MinLengthPolicy(entry.getValue()));
+                        break;
+                    case MaxLengthPolicy.POLICY_NAME:
+                        policies.add(new MaxLengthPolicy(entry.getValue()));
+                        break;
+                    case MinLowerCasePolicy.POLICY_NAME:
+                        policies.add(new MinLowerCasePolicy(entry.getValue()));
+                        break;
+                    case MinSymbolPolicy.POLICY_NAME:
+                        policies.add(new MinSymbolPolicy(entry.getValue()));
+                        break;
+                    case MinUpperCasePolicy.POLICY_NAME:
+                        policies.add(new MinUpperCasePolicy(entry.getValue()));
+                        break;
+                    case RestrictedSymbolCasePolicy.POLICY_NAME:
+                        policies.add(new RestrictedSymbolCasePolicy(entry.getValue()));
+                        break;
+                    case RememberedPasswordPolicy.POLICY_NAME:
+                        policies.add(new RememberedPasswordPolicy(entry.getValue()));
+                        break;
+                    default:
+                        return null;
+                }
+            }
         }
+        if (policies.isEmpty()) {
+            return null;
+        }
+        return policies;
     }
 
     public IQuestionPersistence getQuestionPersistence() {

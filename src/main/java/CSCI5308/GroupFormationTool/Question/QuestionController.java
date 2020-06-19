@@ -10,8 +10,7 @@ import java.util.List;
 
 @Controller
 public class QuestionController {
-
-
+    
     @RequestMapping(value="/instructor/questions")
     public String getAllUserQuestions
             (@RequestParam(name="userId") Long userId,
@@ -32,7 +31,6 @@ public class QuestionController {
         IQuestionService questionService = SystemConfig.instance().getQuestionService();
         IQuestionPersistence questionPersistence = SystemConfig.instance().getQuestionPersistence();
         questionService.deleteQuestion(questionId,questionPersistence);
-        //ModelAndView mv = new ModelAndView("redirect:/questions/AllUserQuestions");
         redirectAttributes.addAttribute("userId",userId);
         return "redirect:/instructor/questions";
     }

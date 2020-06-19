@@ -25,7 +25,7 @@ public class AdminConfigService implements IAdminConfigService {
 	public boolean updateConfig(String key, String value, IAdminConfigPersistence persistence)
 			throws KeyNotFoundException {
 		// update using persistence class, update value in 'config' map
-		if (!config.containsKey(key)) {
+		if (config.containsKey(key) == false) {
 			throw new KeyNotFoundException("Config with key '" + key + "' not found");
 		}
 		boolean result = persistence.setConfig(key, value);
@@ -53,7 +53,7 @@ public class AdminConfigService implements IAdminConfigService {
 
 	@Override
 	public boolean deleteConfig(String key, IAdminConfigPersistence persistence) throws KeyNotFoundException {
-		if (!config.containsKey(key)) {
+		if (config.containsKey(key) == false) {
 			throw new KeyNotFoundException("Config with key '" + key + "' not found");
 		}
 		boolean result = persistence.deleteConfig(key);

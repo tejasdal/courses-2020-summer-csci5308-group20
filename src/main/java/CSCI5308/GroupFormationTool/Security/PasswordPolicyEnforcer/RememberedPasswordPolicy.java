@@ -10,7 +10,7 @@ public class RememberedPasswordPolicy implements IPasswordPolicy {
     private int policyCount;
 
     public RememberedPasswordPolicy(String value) {
-        if (!value.equals("")) {
+        if (value.equals("") == false) {
             policyCount = Integer.parseInt(value);
         }
     }
@@ -28,9 +28,9 @@ public class RememberedPasswordPolicy implements IPasswordPolicy {
         try {
             IPasswordPersistence persistence = SystemConfig.instance().getPasswordPersistence();
             String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-            if (!username.equals("")) {
+            if (username.equals("") == false) {
                 List<String> list = persistence.getPasswordHistoryByUserId(username, policyCount);
-                if (!list.contains(password))
+                if (list.contains(password) == false)
                     return true;
             }
         } catch (Exception e) {
