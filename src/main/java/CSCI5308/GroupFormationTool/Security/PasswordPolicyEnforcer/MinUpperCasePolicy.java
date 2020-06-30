@@ -20,9 +20,9 @@ public class MinUpperCasePolicy implements IPasswordPolicy {
     public boolean validate(String password) {
         int upperCase = 0;
         for (int i = 0; i < password.length(); i++) {
-            // Check for lowercase letters.
-            if (Character.isUpperCase(password.charAt(i)))
+            if (Character.isUpperCase(password.charAt(i))) {
                 upperCase++;
+            }
         }
         return minUpperCase <= upperCase;
     }
