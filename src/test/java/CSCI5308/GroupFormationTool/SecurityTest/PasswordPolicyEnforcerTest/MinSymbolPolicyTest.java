@@ -1,5 +1,6 @@
 package CSCI5308.GroupFormationTool.SecurityTest.PasswordPolicyEnforcerTest;
 
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.IPasswordPolicy;
 import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.MinSymbolPolicy;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,7 @@ public class MinSymbolPolicyTest {
 
     @Test
     public void validate() {
-        MinSymbolPolicy minSymbolPolicy = new MinSymbolPolicy("1");
+        IPasswordPolicy minSymbolPolicy = new MinSymbolPolicy("1");
         assertTrue(minSymbolPolicy.validate(password));
 
         minSymbolPolicy = new MinSymbolPolicy("10");

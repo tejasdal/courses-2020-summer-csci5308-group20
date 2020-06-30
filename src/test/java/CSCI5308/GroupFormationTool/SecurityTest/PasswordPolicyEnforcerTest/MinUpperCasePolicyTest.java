@@ -1,5 +1,6 @@
 package CSCI5308.GroupFormationTool.SecurityTest.PasswordPolicyEnforcerTest;
 
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.IPasswordPolicy;
 import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.MinUpperCasePolicy;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,7 @@ public class MinUpperCasePolicyTest {
 
     @Test
     public void validate() {
-        MinUpperCasePolicy minUpperCasePolicy = new MinUpperCasePolicy("1");
+        IPasswordPolicy minUpperCasePolicy = new MinUpperCasePolicy("1");
         assertTrue(minUpperCasePolicy.validate(password));
 
         minUpperCasePolicy = new MinUpperCasePolicy("10");
