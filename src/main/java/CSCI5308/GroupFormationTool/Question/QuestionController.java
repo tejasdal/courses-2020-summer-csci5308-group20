@@ -90,17 +90,6 @@ public class QuestionController {
         return "questions/addOptionToQuestion";
     }
 
-    /**
-     * If <code>questionType</code> is MCQ and path variable <code>isMcdPrototype</code> is 1,
-     * then display prototype for MCQ question, else redirect it to <code>/question/option</code>.
-     *
-     * If <code>questionType</code> is either Numeric or FreeText, then display prototype for the
-     * question.
-     *
-     * @param model
-     * @param question
-     * @return
-     */
     @PostMapping(value = "/question/prototype/{isMcqPrototype}")
     public String displayQuestionPrototype(Model model, @ModelAttribute Question question,
                                            @PathVariable(value = "isMcqPrototype", required = false) Integer isMcqPrototype){

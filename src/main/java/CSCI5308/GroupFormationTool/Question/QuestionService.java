@@ -19,7 +19,7 @@ public class QuestionService implements IQuestionService {
             log.error("Question details is not valid.");
             throw new QuestionException("Invalid question. Please provide valid details!");
         }
-        if (!isValidQuestionType(question.getQuestionType())){
+        if (isInvalidQuestionType(question.getQuestionType())){
             log.error("Question type for given question is not valid.");
             throw new QuestionException("Invalid question type.");
         }
@@ -58,8 +58,8 @@ public class QuestionService implements IQuestionService {
         return questions;
     }
 
-    public boolean isValidQuestionType(int questionTypeId){
-        return (questionTypeId == Question.getNumeric() || questionTypeId == Question.getFreeText()
+    public boolean isInvalidQuestionType(int questionTypeId){
+        return !(questionTypeId == Question.getNumeric() || questionTypeId == Question.getFreeText()
                 || questionTypeId == Question.getMultipleChoiceChooseOne()
                 || questionTypeId == Question.getMultipleChoiceChooseMany());
     }
