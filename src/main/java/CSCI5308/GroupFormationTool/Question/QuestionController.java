@@ -14,11 +14,34 @@ public class QuestionController {
     @RequestMapping(value="/instructor/questions")
     public String getAllUserQuestions
             (@RequestParam(name="userId") Long userId,
-             @RequestParam(name="sortBy",defaultValue="date",required=false) String sortBy,
              Model model){
         IQuestionService questionService = SystemConfig.instance().getQuestionService();
         IQuestionPersistence questionPersistence = SystemConfig.instance().getQuestionPersistence();
-        List<Question> questions = questionService.getAllUserQuestions(userId,sortBy,questionPersistence);
+        List<Question> questions = questionService.getAllUserQuestions(userId, questionPersistence);
+        model.addAttribute("questions",questions);
+        model.addAttribute("userId",userId);
+        return "questions/AllUserQuestions";
+    }
+
+    @RequestMapping(value="/instructor/questions/titleSort")
+    public String getAllUserQuestionsSortedTitle
+            (@RequestParam(name="userId") Long userId,
+             Model model){
+        IQuestionService questionService = SystemConfig.instance().getQuestionService();
+        IQuestionPersistence questionPersistence = SystemConfig.instance().getQuestionPersistence();
+        List<Question> questions = questionService.getAllUserQuestionsSortedByTitle(userId, questionPersistence);
+        model.addAttribute("questions",questions);
+        model.addAttribute("userId",userId);
+        return "questions/AllUserQuestions";
+    }
+
+    @RequestMapping(value="/instructor/questions/dateSort")
+    public String getAllUserQuestionsSortedDate
+            (@RequestParam(name="userId") Long userId,
+             Model model){
+        IQuestionService questionService = SystemConfig.instance().getQuestionService();
+        IQuestionPersistence questionPersistence = SystemConfig.instance().getQuestionPersistence();
+        List<Question> questions = questionService.getAllUserQuestionsSortedByDate(userId, questionPersistence);
         model.addAttribute("questions",questions);
         model.addAttribute("userId",userId);
         return "questions/AllUserQuestions";
