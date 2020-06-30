@@ -9,7 +9,7 @@ public class CourseUserRelationship implements ICourseUserRelationship
 {
 	public boolean userHasRoleInCourse(User user, Role role, Course course)
 	{
-		if (null == user || !user.isValidUser())
+		if (null == user || user.isValidUser() == false)
 		{
 			return false;
 		}
