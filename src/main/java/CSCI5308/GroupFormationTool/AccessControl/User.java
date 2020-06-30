@@ -122,7 +122,11 @@ public class User
 	
 	public boolean isValidUser()
 	{
-		return id != -1; 
+		boolean valid = true;
+		if (id == -1) {
+			valid = false;
+		}
+		return valid; 
 	}
 	
 	public boolean createUser(
@@ -133,7 +137,11 @@ public class User
 		String rawPassword = password;
 		this.password = passwordEncryption.encryptPassword(this.password);
 		boolean success = userDB.createUser(this);
-		if (success && (null != notification))
+		boolean notificationNotNull = true;
+		if (notification == null) {
+			notificationNotNull = false;
+		}
+		if (success && notificationNotNull)
 		{
 			notification.sendUserLoginCredentials(this, rawPassword);
 		}
