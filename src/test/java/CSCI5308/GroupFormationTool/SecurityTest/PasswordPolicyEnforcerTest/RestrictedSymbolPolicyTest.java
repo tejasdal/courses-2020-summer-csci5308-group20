@@ -1,5 +1,6 @@
 package CSCI5308.GroupFormationTool.SecurityTest.PasswordPolicyEnforcerTest;
 
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.IPasswordPolicy;
 import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.RestrictedSymbolCasePolicy;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,7 @@ public class RestrictedSymbolPolicyTest {
 
     @Test
     public void validate() {
-        RestrictedSymbolCasePolicy restrictedSymbolCasePolicy = new RestrictedSymbolCasePolicy("#");
+        IPasswordPolicy restrictedSymbolCasePolicy = new RestrictedSymbolCasePolicy("#");
         assertTrue(restrictedSymbolCasePolicy.validate(password));
 
         restrictedSymbolCasePolicy = new RestrictedSymbolCasePolicy(".");

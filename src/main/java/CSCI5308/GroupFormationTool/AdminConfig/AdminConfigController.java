@@ -14,6 +14,8 @@ import CSCI5308.GroupFormationTool.SystemConfig;
 public class AdminConfigController {
 	private static final String KEY = "config_key";
 	private static final String VALUE = "config_value";
+	private static final int KEY_LENGTH_MAX = 100;
+	private static final int VALUE_LENGTH_MAX = 100;
 
 	@GetMapping("/admin/config")
 	public String displayAdminConfig(Model model) {
@@ -29,7 +31,7 @@ public class AdminConfigController {
 			mav.addObject("errorMessage", "Key is empty");
 			return mav;
 		}
-		if (key.length() > 100) {
+		if (key.length() > KEY_LENGTH_MAX) {
 			mav.addObject("errorMessage", "Key is too long");
 			return mav;
 		}
@@ -37,7 +39,7 @@ public class AdminConfigController {
 			mav.addObject("errorMessage", "Value is empty");
 			return mav;
 		}
-		if (value.length() > 100) {
+		if (value.length() > VALUE_LENGTH_MAX) {
 			mav.addObject("errorMessage", "Value is too long");
 			return mav;
 		}
@@ -61,7 +63,7 @@ public class AdminConfigController {
 			mav.addObject("errorMessage", "Key is empty");
 			return mav;
 		}
-		if (key.length() > 100) {
+		if (key.length() > KEY_LENGTH_MAX) {
 			mav.addObject("errorMessage", "Key is too long");
 			return mav;
 		}
@@ -69,7 +71,7 @@ public class AdminConfigController {
 			mav.addObject("errorMessage", "Value is empty");
 			return mav;
 		}
-		if (value.length() > 100) {
+		if (value.length() > VALUE_LENGTH_MAX) {
 			mav.addObject("errorMessage", "Value is too long");
 			return mav;
 		}
@@ -92,7 +94,7 @@ public class AdminConfigController {
 			mav.addObject("errorMessage", "Key is empty");
 			return mav;
 		}
-		if (key.length() > 100) {
+		if (key.length() > KEY_LENGTH_MAX) {
 			mav.addObject("errorMessage", "Key is too long");
 			return mav;
 		}
