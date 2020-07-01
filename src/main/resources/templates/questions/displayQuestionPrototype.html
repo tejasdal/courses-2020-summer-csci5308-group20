@@ -27,7 +27,7 @@
     <form action="#" th:action="@{/question/create}" th:object="${question}" method="post">
         <fieldset>
             <div class="row my-4">
-                <!--            User ID-->
+                <!--       User ID-->
                 <div class="col-12 input-group">
                     <input type="text" class="form-control" id="userId" name="userId" th:field="*{userId}"
                            placeholder="UserId" hidden>
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                 </div>
-<!--                Actual Details to be displayed-->
+                <!--        Actual Details to be displayed-->
                 <div class="col-12">
                     <h5 th:text="'Title: '+ ${question.title}">What is title?</h5>
                 </div>

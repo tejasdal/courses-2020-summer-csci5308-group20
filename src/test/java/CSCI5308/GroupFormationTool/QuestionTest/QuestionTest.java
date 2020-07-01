@@ -30,22 +30,6 @@ public class QuestionTest {
     }
 
     @Test
-    void getNumeric() {
-    }
-
-    @Test
-    void getMultipleChoiceChooseOne() {
-    }
-
-    @Test
-    void getMultipleChoiceChooseMany() {
-    }
-
-    @Test
-    void getFreeText() {
-    }
-
-    @Test
     void getId()
     {
         Question question = this.getAllArgsQuestion();
