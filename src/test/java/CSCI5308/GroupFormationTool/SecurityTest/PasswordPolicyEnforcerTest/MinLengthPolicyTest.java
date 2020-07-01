@@ -1,5 +1,6 @@
 package CSCI5308.GroupFormationTool.SecurityTest.PasswordPolicyEnforcerTest;
 
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.IPasswordPolicy;
 import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.MinLengthPolicy;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,7 @@ public class MinLengthPolicyTest {
 
     @Test
     public void validate() {
-        MinLengthPolicy minLengthPolicy = new MinLengthPolicy("1");
+        IPasswordPolicy minLengthPolicy = new MinLengthPolicy("1");
         assertTrue(minLengthPolicy.validate(password));
 
         minLengthPolicy = new MinLengthPolicy("10");

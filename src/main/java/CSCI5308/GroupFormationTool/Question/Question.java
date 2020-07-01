@@ -2,6 +2,7 @@ package CSCI5308.GroupFormationTool.Question;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Question {
@@ -103,5 +104,24 @@ public class Question {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+
+    public static Comparator<Question> titleComparator = new Comparator<Question>() {
+        @Override
+        public int compare(Question question1, Question question2) {
+            String title1 = question1.getTitle();
+            String title2 = question2.getTitle();
+
+            return title1.compareTo(title2);
+        }
+    };
+
+    public static Comparator<Question> dateComparator = new Comparator<Question>() {
+        @Override
+        public int compare(Question question1, Question question2) {
+            Date createdAt1 = question1.getCreatedAt();
+            Date createdAt2 = question2.getCreatedAt();
+            return createdAt1.compareTo(createdAt2);
+        }
+    };
 }
 

@@ -9,8 +9,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class QuestionPersistenceMock implements IQuestionPersistence {
 
     @Override
@@ -24,7 +22,7 @@ class QuestionPersistenceMock implements IQuestionPersistence {
     }
 
     @Override
-    public List<Question> getAllUserQuestions(Long userId, String sortBy) {
+    public List<Question> getAllUserQuestions(Long userId) {
         List<Question> questions = new ArrayList<>();
         List<QuestionOption> questionOptions = new ArrayList<>();
         questionOptions.add(new QuestionOption(1L, "Option 1", 1));

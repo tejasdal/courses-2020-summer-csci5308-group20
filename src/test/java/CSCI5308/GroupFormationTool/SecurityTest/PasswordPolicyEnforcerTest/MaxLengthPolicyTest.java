@@ -1,5 +1,6 @@
 package CSCI5308.GroupFormationTool.SecurityTest.PasswordPolicyEnforcerTest;
 
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.IPasswordPolicy;
 import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.MaxLengthPolicy;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,7 @@ public class MaxLengthPolicyTest {
 
     @Test
     public void validate() {
-        MaxLengthPolicy maxLengthPolicy = new MaxLengthPolicy("10");
+        IPasswordPolicy maxLengthPolicy = new MaxLengthPolicy("10");
         assertTrue(maxLengthPolicy.validate(password));
 
         maxLengthPolicy = new MaxLengthPolicy("1");

@@ -1,10 +1,13 @@
 package CSCI5308.GroupFormationTool.AccessControlTest;
 
-import CSCI5308.GroupFormationTool.AccessControl.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.Assert;
+
+import CSCI5308.GroupFormationTool.AccessControl.IUserPersistence;
+import CSCI5308.GroupFormationTool.AccessControl.User;
 
 @SpringBootTest
 @SuppressWarnings("deprecation")
@@ -14,17 +17,17 @@ public class UserTest
 	public void ConstructorTests()
 	{
 		User u = new User();
-		Assert.isTrue(u.getBannerID().isEmpty());
-		Assert.isTrue(u.getFirstName().isEmpty());
-		Assert.isTrue(u.getLastName().isEmpty());
-		Assert.isTrue(u.getEmail().isEmpty());
+		assertTrue(u.getBannerID().isEmpty());
+		assertTrue(u.getFirstName().isEmpty());
+		assertTrue(u.getLastName().isEmpty());
+		assertTrue(u.getEmail().isEmpty());
 		
 		IUserPersistence userDBMock = new UserDBMock();
 		u = new User(1, userDBMock);
-		Assert.isTrue(u.getBannerID().equals("B00000000"));
+		assertTrue(u.getBannerID().equals("B00000000"));
 		
 		u = new User("B00000000", userDBMock);
-		Assert.isTrue(u.getBannerID().equals("B00000000"));
+		assertTrue(u.getBannerID().equals("B00000000"));
 	}
 	
 	@Test
@@ -32,7 +35,7 @@ public class UserTest
 	{
 		User u = new User();
 		u.setID(10);
-		Assert.isTrue(10 == u.getID());
+		assertTrue(10 == u.getID());
 	}
 	
 	@Test
@@ -40,7 +43,7 @@ public class UserTest
 	{
 		User u = new User();
 		u.setID(10);
-		Assert.isTrue(10 == u.getID());
+		assertTrue(10 == u.getID());
 	}
 	
 	@Test
@@ -48,7 +51,7 @@ public class UserTest
 	{
 		User u = new User();
 		u.setBannerID("B00000000");
-		Assert.isTrue(u.getBannerID().equals("B00000000"));
+		assertTrue(u.getBannerID().equals("B00000000"));
 	}
 	
 	@Test
@@ -56,7 +59,7 @@ public class UserTest
 	{
 		User u = new User();
 		u.setBannerID("B00000000");
-		Assert.isTrue(u.getBannerID().equals("B00000000"));
+		assertTrue(u.getBannerID().equals("B00000000"));
 	}
 	
 	@Test
@@ -64,7 +67,7 @@ public class UserTest
 	{
 		User u = new User();
 		u.setFirstName("Rob");
-		Assert.isTrue(u.getFirstName().equals("Rob"));
+		assertTrue(u.getFirstName().equals("Rob"));
 	}
 	
 	@Test
@@ -72,7 +75,7 @@ public class UserTest
 	{
 		User u = new User();
 		u.setFirstName("Rob");
-		Assert.isTrue(u.getFirstName().equals("Rob"));
+		assertTrue(u.getFirstName().equals("Rob"));
 	}
 
 	@Test
@@ -80,7 +83,7 @@ public class UserTest
 	{
 		User u = new User();
 		u.setLastName("Hawkey");
-		Assert.isTrue(u.getLastName().equals("Hawkey"));
+		assertTrue(u.getLastName().equals("Hawkey"));
 	}
 
 	@Test
@@ -88,7 +91,7 @@ public class UserTest
 	{
 		User u = new User();
 		u.setLastName("Hawkey");
-		Assert.isTrue(u.getLastName().equals("Hawkey"));
+		assertTrue(u.getLastName().equals("Hawkey"));
 	}
 	
 	@Test
@@ -96,7 +99,7 @@ public class UserTest
 	{
 		User u = new User();
 		u.setEmail("rhawkey@dal.ca");
-		Assert.isTrue(u.getEmail().equals("rhawkey@dal.ca"));
+		assertTrue(u.getEmail().equals("rhawkey@dal.ca"));
 	}
 	
 	@Test
@@ -104,7 +107,7 @@ public class UserTest
 	{
 		User u = new User();
 		u.setEmail("rhawkey@dal.ca");
-		Assert.isTrue(u.getEmail().equals("rhawkey@dal.ca"));
+		assertTrue(u.getEmail().equals("rhawkey@dal.ca"));
 	}
 	
 	@Test
@@ -113,41 +116,41 @@ public class UserTest
 		IUserPersistence userDB = new UserDBMock();
 		User user = new User();
 		userDB.createUser(user);
-		Assert.isTrue(user.getId() == 0);
-		Assert.isTrue(user.getBannerID().equals("B00000000"));
+		assertTrue(user.getId() == 0);
+		assertTrue(user.getBannerID().equals("B00000000"));
 	}
 
 	@Test
 	public void isBannerIDValidTest()
 	{
-		Assert.isTrue(User.isBannerIDValid("B000000000"));
-		Assert.isTrue(!User.isBannerIDValid(null));
-		Assert.isTrue(!User.isBannerIDValid(""));
+		assertTrue(User.isBannerIDValid("B000000000"));
+		assertFalse(User.isBannerIDValid(null));
+		assertFalse(User.isBannerIDValid(""));
 	}
 		
 	@Test
 	public void isFirstNameValidTest()
 	{
-		Assert.isTrue(User.isFirstNameValid("rob"));
-		Assert.isTrue(!User.isFirstNameValid(null));
-		Assert.isTrue(!User.isFirstNameValid(""));
+		assertTrue(User.isFirstNameValid("rob"));
+		assertFalse(User.isFirstNameValid(null));
+		assertFalse(User.isFirstNameValid(""));
 	}
 	
 	@Test
 	public void isLastNameValidTest()
 	{
-		Assert.isTrue(User.isLastNameValid("hawkey"));
-		Assert.isTrue(!User.isLastNameValid(null));
-		Assert.isTrue(!User.isLastNameValid(""));
+		assertTrue(User.isLastNameValid("hawkey"));
+		assertFalse(User.isLastNameValid(null));
+		assertFalse(User.isLastNameValid(""));
 	}
 	
 	@Test
 	public void isEmailValidTest()
 	{
-		Assert.isTrue(User.isEmailValid("rhawkey@dal.ca"));
-		Assert.isTrue(!User.isEmailValid(null));
-		Assert.isTrue(!User.isEmailValid(""));
-		Assert.isTrue(!User.isEmailValid("@dal.ca"));
-		Assert.isTrue(!User.isEmailValid("rhawkey@"));
+		assertTrue(User.isEmailValid("rhawkey@dal.ca"));
+		assertFalse(User.isEmailValid(null));
+		assertFalse(User.isEmailValid(""));
+		assertFalse(User.isEmailValid("@dal.ca"));
+		assertFalse(User.isEmailValid("rhawkey@"));
 	}	
 }

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 public class QuestionService implements IQuestionService {
@@ -18,7 +19,7 @@ public class QuestionService implements IQuestionService {
             log.error("Question details is not valid.");
             throw new QuestionException("Invalid question. Please provide valid details!");
         }
-        if (!isValidQuestionType(question.getQuestionType())){
+        if (isInvalidQuestionType(question.getQuestionType())){
             log.error("Question type for given question is not valid.");
             throw new QuestionException("Invalid question type.");
         }
@@ -34,8 +35,8 @@ public class QuestionService implements IQuestionService {
 
     @Override
     public List<Question> getAllUserQuestions
-            (Long userId, String sortBy, IQuestionPersistence questionPersistence) {
-        return questionPersistence.getAllUserQuestions(userId,sortBy);
+            (Long userId, IQuestionPersistence questionPersistence) {
+        return questionPersistence.getAllUserQuestions(userId);
     }
 
     @Override
@@ -43,8 +44,22 @@ public class QuestionService implements IQuestionService {
         return questionPersistence.deleteQuestion(questionId);
     }
 
-    public boolean isValidQuestionType(int questionTypeId){
-        return (questionTypeId == Question.getNumeric() || questionTypeId == Question.getFreeText()
+    @Override
+    public List<Question> getAllUserQuestionsSortedByTitle(Long userId, IQuestionPersistence questionPersistence) {
+        List<Question> questions = questionPersistence.getAllUserQuestions(userId);
+        Collections.sort(questions,Question.titleComparator);
+        return questions;
+    }
+
+    @Override
+    public List<Question> getAllUserQuestionsSortedByDate(Long userId, IQuestionPersistence questionPersistence) {
+        List<Question> questions = questionPersistence.getAllUserQuestions(userId);
+        Collections.sort(questions,Question.dateComparator);
+        return questions;
+    }
+
+    public boolean isInvalidQuestionType(int questionTypeId){
+        return !(questionTypeId == Question.getNumeric() || questionTypeId == Question.getFreeText()
                 || questionTypeId == Question.getMultipleChoiceChooseOne()
                 || questionTypeId == Question.getMultipleChoiceChooseMany());
     }

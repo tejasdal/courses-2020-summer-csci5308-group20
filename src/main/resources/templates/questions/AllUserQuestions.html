@@ -14,9 +14,9 @@
     <table>
         <tr>
             <th>ID</th>
-            <th><a th:href="@{/instructor/questions(userId=${userId},sortBy='Title')}"/>Title</th>
+            <th><a th:href="@{/instructor/questions/titleSort(userId=${userId})}"/>Title</th>
             <th>Description</th>
-            <th><a th:href="@{/instructor/questions(userId=${userId},sortBy='date')}"/>Date of Creation</th>
+            <th><a th:href="@{/instructor/questions/dateSort(userId=${userId})}"/>Date of Creation</th>
         </tr>
         <tr th:each="question : ${questions}">
             <td th:text="${question.id}"></td>
