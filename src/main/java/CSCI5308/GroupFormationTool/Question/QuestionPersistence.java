@@ -75,13 +75,12 @@ public class QuestionPersistence implements IQuestionPersistence {
     }
 
     @Override
-    public List<Question> getAllUserQuestions(Long userId, String sortBy) {
+    public List<Question> getAllUserQuestions(Long userId) {
         List<Question> questions = new ArrayList<Question>();
         CallStoredProcedure proc = null;
         try{
-            proc = new CallStoredProcedure("spGetAllQuestionUser(?,?)");
+            proc = new CallStoredProcedure("spGetAllQuestionUser(?)");
             proc.setParameter(1,userId);
-            proc.setParameter(2,sortBy);
             ResultSet rs = proc.executeWithResults();
             if(rs!=null){
                 while(rs.next()){

@@ -27,7 +27,7 @@ class QuestionServiceTest {
     @Test
     void getAllUserQuestionsTest() {
         IQuestionPersistence questionPersistence = new QuestionPersistenceMock();
-        List<Question> questionList = questionPersistence.getAllUserQuestions(1L,"date");
+        List<Question> questionList = questionPersistence.getAllUserQuestions(1L);
         assertEquals(3,questionList.size());
 
     }

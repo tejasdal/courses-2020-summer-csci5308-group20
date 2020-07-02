@@ -15,12 +15,12 @@ public class RememberedPasswordPolicy implements IPasswordPolicy {
         }
     }
 
-    public void setPolicyCount(int policyCount) {
-        this.policyCount = policyCount;
-    }
-
     public int getPolicyCount() {
         return policyCount;
+    }
+
+    public void setPolicyCount(int policyCount) {
+        this.policyCount = policyCount;
     }
 
     @Override
@@ -30,8 +30,9 @@ public class RememberedPasswordPolicy implements IPasswordPolicy {
             String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
             if (username.equals("") == false) {
                 List<String> list = persistence.getPasswordHistoryByUserId(username, policyCount);
-                if (list.contains(password) == false)
+                if (list.contains(password) == false) {
                     return true;
+                }
             }
         } catch (Exception e) {
             //
