@@ -19,6 +19,10 @@ import CSCI5308.GroupFormationTool.Question.QuestionService;
 import CSCI5308.GroupFormationTool.Security.BCryptPasswordEncryption;
 import CSCI5308.GroupFormationTool.Security.IPasswordEncryption;
 import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.*;
+import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyPersistence;
+import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyService;
+import CSCI5308.GroupFormationTool.SurveyManagement.SurveyPersistence;
+import CSCI5308.GroupFormationTool.SurveyManagement.SurveyService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,16 +39,17 @@ import java.util.Map;
  */
 public class SystemConfig {
     private static SystemConfig uniqueInstance = null;
-
+    private final IAdminConfigService adminConfigService;
+    private final IAdminConfigPersistence adminConfigPersistence;
+    private final IPasswordPolicyService passwordPolicyService;
+    private final IPasswordPersistence passwordPersistence;
+    private final IQuestionPersistence questionPersistence;
+    private final IQuestionService questionService;
     private IPasswordEncryption passwordEncryption;
     private IUserPersistence userDB;
     private IDatabaseConfiguration databaseConfiguration;
     private ICoursePersistence courseDB;
     private ICourseUserRelationshipPersistence courseUserRelationshipDB;
-    private IAdminConfigService adminConfigService;
-    private IAdminConfigPersistence adminConfigPersistence;
-    private IPasswordPolicyService passwordPolicyService;
-    private IPasswordPersistence passwordPersistence;
     private IPasswordPolicy maxLengthPolicy;
     private IPasswordPolicy minLengthPolicy;
     private IPasswordPolicy minLowerCasePolicy;
@@ -52,8 +57,8 @@ public class SystemConfig {
     private IPasswordPolicy minUpperCasePolicy;
     private IPasswordPolicy restrictedSymbolCasePolicy;
     private IPasswordPolicy rememberedPasswordPolicy;
-    private IQuestionPersistence questionPersistence;
-    private IQuestionService questionService;
+    private ISurveyService surveyService;
+    private ISurveyPersistence surveyPersistence;
 
 
     // This private constructor ensures that no class other than System can allocate
@@ -73,6 +78,8 @@ public class SystemConfig {
         passwordPersistence = new PasswordPolicyPersistence();
         questionPersistence = new QuestionPersistence();
         questionService = new QuestionService();
+        surveyPersistence = new SurveyPersistence();
+        surveyService = new SurveyService();
     }
 
     // This is the way the rest of the application gets access to the System object.
@@ -109,20 +116,20 @@ public class SystemConfig {
         this.databaseConfiguration = databaseConfiguration;
     }
 
-    public void setCourseDB(ICoursePersistence courseDB) {
-        this.courseDB = courseDB;
-    }
-
     public ICoursePersistence getCourseDB() {
         return courseDB;
     }
 
-    public void setCourseUserRelationshipDB(ICourseUserRelationshipPersistence courseUserRelationshipDB) {
-        this.courseUserRelationshipDB = courseUserRelationshipDB;
+    public void setCourseDB(ICoursePersistence courseDB) {
+        this.courseDB = courseDB;
     }
 
     public ICourseUserRelationshipPersistence getCourseUserRelationshipDB() {
         return courseUserRelationshipDB;
+    }
+
+    public void setCourseUserRelationshipDB(ICourseUserRelationshipPersistence courseUserRelationshipDB) {
+        this.courseUserRelationshipDB = courseUserRelationshipDB;
     }
 
     public IAdminConfigService getAdminConfigService() {
@@ -185,5 +192,13 @@ public class SystemConfig {
 
     public IQuestionService getQuestionService() {
         return questionService;
+    }
+
+    public ISurveyService getSurveyService() {
+        return surveyService;
+    }
+
+    public ISurveyPersistence getSurveyPersistence() {
+        return surveyPersistence;
     }
 }

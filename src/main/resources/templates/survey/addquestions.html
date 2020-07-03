@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Questions to Survey</title>
+</head>
+<body>
+<h1>Add/Remove Instructor questions to survey</h1>
+<div>
+    <h2>Available Questions</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Date of Creation</th>
+        </tr>
+        <tr th:each="question : ${available}">
+            <td th:text="${question.id}"></td>
+            <td th:text="${question.title}"></td>
+            <td th:text="${question.description}"></td>
+            <td th:text="${question.createdAt}"></td>
+            <td>
+                <form th:action="@{/instructor/survey/addquestions}" method="post">
+                    <input type="hidden" th:value="${question.id}" name="questionId">
+                    <input type="hidden" th:value="${surveyId}" name="surveyId">
+                    <input type="hidden" th:value="${courseId}" name="courseId">
+                    <button type="submit">Add</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+<div>
+    <h2>Survey Questions</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Date of Creation</th>
+        </tr>
+        <tr th:each="question : ${added}">
+            <td th:text="${question.id}"></td>
+            <td th:text="${question.title}"></td>
+            <td th:text="${question.description}"></td>
+            <td th:text="${question.createdAt}"></td>
+            <td>
+                <form th:action="@{/instructor/survey/deletequestion}" method="post">
+                    <input type="hidden" th:value="${question.id}" name="questionId">
+                    <input type="hidden" th:value="${surveyId}" name="surveyId">
+                    <input type="hidden" th:value="${courseId}" name="courseId">
+                    <button type="submit" onClick="return confirm('Do you want to delete?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
