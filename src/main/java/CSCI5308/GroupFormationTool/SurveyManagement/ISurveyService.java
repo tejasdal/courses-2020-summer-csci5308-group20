@@ -7,7 +7,13 @@ public interface ISurveyService {
 
     Map<String, Object> addQuestionPage(long courseId, long surveyId);
 
-    boolean addQuestionToSurvey(long surveyId, long questionId);
+    void addQuestionToSurvey(long surveyId, long questionId);
 
-    boolean deleteQuestionFromSurvey(Long surveyId, Long questionId);
+    void deleteQuestionFromSurvey(Long surveyId, Long questionId);
+
+    boolean unpublishSurvey(long surveyId);
+
+    boolean publishSurvey(long surveyId);
+
+    boolean isSurveyPublished(Long surveyId);
 }

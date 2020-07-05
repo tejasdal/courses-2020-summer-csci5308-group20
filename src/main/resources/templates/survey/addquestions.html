@@ -2,20 +2,26 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>Add Questions to Survey</title>
 </head>
 <body>
 <h1>Add/Remove Instructor questions to survey</h1>
-<div>
+<div class="col-md-5">
     <h2>Available Questions</h2>
-    <table>
+    <div th:if="${#lists.isEmpty(available)}"><h3>Please add some questions from Question Manager</h3></div>
+    <table th:unless="${#lists.isEmpty(available)}" class="table table-sm">
+        <thead class="thead-dark">
         <tr>
-            <th>ID</th>
+            <th>Question ID</th>
             <th>Title</th>
             <th>Description</th>
-            <th>Date of Creation</th>
+            <th>Created on</th>
+            <th>Add</th>
         </tr>
+        </thead>
         <tr th:each="question : ${available}">
             <td th:text="${question.id}"></td>
             <td th:text="${question.title}"></td>
@@ -26,21 +32,26 @@
                     <input type="hidden" th:value="${question.id}" name="questionId">
                     <input type="hidden" th:value="${surveyId}" name="surveyId">
                     <input type="hidden" th:value="${courseId}" name="courseId">
-                    <button type="submit">Add</button>
+                    <input type="hidden" th:value="${userId}" name="userId">
+                    <button type="submit" class="btn btn-success btn-sm">Add</button>
                 </form>
             </td>
         </tr>
     </table>
 </div>
-<div>
+<div class="col-md-5">
     <h2>Survey Questions</h2>
-    <table>
+    <div th:if="${#lists.isEmpty(added)}"><h3>No Questions in the Survey - Use Add Option</h3></div>
+    <table th:unless="${#lists.isEmpty(added)}" class="table table-sm">
+        <thead class="thead-dark">
         <tr>
-            <th>ID</th>
+            <th>Question ID</th>
             <th>Title</th>
             <th>Description</th>
-            <th>Date of Creation</th>
+            <th>Created on</th>
+            <th>Delete</th>
         </tr>
+        </thead>
         <tr th:each="question : ${added}">
             <td th:text="${question.id}"></td>
             <td th:text="${question.title}"></td>
@@ -51,11 +62,15 @@
                     <input type="hidden" th:value="${question.id}" name="questionId">
                     <input type="hidden" th:value="${surveyId}" name="surveyId">
                     <input type="hidden" th:value="${courseId}" name="courseId">
-                    <button type="submit" onClick="return confirm('Do you want to delete?')">Delete</button>
+                    <input type="hidden" th:value="${userId}" name="userId">
+                    <button type="submit" onClick="return confirm('Do you want to delete?')"
+                            class="btn btn-danger btn-sm">Delete
+                    </button>
                 </form>
             </td>
         </tr>
     </table>
 </div>
+<a th:href="@{/instructor/survey(userId=${userId},courseId=${courseId})}">Survey Manager</a>
 </body>
 </html>

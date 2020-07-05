@@ -33,6 +33,23 @@ public class SurveyPersistence implements ISurveyPersistence {
         }
     }
 
+    public boolean createSurvey(long courseId) {
+        CallStoredProcedure proc = null;
+        try {
+            proc = new CallStoredProcedure("spCreateSurvey(?)");
+            proc.setParameter(1, courseId);
+            proc.execute();
+            return true;
+        } catch (SQLException e) {
+            return false;
+            // Logging needed.
+        } finally {
+            if (null != proc) {
+                proc.cleanup();
+            }
+        }
+    }
+
     public boolean addQuestionToSurvey(long surveyId, long questionId) {
         CallStoredProcedure proc = null;
         try {
@@ -62,6 +79,60 @@ public class SurveyPersistence implements ISurveyPersistence {
         } catch (SQLException e) {
             // Logging needed.
             return false;
+        } finally {
+            if (null != proc) {
+                proc.cleanup();
+            }
+        }
+    }
+
+    public boolean publishSurvey(Long surveyId) {
+        CallStoredProcedure proc = null;
+        try {
+            proc = new CallStoredProcedure("spPublishSurvey(?)");
+            proc.setParameter(1, surveyId);
+            proc.execute();
+            return true;
+        } catch (SQLException e) {
+            // Logging needed.
+            return false;
+        } finally {
+            if (null != proc) {
+                proc.cleanup();
+            }
+        }
+    }
+
+    public boolean unpublishSurvey(Long surveyId) {
+        CallStoredProcedure proc = null;
+        try {
+            proc = new CallStoredProcedure("spUnpublishSurvey(?)");
+            proc.setParameter(1, surveyId);
+            proc.execute();
+            return true;
+        } catch (SQLException e) {
+            // Logging needed.
+            return false;
+        } finally {
+            if (null != proc) {
+                proc.cleanup();
+            }
+        }
+    }
+
+    public int getSurveyStatus(Long surveyId) {
+        CallStoredProcedure proc = null;
+        try {
+            proc = new CallStoredProcedure("spGetSurveyStatus(?)");
+            proc.setParameter(1, surveyId);
+            ResultSet resultSet = proc.executeWithResults();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+            return -1;
+        } catch (SQLException e) {
+            // Logging needed.
+            return -1;
         } finally {
             if (null != proc) {
                 proc.cleanup();

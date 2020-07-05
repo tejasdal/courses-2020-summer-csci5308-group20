@@ -14,6 +14,11 @@ public class SurveyService implements ISurveyService {
         ISurveyPersistence surveyPersistence = SystemConfig.instance().getSurveyPersistence();
         Map<String, Object> response = new HashMap<>();
         long surveyId = surveyPersistence.getSurveyIdUsingCourseId(courseID);
+        if (surveyId == -1) {
+            if (surveyPersistence.createSurvey(courseID)) {
+                surveyId = surveyPersistence.getSurveyIdUsingCourseId(courseID);
+            }
+        }
         response.put("surveyId", surveyId);
         if (surveyId != (-1)) {
             List<Question> list = surveyPersistence.getAllSurveyQuestions(surveyId);
@@ -25,6 +30,7 @@ public class SurveyService implements ISurveyService {
         return null;
     }
 
+
     public Map<String, Object> addQuestionPage(long courseId, long surveyId) {
         Map<String, Object> response = new HashMap<>();
         ISurveyPersistence surveyPersistence = SystemConfig.instance().getSurveyPersistence();
@@ -35,13 +41,37 @@ public class SurveyService implements ISurveyService {
         return response;
     }
 
-    public boolean addQuestionToSurvey(long surveyId, long questionId) {
+    public void addQuestionToSurvey(long surveyId, long questionId) {
         ISurveyPersistence surveyPersistence = SystemConfig.instance().getSurveyPersistence();
-        return surveyPersistence.addQuestionToSurvey(surveyId, questionId);
+        if (isSurveyPublished(surveyId) == false) {
+            surveyPersistence.addQuestionToSurvey(surveyId, questionId);
+        }
     }
 
-    public boolean deleteQuestionFromSurvey(Long surveyId, Long questionId) {
+    public void deleteQuestionFromSurvey(Long surveyId, Long questionId) {
         ISurveyPersistence surveyPersistence = SystemConfig.instance().getSurveyPersistence();
-        return surveyPersistence.deleteQuestionFromSurvey(surveyId, questionId);
+        if (isSurveyPublished(surveyId) == false) {
+            surveyPersistence.deleteQuestionFromSurvey(surveyId, questionId);
+        }
+    }
+
+    public boolean publishSurvey(long surveyId) {
+        ISurveyPersistence surveyPersistence = SystemConfig.instance().getSurveyPersistence();
+        return surveyPersistence.publishSurvey(surveyId);
+    }
+
+
+    public boolean unpublishSurvey(long surveyId) {
+        ISurveyPersistence surveyPersistence = SystemConfig.instance().getSurveyPersistence();
+        return surveyPersistence.unpublishSurvey(surveyId);
+    }
+
+    public boolean isSurveyPublished(Long surveyId) {
+        ISurveyPersistence surveyPersistence = SystemConfig.instance().getSurveyPersistence();
+        int status = surveyPersistence.getSurveyStatus(surveyId);
+        if (status == 0) {
+            return false;
+        }
+        return true;
     }
 }
