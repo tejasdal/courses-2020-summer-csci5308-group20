@@ -1,6 +1,7 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
 import CSCI5308.GroupFormationTool.Question.Question;
+import CSCI5308.GroupFormationTool.Question.QuestionOption;
 
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface ISurveyPersistence {
     List<Question> getAllSurveyQuestions(long surveyId);
 
     List<Question> getAllInstructorQuestionsUsingCourseId(long courseId, long surveyId);
+
+    List<QuestionOption> getSurveyQuestionOption(Long questionId);
 }

@@ -2,6 +2,7 @@ package CSCI5308.GroupFormationTool.SurveyManagement;
 
 import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
 import CSCI5308.GroupFormationTool.Question.Question;
+import CSCI5308.GroupFormationTool.Question.QuestionOption;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -197,6 +198,39 @@ public class SurveyPersistence implements ISurveyPersistence {
                     question.setQuestionType(type);
                     question.setCreatedAt(createdOn);
                     list.add(question);
+                }
+                return list;
+            }
+            return null;
+        } catch (SQLException e) {
+            return null;
+            // Logging needed.
+        } finally {
+            if (null != proc) {
+                proc.cleanup();
+            }
+        }
+    }
+
+    public List<QuestionOption> getSurveyQuestionOption(Long questionId) {
+        CallStoredProcedure proc = null;
+        try {
+            proc = new CallStoredProcedure("spGetSurveyQuestionOption(?)");
+            proc.setParameter(1, questionId);
+            ResultSet resultSet = proc.executeWithResults();
+            if (resultSet != null) {
+                List<QuestionOption> list = new ArrayList<>();
+                while (resultSet.next()) {
+                    QuestionOption questionOption = new QuestionOption();
+                    Long id = resultSet.getLong(1);
+                    Long queId = resultSet.getLong(2);
+                    String options = resultSet.getString(3);
+                    int value = resultSet.getInt(4);
+                    questionOption.setId(id);
+                    questionOption.setQuestionId(queId);
+                    questionOption.setOption(options);
+                    questionOption.setValue(value);
+                    list.add(questionOption);
                 }
                 return list;
             }

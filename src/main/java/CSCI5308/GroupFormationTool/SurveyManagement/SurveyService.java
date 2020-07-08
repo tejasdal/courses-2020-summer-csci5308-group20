@@ -1,6 +1,7 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
 import CSCI5308.GroupFormationTool.Question.Question;
+import CSCI5308.GroupFormationTool.Question.QuestionOption;
 import CSCI5308.GroupFormationTool.SystemConfig;
 
 import java.util.HashMap;
@@ -74,4 +75,29 @@ public class SurveyService implements ISurveyService {
         }
         return true;
     }
+
+    public Map<String, Object> displaySurveyQuestionsToStudents(Long courseId, ISurveyPersistence surveyPersistence) {
+        Map<String, Object> response = new HashMap<>();
+        long surveyId = surveyPersistence.getSurveyIdUsingCourseId(courseId);
+        if(surveyId == -1L){
+            response.put("isSurveyPublished", false);
+        }else{
+            List<Question> surveyQuestions = surveyPersistence.getAllSurveyQuestions(surveyId);
+            for (Question surveyQuestion: surveyQuestions) {
+                if(surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_ONE
+                        || surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_MANY){
+
+                    List<QuestionOption> options = surveyPersistence.getSurveyQuestionOption(surveyQuestion.getId());
+                    if(null != options) {
+                        surveyQuestion.setQuestionOptions(options);
+                    }
+                }
+            }
+            response.put("isSurveyPublished", true);
+            response.put("surveyId", surveyId);
+            response.put("questions", surveyQuestions);
+        }
+        return response;
+    }
+
 }
