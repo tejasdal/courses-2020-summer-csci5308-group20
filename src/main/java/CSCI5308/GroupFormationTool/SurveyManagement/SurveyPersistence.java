@@ -1,6 +1,7 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
 import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
+import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
 
@@ -243,5 +244,34 @@ public class SurveyPersistence implements ISurveyPersistence {
                 proc.cleanup();
             }
         }
+    }
+
+    @Override
+    public boolean submitAnswers(String bannerId, Long surveyId, Survey survey) {
+        CallStoredProcedure proc = null;
+        try{
+            proc = new CallStoredProcedure("spSubmitAnswers(?,?,?,?)");
+            for(Question question: survey.getQuestions()){
+                for(Answers answers: question.getAnswers()){
+                    proc.setParameter(1,surveyId);
+                    proc.setParameter(2,bannerId);
+                    proc.setParameter(3,question.getId());
+                    proc.setParameter(4,answers.getAnswerValue());
+                    proc.addBatch();
+                }
+            }
+            proc.executeBatch();
+        }
+        catch(SQLException e){
+            return false;
+        }
+        finally
+        {
+            if (null != proc)
+            {
+                proc.cleanup();
+            }
+        }
+        return true;
     }
 }

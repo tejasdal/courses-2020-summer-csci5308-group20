@@ -25,4 +25,6 @@ public interface ISurveyPersistence {
     List<Question> getAllInstructorQuestionsUsingCourseId(long courseId, long surveyId);
 
     List<QuestionOption> getSurveyQuestionOption(Long questionId);
+
+    boolean submitAnswers(String bannerId, Long surveyId, Survey survey);
 }

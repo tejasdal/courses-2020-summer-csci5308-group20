@@ -33,58 +33,32 @@
     <div th:unless="${!isSurveyPublished}">
         <br><h5 >Questions:</h5>
         <!--    Free text Question-->
-        <form action="#" th:action="@{/question/create}" method="post">
+        <form action="#" th:action="@{/student/survey/submit}" method="post" th:object="${survey}">
+            <input type="hidden" th:value="${surveyId}" name="surveyId">
+            <input type="hidden" th:value="${#httpServletRequest.remoteUser}" name="bannerId">
             <fieldset>
-                <div class="row my-4" th:each="question, status: ${questions}">
-<!--                    &lt;!&ndash;       User ID&ndash;&gt;-->
-<!--                    <div class="col-12 input-group">-->
-<!--                        <input type="text" class="form-control" id="userId" name="userId" th:field="*{userId}"-->
-<!--                               placeholder="UserId" hidden>-->
-<!--                    </div>-->
-<!--                    &lt;!&ndash;       Question Title&ndash;&gt;-->
-<!--                    <input type="text" class="form-control" id="title" name="title" th:field="*{title}"-->
-<!--                           placeholder="Title" hidden>-->
-<!--                    &lt;!&ndash;        Question Description&ndash;&gt;-->
-<!--                    <input type="text" class="form-control" id="description" name="description"-->
-<!--                           th:field="*{description}"-->
-<!--                           placeholder="Description" hidden>-->
-<!--                    &lt;!&ndash;        Question Type Dropdown&ndash;&gt;-->
-<!--                    <input type="text" class="form-control" id="questionType" th:field="*{questionType}" hidden>-->
-<!--                    <div th:each="currentOption, stat : *{questionOptions}">-->
-<!--                        <div id="options" class="row my-3">-->
-<!--                            <div class="col-6 input-group p-1">-->
-<!--                                <input type="text" class="form-control ml-2" id="optionText"-->
-<!--                                       th:field="*{questionOptions[__${stat.index}__].option}" placeholder="Option Text"-->
-<!--                                       hidden>-->
-<!--                            </div>-->
-<!--                            <div class="col-6 input-group p-1">-->
-<!--                                <input type="number" class="form-control ml-2" id="optionValue"-->
-<!--                                       th:field="*{questionOptions[__${stat.index}__].value}" placeholder="Option Value"-->
-<!--                                       hidden>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-                    <!--        Actual Details to be displayed-->
+                <div class="row my-4" th:each="question, status: *{questions}">
+                    <input type="hidden" th:field="*{questions[__${status.index}__].id}">
                     <div class="col-8">
                         <h5 th:text="${(status.index+1)  + '. ' + question.description}">What is question?</h5>
                     </div>
-                    <div class="col-4 input-group" th:if="${question.questionType} == 1">
-                        <input type="number" class="form-control" id="numericAnswer" placeholder="0">
+                    <div class="col-4 input-group" th:if="*{questions[__${status.index}__].questionType} == 1">
+                        <input type="number" class="form-control" id="numericAnswer" placeholder="0" th:field="*{questions[__${status.index}__].answers[0].answerValue}">
                     </div>
-                    <div class="col-4 form-group" th:if="${question.questionType} == 4">
-                        <textarea class="form-control" id="freeTextAnswer" placeholder="Type your answer!"></textarea>
+                    <div class="col-4 form-group" th:if="*{questions[__${status.index}__].questionType} == 4">
+                        <textarea class="form-control" id="freeTextAnswer" placeholder="Type your answer!" th:field="*{questions[__${status.index}__].answers[0].answerValue}"></textarea>
                     </div>
-                    <div class="col-4 input-group" th:if="${question.questionType} == 2">
-                        <select class="form-control" id="questionOption">
+                    <div class="col-4 input-group" th:if="*{questions[__${status.index}__].questionType} == 2">
+                        <select class="form-control" id="questionOption" th:field="*{questions[__${status.index}__].answers[0].answerValue}">
                             <option th:each="option: ${question.questionOptions}" th:value="${option.value}"
                                     th:text="${option.option}">Option 1
                             </option>
                         </select>
                     </div>
                     <div class="col-4" th:if="${question.questionType} == 3">
-                        <div class="form-check" th:each="option: ${question.questionOptions}">
+                        <div class="form-check" th:each="option, stat: ${question.questionOptions}">
                             <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
-                                   th:value="${option.value}">
+                                   th:value="${option.value}" th:field="*{questions[__${status.index}__].answers[__${stat.index}__].answerValue}">
                             <label class="form-check-label" for="inlineCheckbox1" th:text="${option.option}">1</label>
                         </div>
                     </div>

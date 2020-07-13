@@ -1,18 +1,18 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
+import CSCI5308.GroupFormationTool.AccessControl.CurrentUser;
+import CSCI5308.GroupFormationTool.AccessControl.User;
+import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.SystemConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.Map;
 
 @Controller
@@ -133,21 +133,32 @@ public class SurveyController {
     @GetMapping(value = "/student/survey/questions")
     public String displaySurveyQuestionToStudent
             (@RequestParam(name = "courseId") Long courseId,
-             Model model){
+             Model model) {
         ISurveyService surveyService = SystemConfig.instance().getSurveyService();
         Map<String, Object> result = surveyService.displaySurveyQuestionsToStudents(courseId,
                 SystemConfig.instance().getSurveyPersistence());
         model.addAttribute("courseId", courseId);
-        if(result.containsKey("isSurveyPublished")){
+        if (result.containsKey("isSurveyPublished")) {
             model.addAttribute("isSurveyPublished", result.get("isSurveyPublished"));
         }
-        if (result.containsKey("questions") && result.containsKey("surveyId")){
+        if (result.containsKey("survey") && result.containsKey("surveyId")) {
 
-            for (Question question: (List<Question>) result.get("questions")) {
-            }
-            model.addAttribute("questions", result.get("questions"));
+//            for (Question question: (List<Question>) result.get("questions")) {
+//            }
+            model.addAttribute("survey", (Survey) result.get("survey"));
             model.addAttribute("surveyId", result.get("surveyId"));
         }
         return "survey/displaySurveyToStudent";
     }
+
+    @RequestMapping(value = "student/survey/submit")
+    public String submitSurvey
+            (@ModelAttribute Survey survey,
+             @RequestParam(name = "surveyId") Long surveyId,
+             @RequestParam(name = "bannerId") String bannerId) {
+        ISurveyService surveyService = SystemConfig.instance().getSurveyService();
+        surveyService.submitAnswers(bannerId,surveyId,survey,SystemConfig.instance().getSurveyPersistence());
+        return "redirect:/";
+    }
 }
+

@@ -18,4 +18,6 @@ public interface ISurveyService {
     boolean isSurveyPublished(Long surveyId);
 
     Map<String, Object> displaySurveyQuestionsToStudents(Long courseId, ISurveyPersistence surveyPersistence);
+
+    boolean submitAnswers(String bannerId, Long surveyId, Survey survey, ISurveyPersistence surveyPersistence);
 }
