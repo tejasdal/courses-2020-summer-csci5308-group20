@@ -140,11 +140,15 @@ public class SurveyController {
         if(result.containsKey("isSurveyPublished")){
             model.addAttribute("isSurveyPublished", result.get("isSurveyPublished"));
         }
-        if (result.containsKey("questions") && result.containsKey("surveyId")){
+        if (result.containsKey("survey") && result.containsKey("surveyId")){
 
-            for (Question question: (List<Question>) result.get("questions")) {
+//            for (Question question: (Survey) result.get("survey")) {
+//            }
+            if(null == (Survey) result.get("survey")){
+                System.out.println("====================================================> Not possible..");
             }
-            model.addAttribute("questions", result.get("questions"));
+            System.out.println("====================================================> Not null");
+            model.addAttribute("survey", (Survey) result.get("survey"));
             model.addAttribute("surveyId", result.get("surveyId"));
         }
         return "survey/displaySurveyToStudent";
@@ -152,7 +156,15 @@ public class SurveyController {
 
     @RequestMapping(value = "student/survey/submit")
     public String submitSurvey
-            (@ModelAttribute List<Question> questions){
+            (@ModelAttribute Survey survey){
+        System.out.println("Inside submit controller....");
+        System.out.println(survey);
+        for (Question question: survey.getQuestions()){
+            System.out.println(question);
+            for (Answers answers: question.getAnswers()){
+                System.out.println(answers.getAnswerValue());
+            }
+        }
 //        for(Question q: questions){
 //            for(Answers a: q.getAnswers()){
 //                System.out.println(a.getAnswerValue());

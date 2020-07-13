@@ -1,5 +1,6 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
+import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
 import CSCI5308.GroupFormationTool.SystemConfig;
@@ -88,6 +89,9 @@ public class SurveyService implements ISurveyService {
                         || surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_MANY){
 
                     List<QuestionOption> options = surveyPersistence.getSurveyQuestionOption(surveyQuestion.getId());
+                    for(QuestionOption option: options){
+                        surveyQuestion.getAnswers().add(new Answers());
+                    }
                     if(null != options) {
                         surveyQuestion.setQuestionOptions(options);
                     }
@@ -95,7 +99,9 @@ public class SurveyService implements ISurveyService {
             }
             response.put("isSurveyPublished", true);
             response.put("surveyId", surveyId);
-            response.put("questions", surveyQuestions);
+            Survey survey = new Survey();
+            survey.setQuestions(surveyQuestions);
+            response.put("survey", survey);
         }
         return response;
     }
