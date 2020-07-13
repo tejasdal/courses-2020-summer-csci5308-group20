@@ -18,6 +18,7 @@ public class Question {
     private int questionType;
     private List<QuestionOption> questionOptions = new ArrayList<>();
     private Date createdAt;
+    private List<Answers> answers = new ArrayList<>();
 
     public Question() {
     }
@@ -123,5 +124,13 @@ public class Question {
             return createdAt1.compareTo(createdAt2);
         }
     };
+
+    public List<Answers> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answers> answers) {
+        this.answers = answers;
+    }
 }
 

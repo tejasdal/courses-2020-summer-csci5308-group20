@@ -1,17 +1,16 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
+import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.SystemConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -150,4 +149,16 @@ public class SurveyController {
         }
         return "survey/displaySurveyToStudent";
     }
+
+    @RequestMapping(value = "student/survey/submit")
+    public String submitSurvey
+            (@ModelAttribute List<Question> questions){
+//        for(Question q: questions){
+//            for(Answers a: q.getAnswers()){
+//                System.out.println(a.getAnswerValue());
+//            }
+//        }
+        return "Success";
+    }
+
 }
