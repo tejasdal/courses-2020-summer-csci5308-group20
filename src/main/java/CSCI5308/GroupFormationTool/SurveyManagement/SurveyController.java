@@ -1,10 +1,5 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
-import CSCI5308.GroupFormationTool.AccessControl.CurrentUser;
-import CSCI5308.GroupFormationTool.AccessControl.User;
-import CSCI5308.GroupFormationTool.Question.Answers;
-import CSCI5308.GroupFormationTool.Question.Question;
-import CSCI5308.GroupFormationTool.SystemConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -12,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Collections;
 import java.util.Map;
 
 @Controller
@@ -32,6 +26,7 @@ public class SurveyController {
         if (result != null && result.isEmpty() == false) {
             model.addAttribute("questions", result.get("questions"));
             model.addAttribute("surveyId", result.get("surveyId"));
+            model.addAttribute("status", result.get("status"));
         }
         return "survey/surveyquestions";
     }
@@ -142,7 +137,7 @@ public class SurveyController {
             model.addAttribute("isSurveyPublished", result.get("isSurveyPublished"));
         }
         if (result.containsKey("survey") && result.containsKey("surveyId")) {
-            model.addAttribute("survey", (Survey) result.get("survey"));
+            model.addAttribute("survey", result.get("survey"));
             model.addAttribute("surveyId", result.get("surveyId"));
         }
         return "survey/displaySurveyToStudent";

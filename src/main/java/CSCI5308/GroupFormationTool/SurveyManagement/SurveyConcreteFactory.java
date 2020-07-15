@@ -4,7 +4,8 @@ public class SurveyConcreteFactory extends SurveyAbstractFactory {
 
     @Override
     public ISurveyService getService() {
-        return new SurveyService();
+        //TODO check with jaspreet about static SurveyPersistence
+        return new SurveyService(new SurveyPersistence());
     }
 
     @Override

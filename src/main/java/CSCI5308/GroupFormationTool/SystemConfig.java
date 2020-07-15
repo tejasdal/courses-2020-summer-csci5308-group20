@@ -79,7 +79,7 @@ public class SystemConfig {
         questionPersistence = new QuestionPersistence();
         questionService = new QuestionService();
         surveyPersistence = new SurveyPersistence();
-        surveyService = new SurveyService();
+        surveyService = new SurveyService(surveyPersistence);
     }
 
     // This is the way the rest of the application gets access to the System object.

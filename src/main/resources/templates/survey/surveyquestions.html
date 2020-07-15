@@ -11,6 +11,7 @@
 <h1>Survey Manager</h1>
 <div th:if="${publishSuccess}" class="alert alert-success" role="alert"><h2>Successfully Published</h2></div>
 <div th:if="${unpublishSuccess}" class="alert alert-danger" role="alert"><h2>Successfully Unpublished</h2></div>
+<div th:if="${status}" class="alert alert-primary">Survey is Published - To make changes Unpublish Survey.</div>
 <div class="col-md-5">
     <h3>Current List of Questions in the Survey</h3>
     <div th:if="${#lists.isEmpty(questions)}"><h3>Survey is empty - add questions</h3></div>
@@ -21,6 +22,7 @@
             <th>Title</th>
             <th>Description</th>
             <th>Created on</th>
+            <th>Question Type</th>
         </tr>
         </thead>
         <tr th:each="question : ${questions}">
@@ -28,21 +30,26 @@
             <td th:text="${question.title}"></td>
             <td th:text="${question.description}"></td>
             <td th:text="${question.createdAt}"></td>
+            <td th:text="${question.questionTypeString}"></td>
         </tr>
     </table>
 </div>
 <br>
+
 <div>
-    <a th:href="@{/instructor/survey/addquestions(courseId=${courseId},surveyId=${surveyId},userId=${userId})}"
+    <a th:unless="${status}"
+       th:href="@{/instructor/survey/addquestions(courseId=${courseId},surveyId=${surveyId},userId=${userId})}"
        class="btn btn-primary">
         Add/Edit Questions
     </a>
 </div>
 <br>
 <div th:unless="${#lists.isEmpty(questions)}">
-    <a th:href="@{/instructor/survey/publish(courseId=${courseId},surveyId=${surveyId},userId=${userId})}"
+    <a th:unless="${status}"
+       th:href="@{/instructor/survey/publish(courseId=${courseId},surveyId=${surveyId},userId=${userId})}"
        class="btn btn-success">Publish Survey</a>
-    <a th:href="@{/instructor/survey/unpublish(courseId=${courseId},surveyId=${surveyId},userId=${userId})}"
+    <a th:if="${status}"
+       th:href="@{/instructor/survey/unpublish(courseId=${courseId},surveyId=${surveyId},userId=${userId})}"
        class="btn btn-danger">Unpublish</a>
 </div>
 </body>
