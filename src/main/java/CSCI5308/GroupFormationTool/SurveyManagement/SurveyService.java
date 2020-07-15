@@ -111,7 +111,7 @@ public class SurveyService implements ISurveyService {
     @Override
     public boolean submitAnswers(String bannerId, Long surveyId, Survey survey, ISurveyPersistence surveyPersistence) {
         for(Question q: survey.getQuestions()){
-            q.getAnswers().removeIf(question->question.getAnswerValue()==null);
+            q.getAnswers().removeIf(question->question.getAnswerValue() == null);
         }
         return surveyPersistence.submitAnswers(bannerId,surveyId,survey);
     }

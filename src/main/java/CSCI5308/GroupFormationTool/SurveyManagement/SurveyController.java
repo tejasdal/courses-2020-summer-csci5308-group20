@@ -26,7 +26,7 @@ public class SurveyController {
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
-        ISurveyService surveyService = SystemConfig.instance().getSurveyService();
+        ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
         Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId);
 
         if (result != null && result.isEmpty() == false) {
@@ -46,7 +46,7 @@ public class SurveyController {
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
-        ISurveyService surveyService = SystemConfig.instance().getSurveyService();
+        ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
         Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId);
         if (result != null && result.isEmpty() == false) {
             model.addAttribute("available", result.get("availableQuestions"));
@@ -67,7 +67,7 @@ public class SurveyController {
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
-        ISurveyService surveyService = SystemConfig.instance().getSurveyService();
+        ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
         surveyService.addQuestionToSurvey(surveyId, questionId);
 
         Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId);
@@ -87,7 +87,7 @@ public class SurveyController {
         model.addAttribute("surveyId", surveyId);
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
-        ISurveyService surveyService = SystemConfig.instance().getSurveyService();
+        ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
 
         surveyService.deleteQuestionFromSurvey(surveyId, questionId);
         return new ModelAndView("redirect:/instructor/survey/addquestions", model);
@@ -104,7 +104,7 @@ public class SurveyController {
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
-        ISurveyService surveyService = SystemConfig.instance().getSurveyService();
+        ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
         if (surveyService.publishSurvey(surveyId)) {
             redirectAttributes.addFlashAttribute("publishSuccess", true);
         }
@@ -123,7 +123,7 @@ public class SurveyController {
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
-        ISurveyService surveyService = SystemConfig.instance().getSurveyService();
+        ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
         if (surveyService.unpublishSurvey(surveyId)) {
             redirectAttributes.addFlashAttribute("unpublishSuccess", true);
         }
@@ -134,17 +134,14 @@ public class SurveyController {
     public String displaySurveyQuestionToStudent
             (@RequestParam(name = "courseId") Long courseId,
              Model model) {
-        ISurveyService surveyService = SystemConfig.instance().getSurveyService();
+        ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
         Map<String, Object> result = surveyService.displaySurveyQuestionsToStudents(courseId,
-                SystemConfig.instance().getSurveyPersistence());
+                SurveyAbstractFactory.instance().getPersistence());
         model.addAttribute("courseId", courseId);
         if (result.containsKey("isSurveyPublished")) {
             model.addAttribute("isSurveyPublished", result.get("isSurveyPublished"));
         }
         if (result.containsKey("survey") && result.containsKey("surveyId")) {
-
-//            for (Question question: (List<Question>) result.get("questions")) {
-//            }
             model.addAttribute("survey", (Survey) result.get("survey"));
             model.addAttribute("surveyId", result.get("surveyId"));
         }
@@ -156,8 +153,8 @@ public class SurveyController {
             (@ModelAttribute Survey survey,
              @RequestParam(name = "surveyId") Long surveyId,
              @RequestParam(name = "bannerId") String bannerId) {
-        ISurveyService surveyService = SystemConfig.instance().getSurveyService();
-        surveyService.submitAnswers(bannerId,surveyId,survey,SystemConfig.instance().getSurveyPersistence());
+        ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
+        surveyService.submitAnswers(bannerId,surveyId,survey,SurveyAbstractFactory.instance().getPersistence());
         return "redirect:/";
     }
 }
