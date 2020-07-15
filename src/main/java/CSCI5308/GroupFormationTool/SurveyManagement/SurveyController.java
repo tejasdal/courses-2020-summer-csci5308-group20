@@ -5,6 +5,8 @@ import CSCI5308.GroupFormationTool.AccessControl.User;
 import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.SystemConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -18,11 +20,15 @@ import java.util.Map;
 @Controller
 public class SurveyController {
 
+    private Logger log = LoggerFactory.getLogger(SurveyController.class);
+
     @RequestMapping(value = "/instructor/survey")
     public String surveyManagementPage
             (@RequestParam(name = "userId") Long userId,
              @RequestParam(name = "courseId") Long courseId,
              Model model) {
+        log.info("Processing a request to load a survey management page to instructor with ID: {} for a course with ID: {}",
+                userId, courseId);
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
@@ -42,6 +48,8 @@ public class SurveyController {
              @RequestParam(name = "surveyId") Long surveyId,
              @RequestParam(name = "userId") Long userId,
              Model model) {
+        log.info("Processing a request to load a page to add question to a survey with ID: {} by instructor with ID: {} " +
+                "for a course with ID: {}",surveyId, userId, courseId);
         model.addAttribute("surveyId", surveyId);
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
@@ -63,6 +71,8 @@ public class SurveyController {
              @RequestParam(name = "userId") Long userId,
              @RequestParam(name = "questionId") Long questionId,
              Model model) {
+        log.info("Processing a request to add question to a survey with ID: {} by instructor with ID: {} for a course with" +
+                " ID: {}",surveyId, userId, courseId);
         model.addAttribute("surveyId", surveyId);
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
@@ -84,6 +94,8 @@ public class SurveyController {
              @RequestParam(name = "userId") Long userId,
              @RequestParam(name = "questionId") Long questionId,
              ModelMap model) {
+        log.info("Processing a request to delete question with ID: {} of a survey with ID: {} by instructor with ID: {} " +
+                "for a course with ID: {}", questionId, surveyId, userId, courseId);
         model.addAttribute("surveyId", surveyId);
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
@@ -100,6 +112,8 @@ public class SurveyController {
              @RequestParam(name = "userId") Long userId,
              ModelMap model,
              RedirectAttributes redirectAttributes) {
+        log.info("Processing a request to publish a survey with ID: {} by instructor with ID: {} for a course with" +
+                " ID: {}",surveyId, userId, courseId);
         model.addAttribute("surveyId", surveyId);
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
@@ -118,7 +132,8 @@ public class SurveyController {
              @RequestParam(name = "userId") Long userId,
              ModelMap model,
              RedirectAttributes redirectAttributes) {
-
+        log.info("Processing a request to unpublish a survey with ID: {} by instructor with ID: {} for a course with" +
+                " ID: {}",surveyId, userId, courseId);
         model.addAttribute("surveyId", surveyId);
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
@@ -134,6 +149,7 @@ public class SurveyController {
     public String displaySurveyQuestionToStudent
             (@RequestParam(name = "courseId") Long courseId,
              Model model) {
+        log.info("Processing a request to display all survey questions to student for a course with ID: {}", courseId);
         ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
         Map<String, Object> result = surveyService.displaySurveyQuestionsToStudents(courseId,
                 SurveyAbstractFactory.instance().getPersistence());
@@ -153,6 +169,7 @@ public class SurveyController {
             (@ModelAttribute Survey survey,
              @RequestParam(name = "surveyId") Long surveyId,
              @RequestParam(name = "bannerId") String bannerId) {
+        log.info("Processing a request to submit response of a survey with ID: {} by a student with banner ID: {}", surveyId, bannerId);
         ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
         surveyService.submitAnswers(bannerId,surveyId,survey,SurveyAbstractFactory.instance().getPersistence());
         return "redirect:/";

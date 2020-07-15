@@ -4,6 +4,8 @@ import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
 import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -13,7 +15,9 @@ import java.util.List;
 
 public class SurveyPersistence implements ISurveyPersistence {
 
+    private Logger log = LoggerFactory.getLogger(SurveyPersistence.class);
     public long getSurveyIdUsingCourseId(long courseId) {
+        log.trace("Fetching survey ID for a course with ID: {} from database.", courseId);
         CallStoredProcedure proc = null;
         try {
             proc = new CallStoredProcedure("spGetSurveyIdUsingCourseId(?)");
@@ -26,8 +30,8 @@ public class SurveyPersistence implements ISurveyPersistence {
             }
             return (-1);
         } catch (SQLException e) {
+            log.error("Error while fetching survey ID for a course with ID: {} from database, error: {}", courseId, e.getMessage());
             return (-1);
-            // Logging needed.
         } finally {
             if (null != proc) {
                 proc.cleanup();
@@ -36,6 +40,7 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public boolean createSurvey(long courseId) {
+        log.trace("Creating a new survey for a course with ID: {} to database", courseId);
         CallStoredProcedure proc = null;
         try {
             proc = new CallStoredProcedure("spCreateSurvey(?)");
@@ -43,8 +48,8 @@ public class SurveyPersistence implements ISurveyPersistence {
             proc.execute();
             return true;
         } catch (SQLException e) {
+            log.error("Error while creating a new survey for a course with ID: {} to database, error: {}", courseId, e.getMessage());
             return false;
-            // Logging needed.
         } finally {
             if (null != proc) {
                 proc.cleanup();
@@ -53,6 +58,7 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public boolean addQuestionToSurvey(long surveyId, long questionId) {
+        log.trace("Adding question with ID: {} to a survey with ID: {} in database", questionId, surveyId);
         CallStoredProcedure proc = null;
         try {
             proc = new CallStoredProcedure("spAddQuestionToSurvey(?,?)");
@@ -61,8 +67,8 @@ public class SurveyPersistence implements ISurveyPersistence {
             proc.execute();
             return true;
         } catch (SQLException e) {
+            log.error("Error while adding question with ID: {} to a survey with ID: {} in database, error: {}", questionId, surveyId, e.getMessage());
             return false;
-            // Logging needed.
         } finally {
             if (null != proc) {
                 proc.cleanup();
@@ -71,6 +77,7 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public boolean deleteQuestionFromSurvey(Long surveyId, Long questionId) {
+        log.trace("Deleting question with ID: {} from a survey with ID: {} in database", questionId, surveyId);
         CallStoredProcedure proc = null;
         try {
             proc = new CallStoredProcedure("spDeleteQuestionFromSurvey(?,?)");
@@ -79,7 +86,7 @@ public class SurveyPersistence implements ISurveyPersistence {
             proc.execute();
             return true;
         } catch (SQLException e) {
-            // Logging needed.
+            log.error("Error while deleting question with ID: {} from a survey with ID: {} in database, error: {}", questionId, surveyId, e.getMessage());
             return false;
         } finally {
             if (null != proc) {
@@ -89,6 +96,7 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public boolean publishSurvey(Long surveyId) {
+        log.trace("Updating a survey with ID: {} in database to publish", surveyId);
         CallStoredProcedure proc = null;
         try {
             proc = new CallStoredProcedure("spPublishSurvey(?)");
@@ -96,7 +104,7 @@ public class SurveyPersistence implements ISurveyPersistence {
             proc.execute();
             return true;
         } catch (SQLException e) {
-            // Logging needed.
+            log.error("Error while updating a survey with ID: {} in database, error: {}", surveyId, e.getMessage());
             return false;
         } finally {
             if (null != proc) {
@@ -106,6 +114,7 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public boolean unpublishSurvey(Long surveyId) {
+        log.trace("Updating a survey with ID: {} in database to unpublish", surveyId);
         CallStoredProcedure proc = null;
         try {
             proc = new CallStoredProcedure("spUnpublishSurvey(?)");
@@ -113,7 +122,7 @@ public class SurveyPersistence implements ISurveyPersistence {
             proc.execute();
             return true;
         } catch (SQLException e) {
-            // Logging needed.
+            log.error("Error while updating a survey with ID: {} in database, error: {}", surveyId, e.getMessage());
             return false;
         } finally {
             if (null != proc) {
@@ -123,6 +132,7 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public int getSurveyStatus(Long surveyId) {
+        log.trace("Fetching a status of a survey with ID: {} from database", surveyId);
         CallStoredProcedure proc = null;
         try {
             proc = new CallStoredProcedure("spGetSurveyStatus(?)");
@@ -133,7 +143,7 @@ public class SurveyPersistence implements ISurveyPersistence {
             }
             return -1;
         } catch (SQLException e) {
-            // Logging needed.
+            log.error("Error while fetching status of a survey with ID: {} from database, error: {}", surveyId, e.getMessage());
             return -1;
         } finally {
             if (null != proc) {
@@ -143,6 +153,7 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public List<Question> getAllSurveyQuestions(long surveyId) {
+        log.trace("Fetching all survey questions of a survey with ID: {} from database", surveyId);
         CallStoredProcedure proc = null;
         try {
             proc = new CallStoredProcedure("spGetAllSurveyQuestions(?)");
@@ -168,8 +179,8 @@ public class SurveyPersistence implements ISurveyPersistence {
             }
             return null;
         } catch (SQLException e) {
+            log.error("Error while fetching all question of a survey with ID: {} from database, error: {}", surveyId, e.getMessage());
             return null;
-            // Logging needed.
         } finally {
             if (null != proc) {
                 proc.cleanup();
@@ -178,6 +189,7 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public List<Question> getAllInstructorQuestionsUsingCourseId(long courseId, long surveyId) {
+        log.trace("Fetching all instructor questions of a survey with ID: {} for a course with ID: {} from database", surveyId, courseId);
         CallStoredProcedure proc = null;
         try {
             proc = new CallStoredProcedure("spGetAllInstructorQuestionsUsingCourseId(?,?)");
@@ -204,8 +216,9 @@ public class SurveyPersistence implements ISurveyPersistence {
             }
             return null;
         } catch (SQLException e) {
+            log.error("Error while fetching instructor questions of a survey with ID: {} for a course with ID: {} from " +
+                    "database, error: {}", surveyId, courseId, e.getMessage());
             return null;
-            // Logging needed.
         } finally {
             if (null != proc) {
                 proc.cleanup();
@@ -214,6 +227,7 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public List<QuestionOption> getSurveyQuestionOption(Long questionId) {
+        log.trace("Fetching question options for a question with ID: {} from database", questionId);
         CallStoredProcedure proc = null;
         try {
             proc = new CallStoredProcedure("spGetSurveyQuestionOption(?)");
@@ -237,8 +251,9 @@ public class SurveyPersistence implements ISurveyPersistence {
             }
             return null;
         } catch (SQLException e) {
+            log.error("Error while fetching question options for a question with ID: {} from database, error: {}",
+                    questionId, e.getMessage());
             return null;
-            // Logging needed.
         } finally {
             if (null != proc) {
                 proc.cleanup();
@@ -248,6 +263,7 @@ public class SurveyPersistence implements ISurveyPersistence {
 
     @Override
     public boolean submitAnswers(String bannerId, Long surveyId, Survey survey) {
+        log.trace("Adding answers of a survey with ID: {} for user with banner ID: {} to database", surveyId, bannerId);
         CallStoredProcedure proc = null;
         try{
             proc = new CallStoredProcedure("spSubmitAnswers(?,?,?,?)");
@@ -263,6 +279,8 @@ public class SurveyPersistence implements ISurveyPersistence {
             proc.executeBatch();
         }
         catch(SQLException e){
+            log.error("Error while adding answers of a survey with ID: {} for user with banner ID: {} to database, error: " +
+                    "{}", surveyId, bannerId, e.getMessage());
             return false;
         }
         finally

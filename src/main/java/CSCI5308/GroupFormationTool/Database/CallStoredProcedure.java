@@ -1,9 +1,13 @@
 package CSCI5308.GroupFormationTool.Database;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.*;
 
 public class CallStoredProcedure
 {
+	Logger log = LoggerFactory.getLogger(CallStoredProcedure.class);
 	private String storedProcedureName;
 	private Connection connection;
 	private CallableStatement statement;
@@ -45,7 +49,7 @@ public class CallStoredProcedure
 		}
 		catch (Exception e)
 		{
-			// Logging needed.
+			log.error("Error while cleaning up statement and connection resources, error: {}", e.getMessage());
 		}
 	}
 	

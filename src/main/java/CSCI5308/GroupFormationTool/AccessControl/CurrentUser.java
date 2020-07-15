@@ -1,5 +1,7 @@
 package CSCI5308.GroupFormationTool.AccessControl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -7,6 +9,7 @@ import CSCI5308.GroupFormationTool.SystemConfig;
 
 public class CurrentUser
 {
+	private Logger log = LoggerFactory.getLogger(CurrentUser.class);
 	private static CurrentUser uniqueInstance = null;
 	
 	private CurrentUser()
@@ -25,6 +28,7 @@ public class CurrentUser
 	
 	public User getCurrentAuthenticatedUser()
 	{
+		log.trace("Fetching current authenticated user.");
 		IUserPersistence userDB = SystemConfig.instance().getUserDB();
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication.isAuthenticated())
@@ -37,6 +41,7 @@ public class CurrentUser
 				return u;
 			}
 		}
+		log.debug("Instance of current authenticated user is null.");
 		return null;
 	}
 }

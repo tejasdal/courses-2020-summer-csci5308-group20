@@ -7,11 +7,15 @@ import java.util.List;
 
 import CSCI5308.GroupFormationTool.AccessControl.User;
 import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CourseUserRelationshipDB implements ICourseUserRelationshipPersistence
 {
+	private Logger log = LoggerFactory.getLogger(CourseUserRelationshipDB.class);
 	public List<User> findAllUsersWithoutCourseRole(Role role, long courseID)
 	{
+		log.trace("Loading all users without a role: {} for a course with ID: {} from database.", role.toString(), courseID);
 		List<User> users = new ArrayList<User>();
 		CallStoredProcedure proc = null;
 		try
@@ -39,7 +43,7 @@ public class CourseUserRelationshipDB implements ICourseUserRelationshipPersiste
 		}
 		catch (SQLException e)
 		{
-			// Logging needed.
+			log.error("Error while loading all users without a role: {} for a course with ID: {} from database, error: {}", role.toString(), courseID, e.getMessage());
 		}
 		finally
 		{
@@ -53,6 +57,7 @@ public class CourseUserRelationshipDB implements ICourseUserRelationshipPersiste
 
 	public List<User> findAllUsersWithCourseRole(Role role, long courseID)
 	{
+		log.trace("Loading all users with a role: {} for course with ID: {} from database.", role.toString(), courseID);
 		List<User> users = new ArrayList<User>();
 		CallStoredProcedure proc = null;
 		try
@@ -74,7 +79,7 @@ public class CourseUserRelationshipDB implements ICourseUserRelationshipPersiste
 		}
 		catch (SQLException e)
 		{
-			// Logging needed.
+			log.error("Error while loading all users with a role: {} for a course with ID: {} from database, error: {}", role.toString(), courseID, e.getMessage());
 		}
 		finally
 		{
@@ -88,6 +93,7 @@ public class CourseUserRelationshipDB implements ICourseUserRelationshipPersiste
 	
 	public boolean enrollUser(Course course, User user, Role role)
 	{
+		log.trace("Enrolling a user with bannerID: {} with a role: {} to a course with ID: {} in database.", user.getBannerID(), role.toString(), course.getId());
 		CallStoredProcedure proc = null;
 		try
 		{
@@ -99,7 +105,7 @@ public class CourseUserRelationshipDB implements ICourseUserRelationshipPersiste
 		}
 		catch (SQLException e)
 		{
-			// Logging needed
+			log.error("Error while enrolling a user with bannerID: {} with a role: {} to a course with ID: {} in database, error: {}", user.getBannerID(), role.toString(), course.getId(), e.getMessage());
 			return false;
 		}
 		finally
@@ -114,6 +120,7 @@ public class CourseUserRelationshipDB implements ICourseUserRelationshipPersiste
 
 	public List<Role> loadUserRolesForCourse(Course course, User user)
 	{
+		log.trace("Loading all roles of a user with bannerID: {} for a course with ID: {} from database.", user.getBannerID(), course.getId());
 		List<Role> roles = new ArrayList<Role>();
 		CallStoredProcedure proc = null;
 		try
@@ -133,7 +140,7 @@ public class CourseUserRelationshipDB implements ICourseUserRelationshipPersiste
 		}
 		catch (SQLException e)
 		{
-			// Logging needed.
+			log.error("Error while loading all roles of a user with bannerID: {} for a course with ID: {} in database, error: {}", user.getBannerID(), course.getId(), e.getMessage());
 		}
 		finally
 		{

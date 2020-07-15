@@ -4,6 +4,8 @@ import java.util.List;
 
 import CSCI5308.GroupFormationTool.AccessControl.CurrentUser;
 import CSCI5308.GroupFormationTool.AccessControl.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,7 @@ import CSCI5308.GroupFormationTool.SystemConfig;
 @Controller
 public class InstructorAdminController
 {
+	private Logger log = LoggerFactory.getLogger(InstructorAdminController.class);
 	private static final String ID = "id";
 	private static final String FILE = "file";
 	private static final String SUCCESSFUL = "successful";
@@ -26,6 +29,7 @@ public class InstructorAdminController
 	@GetMapping("/course/instructoradmin")
 	public String instructorAdmin(Model model, @RequestParam(name = ID) long courseID)
 	{
+		log.info("Processing a request to load a course admin page for instructor and ta.");
 		ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
 		Course course = new Course();
 		courseDB.loadCourseByID(courseID, course);
@@ -55,6 +59,7 @@ public class InstructorAdminController
 			@RequestParam(name = FAILURES, required = false) List<String> failures,
 			@RequestParam(name = DISPLAY_RESULTS) boolean displayResults)
 	{
+		log.info("Processing a request to redirect to a course admin page to display results of tas enroll request.");
 		ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
 		Course course = new Course();
 		courseDB.loadCourseByID(courseID, course);
@@ -78,6 +83,7 @@ public class InstructorAdminController
 	@GetMapping("/course/enrollta")
 	public String enrollTA(Model model, @RequestParam(name = ID) long courseID)
 	{
+		log.info("Processing a request to load a page to enroll tas for a course with ID: {}.", courseID);
 		ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
 		Course course = new Course();
 		courseDB.loadCourseByID(courseID, course);
@@ -96,6 +102,7 @@ public class InstructorAdminController
 	@RequestMapping(value = "/course/uploadcsv", consumes = {"multipart/form-data"})
    public ModelAndView upload(@RequestParam(name = FILE) MultipartFile file, @RequestParam(name = ID) long courseID)
    {
+   		log.info("Processing a request to enroll tas for a course with ID: {}.", courseID);
 		ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
 		Course course = new Course();
 		courseDB.loadCourseByID(courseID, course);

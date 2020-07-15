@@ -2,12 +2,15 @@ package CSCI5308.GroupFormationTool.AdminConfig;
 
 import CSCI5308.GroupFormationTool.CustomExceptions.DuplicateKeyException;
 import CSCI5308.GroupFormationTool.CustomExceptions.KeyNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AdminConfigService implements IAdminConfigService {
 
+	private Logger log = LoggerFactory.getLogger(AdminConfigService.class);
 	public static Map<String, String> config = new ConcurrentHashMap<>();
 
 	@Override

@@ -3,6 +3,8 @@ package CSCI5308.GroupFormationTool.Courses;
 import java.util.List;
 
 import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,8 +12,11 @@ import java.util.ArrayList;
 
 public class CourseDB implements ICoursePersistence
 {
+	private Logger log = LoggerFactory.getLogger(CourseDB.class);
+
 	public List<Course> loadAllCourses()
 	{
+		log.trace("Loading all courses from database.");
 		List<Course> courses = new ArrayList<Course>();
 		CallStoredProcedure proc = null;
 		try
@@ -33,7 +38,7 @@ public class CourseDB implements ICoursePersistence
 		}
 		catch (SQLException e)
 		{
-			// Logging needed.
+			log.error("Error while loading all courses from database, error: {}", e.getMessage());
 		}
 		finally
 		{
@@ -47,6 +52,7 @@ public class CourseDB implements ICoursePersistence
 
 	public void loadCourseByID(long id, Course course)
 	{
+		log.trace("Loading a course by ID: {} from database.", course.getId());
 		CallStoredProcedure proc = null;
 		try
 		{
@@ -65,7 +71,7 @@ public class CourseDB implements ICoursePersistence
 		}
 		catch (SQLException e)
 		{
-			// Logging needed.
+			log.error("Error while loading a course with ID: {} from database, erorr: {}", course.getId(), e.getMessage());
 		}
 		finally
 		{
@@ -78,6 +84,7 @@ public class CourseDB implements ICoursePersistence
 	
 	public boolean createCourse(Course course)
 	{
+		log.trace("Creating a new course with title: {} to database.", course.getTitle());
 		CallStoredProcedure proc = null;
 		try
 		{
@@ -88,7 +95,7 @@ public class CourseDB implements ICoursePersistence
 		}
 		catch (SQLException e)
 		{
-			// Logging needed
+			log.error("Error while creating a course with title: {} to database, error: {}", course.getTitle(), e.getMessage());
 			return false;
 		}
 		finally
@@ -103,6 +110,7 @@ public class CourseDB implements ICoursePersistence
 	
 	public boolean deleteCourse(long id)
 	{
+		log.trace("Deleting a course with ID: {} from database.", id);
 		CallStoredProcedure proc = null;
 		try
 		{
@@ -112,7 +120,7 @@ public class CourseDB implements ICoursePersistence
 		}
 		catch (SQLException e)
 		{
-			// Logging needed
+			log.error("Error while deleting a course with ID: {} from database, error: {}", id, e.getMessage());
 			return false;
 		}
 		finally
