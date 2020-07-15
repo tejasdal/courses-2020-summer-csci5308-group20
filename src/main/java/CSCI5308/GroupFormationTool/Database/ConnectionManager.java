@@ -35,7 +35,6 @@ public class ConnectionManager {
     public Connection getDBConnection() throws SQLException {
 
         Connection connection = DriverManager.getConnection(dbURL, dbUserName, dbPassword);
-        log.info("Connected to a database with URL: {}", dbURL);
         return connection;
     }
 }

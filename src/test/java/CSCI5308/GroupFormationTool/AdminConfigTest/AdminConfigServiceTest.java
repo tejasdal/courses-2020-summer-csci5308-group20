@@ -2,8 +2,6 @@ package CSCI5308.GroupFormationTool.AdminConfigTest;
 
 import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigPersistence;
 import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigService;
-import CSCI5308.GroupFormationTool.CustomExceptions.DuplicateKeyException;
-import CSCI5308.GroupFormationTool.CustomExceptions.KeyNotFoundException;
 import CSCI5308.GroupFormationTool.SystemConfig;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AdminConfigServiceTest {
 
 	@Test
-	public void addConfigTest() throws DuplicateKeyException {
+	public void addConfigTest() {
 		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
 		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
 		final String key = "key1", value = "value1";
@@ -21,7 +19,7 @@ public class AdminConfigServiceTest {
 	}
 
 	@Test
-	public void getAllConfigTest() throws DuplicateKeyException {
+	public void getAllConfigTest() {
 		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
 		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
 		final String key = "key2", value = "value2";
@@ -30,7 +28,7 @@ public class AdminConfigServiceTest {
 	}
 
 	@Test
-	public void loadAllConfigTest() throws DuplicateKeyException {
+	public void loadAllConfigTest() {
 		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
 		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
 		final String key = "key3", value = "value3";
@@ -39,7 +37,7 @@ public class AdminConfigServiceTest {
 	}
 
 	@Test
-	public void updateConfigTest() throws KeyNotFoundException, DuplicateKeyException {
+	public void updateConfigTest() {
 		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
 		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
 		final String key = "key4", value = "value4", value2 = "value5";
@@ -49,7 +47,7 @@ public class AdminConfigServiceTest {
 	}
 
 	@Test
-	public void deleteConfigTest() throws KeyNotFoundException, DuplicateKeyException {
+	public void deleteConfigTest() {
 		final IAdminConfigPersistence persistence = new AdminConfigPersistenceMock();
 		final IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
 		final String key = "key5", value = "value5";

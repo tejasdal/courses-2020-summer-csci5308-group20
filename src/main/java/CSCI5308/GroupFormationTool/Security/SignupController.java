@@ -2,7 +2,6 @@ package CSCI5308.GroupFormationTool.Security;
 
 import CSCI5308.GroupFormationTool.AccessControl.IUserPersistence;
 import CSCI5308.GroupFormationTool.AccessControl.User;
-import CSCI5308.GroupFormationTool.CustomExceptions.PasswordPolicyVoidException;
 import CSCI5308.GroupFormationTool.SystemConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +58,7 @@ public class SignupController {
                 IPasswordEncryption passwordEncryption = SystemConfig.instance().getPasswordEncryption();
                 success = u.createUser(userDB, passwordEncryption, null);
             }
-        } catch (PasswordPolicyVoidException e) {
+        } catch (Exception e) {
             log.info("Failed to singup a user with banner ID: {}, error: {}", e.getMessage());
             //add error messages in model
             m = new ModelAndView("signup");

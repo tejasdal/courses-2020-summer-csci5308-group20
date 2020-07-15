@@ -1,7 +1,5 @@
 package CSCI5308.GroupFormationTool.AdminConfig;
 
-import CSCI5308.GroupFormationTool.CustomExceptions.DuplicateKeyException;
-import CSCI5308.GroupFormationTool.CustomExceptions.KeyNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,45 +23,40 @@ public class AdminConfigService implements IAdminConfigService {
 	}
 
 	@Override
-	public boolean updateConfig(String key, String value, IAdminConfigPersistence persistence)
-			throws KeyNotFoundException {
+	public boolean updateConfig(String key, String value, IAdminConfigPersistence persistence) {
 		// update using persistence class, update value in 'config' map
 		if (config.containsKey(key) == false) {
-			throw new KeyNotFoundException("Config with key '" + key + "' not found");
+			throw new IllegalArgumentException("Config with key '" + key + "' not found");
 		}
 		boolean result = persistence.setConfig(key, value);
 		if (result) {
 			config.put(key, value);
 		}
-		// Logging required
 		return result;
 	}
 
 	@Override
-	public boolean addConfig(String key, String value, IAdminConfigPersistence persistence)
-			throws DuplicateKeyException {
+	public boolean addConfig(String key, String value, IAdminConfigPersistence persistence) {
 		// add using persistence class, update value in 'config' map
 		if (config.containsKey(key)) {
-			throw new DuplicateKeyException("Key '" + key + "' already exists");
+			throw new IllegalArgumentException("Key '" + key + "' already exists");
 		}
 		boolean result = persistence.addConfig(key, value);
 		if (result) {
 			config.put(key, value);
 		}
-		// Logging required
 		return result;
 	}
 
 	@Override
-	public boolean deleteConfig(String key, IAdminConfigPersistence persistence) throws KeyNotFoundException {
+	public boolean deleteConfig(String key, IAdminConfigPersistence persistence) {
 		if (config.containsKey(key) == false) {
-			throw new KeyNotFoundException("Config with key '" + key + "' not found");
+			throw new IllegalArgumentException("Config with key '" + key + "' not found");
 		}
 		boolean result = persistence.deleteConfig(key);
 		if (result) {
 			config.remove(key);
 		}
-		// Logging required
 		return result;
 	}
 
