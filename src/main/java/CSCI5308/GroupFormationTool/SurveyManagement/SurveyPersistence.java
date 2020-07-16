@@ -52,14 +52,12 @@ public class SurveyPersistence implements ISurveyPersistence {
         }
     }
 
-    public boolean addQuestionToSurvey(long surveyId, long questionId, int criteriaType, int criteriaValue) {
+    public boolean addQuestionToSurvey(long surveyId, long questionId) {
         CallStoredProcedure proc = null;
         try {
-            proc = new CallStoredProcedure("spAddQuestionToSurvey(?,?,?,?)");
+            proc = new CallStoredProcedure("spAddQuestionToSurvey(?,?)");
             proc.setParameter(1, surveyId);
             proc.setParameter(2, questionId);
-            proc.setParameter(3, criteriaType);
-            proc.setParameter(4, criteriaValue);
             proc.execute();
             return true;
         } catch (SQLException e) {

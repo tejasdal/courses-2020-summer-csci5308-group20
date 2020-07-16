@@ -1,5 +1,6 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
+import CSCI5308.GroupFormationTool.Question.Question;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -57,15 +59,13 @@ public class SurveyController {
              @RequestParam(name = "surveyId") Long surveyId,
              @RequestParam(name = "userId") Long userId,
              @RequestParam(name = "questionId") Long questionId,
-             @RequestParam(name = "criteriaType") int criteriaType,
-             @RequestParam(name = "criteriaValue") int criteriaValue,
              Model model) {
         model.addAttribute("surveyId", surveyId);
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
         ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
-        surveyService.addQuestionToSurvey(surveyId, questionId, criteriaType, criteriaValue, SurveyPersistenceAbstractFactory.instance().makePersistence());
+        surveyService.addQuestionToSurvey(surveyId, questionId, SurveyPersistenceAbstractFactory.instance().makePersistence());
 
         Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId, SurveyPersistenceAbstractFactory.instance().makePersistence());
 
@@ -153,6 +153,28 @@ public class SurveyController {
         ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
         surveyService.submitAnswers(bannerId, surveyId, survey, SurveyPersistenceAbstractFactory.instance().makePersistence());
         return "redirect:/";
+    }
+
+    @GetMapping("instructor/survey/creategroup")
+    public String createGroup(@RequestParam(name = "courseId") Long courseId,
+                              @RequestParam(name = "surveyId") Long surveyId,
+                              Model model) {
+        ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
+        Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId, SurveyPersistenceAbstractFactory.instance().makePersistence());
+        QuestionCriteriaList questionCriteriaList = new QuestionCriteriaList((List<Question>) result.get("questions"));
+        model.addAttribute("questions", questionCriteriaList);
+        return "survey/creategroups";
+    }
+
+    @PostMapping(value = "/survey/generategroups")
+    public String generateGroups
+            (@ModelAttribute QuestionCriteriaList questionCriteriaList,
+             @RequestParam(name = "surveyId", required = false) Long surveyId,
+             @RequestParam(name = "bannerId", required = false) String bannerId) {
+        questionCriteriaList.list.forEach(x -> {
+            System.out.println(x.criteriaType + "  " + x.criteriaValue);
+        });
+        return "index";
     }
 }
 

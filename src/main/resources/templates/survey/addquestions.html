@@ -19,8 +19,6 @@
             <th>Title</th>
             <th>Description</th>
             <th>Created on</th>
-            <th>Criteria Type</th>
-            <th>Criteria Value</th>
             <th>Add</th>
         </tr>
         </thead>
@@ -29,31 +27,15 @@
             <td th:text="${question.title}"></td>
             <td th:text="${question.description}"></td>
             <td th:text="${question.createdAt}"></td>
-            <form th:action="@{/instructor/survey/addquestions}" method="post">
-                <td class="form-group">
-                    <select class="form-control" name="criteriaType" id="criteriaType" required>
-                        <option disabled selected value="-1">Select Criteria</option>
-                        <option value="0">Similar</option>
-                        <option value="1">Dissimilar</option>
-                        <option value="2">Match</option>
-                        <option value="3">Does not Match</option>
-                        <option value="4">1 Greater then Criteria Value</option>
-                        <option value="5">1 Less then Criteria Value</option>
-                    </select>
-                </td>
-                <td class="form-group">
-                    <input class="form-control" type="number" id="criteriaValue" name="criteriaValue" min="0" required
-                           value="0">
-                </td>
-                <td>
+            <td>
+                <form th:action="@{/instructor/survey/addquestions}" method="post">
                     <input type="hidden" th:value="${question.id}" name="questionId">
                     <input type="hidden" th:value="${surveyId}" name="surveyId">
                     <input type="hidden" th:value="${courseId}" name="courseId">
                     <input type="hidden" th:value="${userId}" name="userId">
                     <button type="submit" class="btn btn-success btn-sm">Add</button>
-
-                </td>
-            </form>
+                </form>
+            </td>
         </tr>
     </table>
 </div>

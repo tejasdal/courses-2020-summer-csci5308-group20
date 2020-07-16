@@ -69,14 +69,11 @@ public class SurveyServiceTest {
 
     @Test
     public void addQuestionToSurveyTest() {
-        //TODO
         long questionId = 1;
         long surveyId = 1;
-        int criteriaType = 1;
-        int criteriaValue = 1;
-        Mockito.when(surveyPersistence.addQuestionToSurvey(surveyId, questionId, criteriaType, criteriaValue)).thenReturn(true);
+        Mockito.when(surveyPersistence.addQuestionToSurvey(surveyId, questionId)).thenReturn(true);
         Mockito.when(surveyPersistence.getSurveyStatus(surveyId)).thenReturn(1);
-        surveyService.addQuestionToSurvey(surveyId, questionId, criteriaType, criteriaValue, surveyPersistence);
+        surveyService.addQuestionToSurvey(surveyId, questionId, surveyPersistence);
     }
 
     @Test

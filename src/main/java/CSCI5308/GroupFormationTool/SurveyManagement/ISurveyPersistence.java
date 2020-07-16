@@ -10,7 +10,7 @@ public interface ISurveyPersistence {
 
     long getSurveyIdUsingCourseId(long courseId);
 
-    boolean addQuestionToSurvey(long surveyId, long questionId, int criteriaType, int criteriaValue);
+    boolean addQuestionToSurvey(long surveyId, long questionId);
 
     boolean deleteQuestionFromSurvey(Long surveyId, Long questionId);
 

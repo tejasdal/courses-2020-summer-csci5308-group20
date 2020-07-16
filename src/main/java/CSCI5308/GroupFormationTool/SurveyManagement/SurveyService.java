@@ -40,9 +40,9 @@ public class SurveyService implements ISurveyService {
         return response;
     }
 
-    public void addQuestionToSurvey(long surveyId, long questionId, int criteriaType, int criteriaValue, ISurveyPersistence surveyPersistence) {
+    public void addQuestionToSurvey(long surveyId, long questionId, ISurveyPersistence surveyPersistence) {
         if (isSurveyPublished(surveyId, surveyPersistence) == false) {
-            surveyPersistence.addQuestionToSurvey(surveyId, questionId, criteriaType, criteriaValue);
+            surveyPersistence.addQuestionToSurvey(surveyId, questionId);
         }
     }
 
@@ -71,40 +71,40 @@ public class SurveyService implements ISurveyService {
 
     public Map<String, Object> displaySurveyQuestionsToStudents(Long courseId, ISurveyPersistence surveyPersistence) {
         Map<String, Object> response = new HashMap<>();
-        long surveyId = surveyPersistence.getSurveyIdUsingCourseId(courseId);
-        if (surveyId == -1L) {
-            response.put("isSurveyPublished", false);
-        } else {
-            List<Question> surveyQuestions = surveyPersistence.getAllSurveyQuestions(surveyId);
-            for (Question surveyQuestion : surveyQuestions) {
-                if (surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_ONE
-                        || surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_MANY) {
-
-                    List<IQuestionOption> options = surveyPersistence.getSurveyQuestionOption(surveyQuestion.getId());
-                    for (IQuestionOption option : options) {
-                        surveyQuestion.getAnswers().add(new Answers());
-                    }
-
-                    if (null != options) {
-                        surveyQuestion.setQuestionOptions(options);
-                    }
-                }
-            }
-            response.put("isSurveyPublished", true);
-            response.put("surveyId", surveyId);
-            ISurvey survey = SurveyServiceAbstractFactory.instance().makeSurvey();
-            survey.setQuestions(surveyQuestions);
-            response.put("survey", survey);
-
-        }
+//        long surveyId = surveyPersistence.getSurveyIdUsingCourseId(courseId);
+//        if (surveyId == -1L) {
+//            response.put("isSurveyPublished", false);
+//        } else {
+//            List<Question> surveyQuestions = surveyPersistence.getAllSurveyQuestions(surveyId);
+//            for (Question surveyQuestion : surveyQuestions) {
+//                if (surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_ONE
+//                        || surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_MANY) {
+//
+//                    List<IQuestionOption> options = surveyPersistence.getSurveyQuestionOption(surveyQuestion.getId());
+//                    for (IQuestionOption option : options) {
+//                        surveyQuestion.getAnswers().add(new Answers());
+//                    }
+//
+//                    if (null != options) {
+//                        surveyQuestion.setQuestionOptions(options);
+//                    }
+//                }
+//            }
+//            response.put("isSurveyPublished", true);
+//            response.put("surveyId", surveyId);
+//            ISurvey survey = SurveyServiceAbstractFactory.instance().makeSurvey();
+//            survey.setQuestions(surveyQuestions);
+//            response.put("survey", survey);
+//
+//        }
         return response;
     }
 
     @Override
     public boolean submitAnswers(String bannerId, Long surveyId, Survey survey, ISurveyPersistence surveyPersistence) {
-        for (Question q : survey.getQuestions()) {
-            q.getAnswers().removeIf(question -> question.getAnswerValue() == null);
-        }
+//        for (Question q : survey.getQuestions()) {
+//            q.getAnswers().removeIf(question -> question.getAnswerValue() == null);
+//        }
         return surveyPersistence.submitAnswers(bannerId, surveyId, survey);
     }
 }
