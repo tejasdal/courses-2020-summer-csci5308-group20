@@ -1,7 +1,6 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
-import CSCI5308.GroupFormationTool.Question.Answers;
-import CSCI5308.GroupFormationTool.Question.IQuestionOption;
+import CSCI5308.GroupFormationTool.AccessControl.User;
 import CSCI5308.GroupFormationTool.Question.Question;
 
 import java.util.HashMap;
@@ -73,40 +72,51 @@ public class SurveyService implements ISurveyService {
 
     public Map<String, Object> displaySurveyQuestionsToStudents(Long courseId, ISurveyPersistence surveyPersistence) {
         Map<String, Object> response = new HashMap<>();
-        long surveyId = surveyPersistence.getSurveyIdUsingCourseId(courseId);
-        if (surveyId == -1L) {
-            response.put("isSurveyPublished", false);
-        } else {
-            List<Question> surveyQuestions = surveyPersistence.getAllSurveyQuestions(surveyId);
-            for (Question surveyQuestion : surveyQuestions) {
-                if (surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_ONE
-                        || surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_MANY) {
-
-                    List<IQuestionOption> options = surveyPersistence.getSurveyQuestionOption(surveyQuestion.getId());
-                    for (IQuestionOption option : options) {
-                        surveyQuestion.getAnswers().add(new Answers());
-                    }
-
-                    if (null != options) {
-                        surveyQuestion.setQuestionOptions(options);
-                    }
-                }
-            }
-            response.put("isSurveyPublished", true);
-            response.put("surveyId", surveyId);
-            ISurvey survey = SurveyServiceAbstractFactory.instance().makeSurvey();
-            survey.setQuestions(surveyQuestions);
-            response.put("survey", survey);
-
-        }
+//        long surveyId = surveyPersistence.getSurveyIdUsingCourseId(courseId);
+//        if (surveyId == -1L) {
+//            response.put("isSurveyPublished", false);
+//        } else {
+//            List<Question> surveyQuestions = surveyPersistence.getAllSurveyQuestions(surveyId);
+//            for (Question surveyQuestion : surveyQuestions) {
+//                if (surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_ONE
+//                        || surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_MANY) {
+//
+//                    List<IQuestionOption> options = surveyPersistence.getSurveyQuestionOption(surveyQuestion.getId());
+//                    for (IQuestionOption option : options) {
+//                        surveyQuestion.getAnswers().add(new Answers());
+//                    }
+//
+//                    if (null != options) {
+//                        surveyQuestion.setQuestionOptions(options);
+//                    }
+//                }
+//            }
+//            response.put("isSurveyPublished", true);
+//            response.put("surveyId", surveyId);
+//            ISurvey survey = SurveyServiceAbstractFactory.instance().makeSurvey();
+//            survey.setQuestions(surveyQuestions);
+//            response.put("survey", survey);
+//
+//        }
         return response;
     }
 
     @Override
     public boolean submitAnswers(String bannerId, Long surveyId, Survey survey, ISurveyPersistence surveyPersistence) {
-        for (Question q : survey.getQuestions()) {
-            q.getAnswers().removeIf(question -> question.getAnswerValue() == null);
-        }
+//        for (Question q : survey.getQuestions()) {
+//            q.getAnswers().removeIf(question -> question.getAnswerValue() == null);
+//        }
         return surveyPersistence.submitAnswers(bannerId, surveyId, survey);
+    }
+
+    @Override
+    public List<List<User>> createGroups(QuestionCriteriaList questionsList, Long surveyId) {
+        List<User> users;
+        List<SurveyQuestion> questions;
+        int maxUsersPerGroup;
+        // answers
+//        IGroupFormationAlgorithm algorithm = GroupFormationAlgorithmBuilder.builder().setUsers(users).setQuestions(questions).setUserAnswers(userAnswers).setMaxUsersPerGroup(5).build();
+//        return algorithm.createGroups();
+        return null;
     }
 }

@@ -2,7 +2,6 @@ package CSCI5308.GroupFormationTool.SurveyManagement;
 
 import CSCI5308.GroupFormationTool.Question.IQuestionOption;
 import CSCI5308.GroupFormationTool.Question.Question;
-import CSCI5308.GroupFormationTool.Question.QuestionOption;
 
 import java.util.List;
 

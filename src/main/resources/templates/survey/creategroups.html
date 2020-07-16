@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Survey Manager</title>
+</head>
+<body>
+<div class="col-md-10">
+    <h3>Select Criteria for Questions</h3>
+    <div th:if="${#lists.isEmpty(questions)}"><h3>Survey is empty - add questions</h3></div>
+    <form method="post" action="/survey/generategroups" th:object="${questions}">
+        <table th:unless="${#lists.isEmpty(questions)}" class="table table-sm">
+            <thead class="thead-dark">
+            <tr>
+                <th>Question ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Created on</th>
+                <th>Question Type</th>
+                <th>Criteria Type</th>
+                <th>Criteria Value</th>
+            </tr>
+            </thead>
+            <tr th:each="question,status : *{list}">
+
+                <td th:text="*{list[__${status.index}__].id}"></td>
+                <td th:text="*{list[__${status.index}__].title}"></td>
+                <td th:text="*{list[__${status.index}__].description}"></td>
+                <td th:text="*{list[__${status.index}__].createdAt}"></td>
+                <td th:text="*{list[__${status.index}__].questionTypeString}"></td>
+                <td class="form-group">
+                    <select class="form-control" th:field="*{list[__${status.index}__].criteriaType}"
+                            required>
+                        <option disabled selected value="-1">Select Criteria</option>
+                        <option value="0">Similar</option>
+                        <option value="1">Dissimilar</option>
+                        <option value="2">Match</option>
+                        <option value="3">Does not Match</option>
+                        <option value="4">1 Greater then Criteria Value</option>
+                        <option value="5">1 Less then Criteria Value</option>
+                    </select>
+                </td>
+                <td class="form-group">
+                    <input class="form-control" type="number"
+                           th:field="*{list[__${status.index}__].criteriaValue}"
+                           min="0" value="0" required>
+                </td>
+            </tr>
+        </table>
+        <div class="col-md-2">
+            <input type="hidden" th:value="${surveyId}" name="surveyId">
+            <input class="form-control" type="number" th:field="*{membersPerGroup}" placeholder="Group Size" min="1"
+                   required>
+        </div>
+        <br>
+        <button class="btn btn-primary" type="submit">Generate Groups</button>
+    </form>
+</div>
+<br>
+
+<br>
+</div>
+</body>
+</html>

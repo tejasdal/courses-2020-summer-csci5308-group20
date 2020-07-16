@@ -1,7 +1,6 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
 import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
-import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.IQuestionOption;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
@@ -251,26 +250,23 @@ public class SurveyPersistence implements ISurveyPersistence {
     @Override
     public boolean submitAnswers(String bannerId, Long surveyId, Survey survey) {
         CallStoredProcedure proc = null;
-        try{
-            proc = new CallStoredProcedure("spSubmitAnswers(?,?,?,?)");
-            for(Question question: survey.getQuestions()){
-                for(Answers answers: question.getAnswers()){
-                    proc.setParameter(1,surveyId);
-                    proc.setParameter(2,bannerId);
-                    proc.setParameter(3,question.getId());
-                    proc.setParameter(4,answers.getAnswerValue());
+        try {
+            proc = new CallStoredProcedure("spSubmitAnswers(?,?,?,?,?)");
+            for (SurveyQuestion question : survey.getQuestions()) {
+                for (UserAnswer answer : survey.getUserAnswers().get(question.getId()).get(bannerId)) {
+                    proc.setParameter(1, surveyId);
+                    proc.setParameter(2, bannerId);
+                    proc.setParameter(3, question.getId());
+                    proc.setParameter(4, answer.getAnswerRaw());
+                    proc.setParameter(5, answer.getAnswerIndex());
                     proc.addBatch();
                 }
             }
             proc.executeBatch();
-        }
-        catch(SQLException e){
+        } catch (SQLException e) {
             return false;
-        }
-        finally
-        {
-            if (null != proc)
-            {
+        } finally {
+            if (null != proc) {
                 proc.cleanup();
             }
         }
