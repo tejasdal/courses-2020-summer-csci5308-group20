@@ -1,5 +1,6 @@
 package CSCI5308.GroupFormationTool.SecurityTest.PasswordPolicyEnforcerTest;
 
+import CSCI5308.GroupFormationTool.AdminConfig.AdminConfigServiceAbstractFactory;
 import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigService;
 import CSCI5308.GroupFormationTool.AdminConfigTest.AdminConfigPersistenceMock;
 import CSCI5308.GroupFormationTool.CustomExceptions.DuplicateKeyException;
@@ -17,7 +18,7 @@ public class PasswordPolicyServiceTest {
 
     @Test
     public void validateUsingPolicies() throws DuplicateKeyException, PasswordPolicyVoidException {
-        IAdminConfigService configService = SystemConfig.instance().getAdminConfigService();
+        IAdminConfigService configService = AdminConfigServiceAbstractFactory.instance().makeAdminConfigService();
         configService.addConfig(minPasswordPolicy, minPasswordPolicyCount, new AdminConfigPersistenceMock());
         IPasswordPolicyService passwordPolicyService = SystemConfig.instance().getPasswordPolicyService();
         assertTrue(passwordPolicyService.validateUsingPolicies("TestPassword"));

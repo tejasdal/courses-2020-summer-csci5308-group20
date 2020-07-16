@@ -2,7 +2,8 @@ package CSCI5308.GroupFormationTool.Courses;
 
 import java.util.List;
 
-import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
+import CSCI5308.GroupFormationTool.Database.DatabaseAbstractFactory;
+import CSCI5308.GroupFormationTool.Database.ICallStoredProcedure;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,10 +14,10 @@ public class CourseDB implements ICoursePersistence
 	public List<Course> loadAllCourses()
 	{
 		List<Course> courses = new ArrayList<Course>();
-		CallStoredProcedure proc = null;
+		ICallStoredProcedure proc = null;
 		try
 		{
-			proc = new CallStoredProcedure("spLoadAllCourses()");
+			proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spLoadAllCourses()");
 			ResultSet results = proc.executeWithResults();
 			if (null != results)
 			{
@@ -47,10 +48,10 @@ public class CourseDB implements ICoursePersistence
 
 	public void loadCourseByID(long id, Course course)
 	{
-		CallStoredProcedure proc = null;
+		ICallStoredProcedure proc = null;
 		try
 		{
-			proc = new CallStoredProcedure("spFindCourseByID(?)");
+			proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spFindCourseByID(?)");
 			proc.setParameter(1, id);
 			ResultSet results = proc.executeWithResults();
 			if (null != results)
@@ -78,10 +79,10 @@ public class CourseDB implements ICoursePersistence
 	
 	public boolean createCourse(Course course)
 	{
-		CallStoredProcedure proc = null;
+		ICallStoredProcedure proc = null;
 		try
 		{
-			proc = new CallStoredProcedure("spCreateCourse(?, ?)");
+			proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spCreateCourse(?, ?)");
 			proc.setParameter(1, course.getTitle());
 			proc.registerOutputParameterLong(2);
 			proc.execute();
@@ -103,10 +104,10 @@ public class CourseDB implements ICoursePersistence
 	
 	public boolean deleteCourse(long id)
 	{
-		CallStoredProcedure proc = null;
+		ICallStoredProcedure proc = null;
 		try
 		{
-			proc = new CallStoredProcedure("spDeleteCourse(?)");
+			proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spDeleteCourse(?)");
 			proc.setParameter(1, id);
 			proc.execute();
 		}

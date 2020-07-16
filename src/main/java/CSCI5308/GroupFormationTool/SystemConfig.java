@@ -2,10 +2,7 @@ package CSCI5308.GroupFormationTool;
 
 import CSCI5308.GroupFormationTool.AccessControl.IUserPersistence;
 import CSCI5308.GroupFormationTool.AccessControl.UserDB;
-import CSCI5308.GroupFormationTool.AdminConfig.AdminConfigPersistence;
-import CSCI5308.GroupFormationTool.AdminConfig.AdminConfigService;
-import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigPersistence;
-import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigService;
+import CSCI5308.GroupFormationTool.AdminConfig.*;
 import CSCI5308.GroupFormationTool.Courses.CourseDB;
 import CSCI5308.GroupFormationTool.Courses.CourseUserRelationshipDB;
 import CSCI5308.GroupFormationTool.Courses.ICoursePersistence;
@@ -149,7 +146,7 @@ public class SystemConfig {
     }
 
     public List<IPasswordPolicy> getPolicy() {
-        Map<String, String> allConfig = SystemConfig.instance().getAdminConfigService().getAllConfig();
+        Map<String, String> allConfig = AdminConfigServiceAbstractFactory.instance().makeAdminConfigService().getAllConfig();
         List<IPasswordPolicy> policies = new ArrayList<>();
         for (Map.Entry<String, String> entry : allConfig.entrySet()) {
             if (entry.getKey().startsWith("PASSWORD_")) {

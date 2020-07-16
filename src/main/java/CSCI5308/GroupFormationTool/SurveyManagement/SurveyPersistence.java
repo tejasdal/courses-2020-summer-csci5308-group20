@@ -1,6 +1,7 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
-import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
+import CSCI5308.GroupFormationTool.Database.DatabaseAbstractFactory;
+import CSCI5308.GroupFormationTool.Database.ICallStoredProcedure;
 import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.IQuestionOption;
 import CSCI5308.GroupFormationTool.Question.Question;
@@ -15,9 +16,9 @@ import java.util.List;
 public class SurveyPersistence implements ISurveyPersistence {
 
     public long getSurveyIdUsingCourseId(long courseId) {
-        CallStoredProcedure proc = null;
+        ICallStoredProcedure proc = null;
         try {
-            proc = new CallStoredProcedure("spGetSurveyIdUsingCourseId(?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spGetSurveyIdUsingCourseId(?)");
             proc.setParameter(1, courseId);
             ResultSet resultSet = proc.executeWithResults();
             if (resultSet != null) {
@@ -37,9 +38,9 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public boolean createSurvey(long courseId) {
-        CallStoredProcedure proc = null;
+        ICallStoredProcedure proc = null;
         try {
-            proc = new CallStoredProcedure("spCreateSurvey(?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spCreateSurvey(?)");
             proc.setParameter(1, courseId);
             proc.execute();
             return true;
@@ -54,9 +55,9 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public boolean addQuestionToSurvey(long surveyId, long questionId) {
-        CallStoredProcedure proc = null;
+        ICallStoredProcedure proc = null;
         try {
-            proc = new CallStoredProcedure("spAddQuestionToSurvey(?,?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spAddQuestionToSurvey(?,?)");
             proc.setParameter(1, surveyId);
             proc.setParameter(2, questionId);
             proc.execute();
@@ -72,9 +73,9 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public boolean deleteQuestionFromSurvey(Long surveyId, Long questionId) {
-        CallStoredProcedure proc = null;
+        ICallStoredProcedure proc = null;
         try {
-            proc = new CallStoredProcedure("spDeleteQuestionFromSurvey(?,?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spDeleteQuestionFromSurvey(?,?)");
             proc.setParameter(1, surveyId);
             proc.setParameter(2, questionId);
             proc.execute();
@@ -90,9 +91,9 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public boolean publishSurvey(Long surveyId) {
-        CallStoredProcedure proc = null;
+        ICallStoredProcedure proc = null;
         try {
-            proc = new CallStoredProcedure("spPublishSurvey(?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spPublishSurvey(?)");
             proc.setParameter(1, surveyId);
             proc.execute();
             return true;
@@ -107,9 +108,9 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public boolean unpublishSurvey(Long surveyId) {
-        CallStoredProcedure proc = null;
+        ICallStoredProcedure proc = null;
         try {
-            proc = new CallStoredProcedure("spUnpublishSurvey(?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spUnpublishSurvey(?)");
             proc.setParameter(1, surveyId);
             proc.execute();
             return true;
@@ -124,9 +125,9 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public int getSurveyStatus(Long surveyId) {
-        CallStoredProcedure proc = null;
+        ICallStoredProcedure proc = null;
         try {
-            proc = new CallStoredProcedure("spGetSurveyStatus(?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spGetSurveyStatus(?)");
             proc.setParameter(1, surveyId);
             ResultSet resultSet = proc.executeWithResults();
             if (resultSet.next()) {
@@ -144,9 +145,9 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public List<Question> getAllSurveyQuestions(long surveyId) {
-        CallStoredProcedure proc = null;
+        ICallStoredProcedure proc = null;
         try {
-            proc = new CallStoredProcedure("spGetAllSurveyQuestions(?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spGetAllSurveyQuestions(?)");
             proc.setParameter(1, surveyId);
             ResultSet resultSet = proc.executeWithResults();
             if (resultSet != null) {
@@ -180,9 +181,9 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public List<Question> getAllInstructorQuestionsUsingCourseId(long courseId, long surveyId) {
-        CallStoredProcedure proc = null;
+        ICallStoredProcedure proc = null;
         try {
-            proc = new CallStoredProcedure("spGetAllInstructorQuestionsUsingCourseId(?,?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spGetAllInstructorQuestionsUsingCourseId(?,?)");
             proc.setParameter(1, courseId);
             proc.setParameter(2, surveyId);
             ResultSet resultSet = proc.executeWithResults();
@@ -216,9 +217,9 @@ public class SurveyPersistence implements ISurveyPersistence {
     }
 
     public List<IQuestionOption> getSurveyQuestionOption(Long questionId) {
-        CallStoredProcedure proc = null;
+        ICallStoredProcedure proc = null;
         try {
-            proc = new CallStoredProcedure("spGetSurveyQuestionOption(?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spGetSurveyQuestionOption(?)");
             proc.setParameter(1, questionId);
             ResultSet resultSet = proc.executeWithResults();
             if (resultSet != null) {
@@ -250,9 +251,9 @@ public class SurveyPersistence implements ISurveyPersistence {
 
     @Override
     public boolean submitAnswers(String bannerId, Long surveyId, Survey survey) {
-        CallStoredProcedure proc = null;
+        ICallStoredProcedure proc = null;
         try{
-            proc = new CallStoredProcedure("spSubmitAnswers(?,?,?,?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spSubmitAnswers(?,?,?,?)");
             for(Question question: survey.getQuestions()){
                 for(Answers answers: question.getAnswers()){
                     proc.setParameter(1,surveyId);

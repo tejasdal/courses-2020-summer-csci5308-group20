@@ -21,7 +21,7 @@ public class CourseUserRelationship implements ICourseUserRelationship
 		{
 			return false;
 		}
-		ICourseUserRelationshipPersistence userCourseRelationshipDB = SystemConfig.instance().getCourseUserRelationshipDB();
+		ICourseUserRelationshipPersistence userCourseRelationshipDB = CoursePersistenceAbstractFactory.instance().makeCourseUserRelationshipPersistence();
 		List<Role> roles = userCourseRelationshipDB.loadUserRolesForCourse(course, user);
 		if (null != roles && roles.contains(role))
 		{
@@ -32,14 +32,14 @@ public class CourseUserRelationship implements ICourseUserRelationship
 
 	public List<Role> loadAllRoluesForUserInCourse(User user, Course course)
 	{
-		ICourseUserRelationshipPersistence userCourseRelationshipDB = SystemConfig.instance().getCourseUserRelationshipDB();
+		ICourseUserRelationshipPersistence userCourseRelationshipDB = CoursePersistenceAbstractFactory.instance().makeCourseUserRelationshipPersistence();
 		List<Role> roles = userCourseRelationshipDB.loadUserRolesForCourse(course, user);
 		return roles;
 	}
 
 	public boolean enrollUserInCourse(User user, Course course, Role role)
 	{
-		ICourseUserRelationshipPersistence userCourseRelationshipDB = SystemConfig.instance().getCourseUserRelationshipDB();
+		ICourseUserRelationshipPersistence userCourseRelationshipDB = CoursePersistenceAbstractFactory.instance().makeCourseUserRelationshipPersistence();
 		return userCourseRelationshipDB.enrollUser(course, user, role);
 	}
 }

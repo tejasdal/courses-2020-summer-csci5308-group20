@@ -17,7 +17,7 @@ public class CourseController
 	@GetMapping("/course/course")
 	public String course(Model model, @RequestParam(name = ID) long courseID)
 	{
-		ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+		ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
 		Course course = new Course();
 		courseDB.loadCourseByID(courseID, course);
 		model.addAttribute("course", course);

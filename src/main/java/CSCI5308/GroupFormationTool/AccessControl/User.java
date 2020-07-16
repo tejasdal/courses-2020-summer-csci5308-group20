@@ -5,8 +5,7 @@ import java.util.regex.Pattern;
 
 import CSCI5308.GroupFormationTool.Security.IPasswordEncryption;
 
-public class User
-{
+public class User implements IUser {
 	// This regex comes from here:
 	// https://howtodoinjava.com/regex/java-regex-validate-email-address/
 	private static final String EMAIL_REGEX = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
@@ -35,6 +34,7 @@ public class User
 		persistence.loadUserByBannerID(bannerID, this);
 	}
 	
+	@Override
 	public void setDefaults()
 	{
 		id = -1;
@@ -45,81 +45,96 @@ public class User
 		email = "";
 	}
 	
+	@Override
 	public void setID(long id)
 	{
 		this.id = id;
 	}
 	
+	@Override
 	public long getID()
 	{
 		return id;
 	}
 	
-	// These are here for the Thymeleaf / Spring binding nonsense.
+	@Override
 	public void setId(long id)
 	{
 		this.id = id;
 	}
+	@Override
 	public long getId()
 	{
 		return id;
 	}
 	
+	@Override
 	public void setPassword(String password)
 	{
 		this.password = password;
 	}
 	
+	@Override
 	public String getPassword()
 	{
 		return password;
 	}
 	
+	@Override
 	public void setBannerID(String bannerID)
 	{
 		this.bannerID = bannerID;
 	}
 	
+	@Override
 	public String getBannerID()
 	{
 		return bannerID;
 	}
-	// Also here for Thymeleaf nonsense.
+
+	@Override
 	public String getBanner()
 	{
 		return bannerID;
 	}
 	
+	@Override
 	public void setFirstName(String name)
 	{
 		firstName = name;
 	}
 	
+	@Override
 	public String getFirstName()
 	{
 		return firstName;
 	}
 	
+	@Override
 	public void setLastName(String name)
 	{
 		lastName = name;
 	}
 	
+	@Override
 	public String getLastName()
 	{
 		return lastName;
 	}
 	
+	@Override
 	public void setEmail(String email)
 	{
 		this.email = email;
 	}
 	
+	@Override
 	public String getEmail()
 	{
 		return email;
 	}
 	
+	@Override
 	public boolean isValidUser()
 	{
 		boolean valid = true;
@@ -129,10 +144,11 @@ public class User
 		return valid; 
 	}
 	
+	@Override
 	public boolean createUser(
-		IUserPersistence userDB,
-		IPasswordEncryption passwordEncryption,
-		IUserNotifications notification)
+			IUserPersistence userDB,
+			IPasswordEncryption passwordEncryption,
+			IUserNotifications notification)
 	{
 		String rawPassword = password;
 		this.password = passwordEncryption.encryptPassword(this.password);
@@ -148,6 +164,7 @@ public class User
 		return success;
 	}
 	
+	@Override
 	public boolean updateUser(IUserPersistence userDB)
 	{
 		return userDB.updateUser(this);

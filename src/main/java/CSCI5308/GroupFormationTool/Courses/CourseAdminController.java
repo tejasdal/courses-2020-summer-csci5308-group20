@@ -24,7 +24,7 @@ public class CourseAdminController
 	@GetMapping("/admin/course")
 	public String course(Model model)
 	{
-		ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+		ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
 		List<Course> allCourses = courseDB.loadAllCourses();
 		model.addAttribute("courses", allCourses);
 		return "admin/course";
@@ -33,11 +33,11 @@ public class CourseAdminController
 	@GetMapping("/admin/assigninstructor")
 	public String assignInstructor(Model model, @RequestParam(name = ID) long courseID)
 	{
-		ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+		ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
 		Course c = new Course();
 		courseDB.loadCourseByID(courseID, c);
 		model.addAttribute("course", c);
-		ICourseUserRelationshipPersistence courseUserRelationshipDB = SystemConfig.instance().getCourseUserRelationshipDB();
+		ICourseUserRelationshipPersistence courseUserRelationshipDB = CoursePersistenceAbstractFactory.instance().makeCourseUserRelationshipPersistence();
 		List<User> allUsersNotCurrentlyInstructors = courseUserRelationshipDB.findAllUsersWithoutCourseRole(Role.INSTRUCTOR, courseID);
 		model.addAttribute("users", allUsersNotCurrentlyInstructors);
 		return "admin/assigninstructor";
@@ -46,7 +46,7 @@ public class CourseAdminController
 	@GetMapping("/admin/deletecourse")
 	public ModelAndView deleteCourse(@RequestParam(name = ID) long courseID)
 	{
-		ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+		ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
 		Course c = new Course();
 		c.setId(courseID);
 		c.delete(courseDB);
@@ -57,7 +57,7 @@ public class CourseAdminController
 	@RequestMapping(value = "/admin/createcourse", method = RequestMethod.POST) 
    public ModelAndView createCourse(@RequestParam(name = TITLE) String title)
    {
-		ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+		ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
 		Course c = new Course();
 		c.setTitle(title);
 		c.createCourse(courseDB);
@@ -72,7 +72,7 @@ public class CourseAdminController
 		Course c = new Course();
 		c.setId(courseID);
 		Iterator<Integer> iter = instructor.iterator();
-		ICourseUserRelationshipPersistence courseUserRelationshipDB = SystemConfig.instance().getCourseUserRelationshipDB();
+		ICourseUserRelationshipPersistence courseUserRelationshipDB = CoursePersistenceAbstractFactory.instance().makeCourseUserRelationshipPersistence();
 		while (iter.hasNext())
 		{
 			User u = new User();

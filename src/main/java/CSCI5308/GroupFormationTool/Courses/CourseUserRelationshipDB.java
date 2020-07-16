@@ -6,17 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import CSCI5308.GroupFormationTool.AccessControl.User;
-import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
+import CSCI5308.GroupFormationTool.Database.DatabaseAbstractFactory;
+import CSCI5308.GroupFormationTool.Database.ICallStoredProcedure;
 
 public class CourseUserRelationshipDB implements ICourseUserRelationshipPersistence
 {
 	public List<User> findAllUsersWithoutCourseRole(Role role, long courseID)
 	{
 		List<User> users = new ArrayList<User>();
-		CallStoredProcedure proc = null;
+		ICallStoredProcedure proc = null;
 		try
 		{
-			proc = new CallStoredProcedure("spFindUsersWithoutCourseRole(?, ?)");
+			proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spFindUsersWithoutCourseRole(?, ?)");
 			proc.setParameter(1, role.toString());
 			proc.setParameter(2,  courseID);
 			ResultSet results = proc.executeWithResults();
@@ -54,10 +55,10 @@ public class CourseUserRelationshipDB implements ICourseUserRelationshipPersiste
 	public List<User> findAllUsersWithCourseRole(Role role, long courseID)
 	{
 		List<User> users = new ArrayList<User>();
-		CallStoredProcedure proc = null;
+		ICallStoredProcedure proc = null;
 		try
 		{
-			proc = new CallStoredProcedure("spFindUsersWithCourseRole(?, ?)");
+			proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spFindUsersWithCourseRole(?, ?)");
 			proc.setParameter(1, role.toString());
 			proc.setParameter(2,  courseID);
 			ResultSet results = proc.executeWithResults();
@@ -88,10 +89,10 @@ public class CourseUserRelationshipDB implements ICourseUserRelationshipPersiste
 	
 	public boolean enrollUser(Course course, User user, Role role)
 	{
-		CallStoredProcedure proc = null;
+		ICallStoredProcedure proc = null;
 		try
 		{
-			proc = new CallStoredProcedure("spEnrollUser(?, ?, ?)");
+			proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spEnrollUser(?, ?, ?)");
 			proc.setParameter(1, course.getId());
 			proc.setParameter(2, user.getID());
 			proc.setParameter(3, role.toString());
@@ -115,10 +116,10 @@ public class CourseUserRelationshipDB implements ICourseUserRelationshipPersiste
 	public List<Role> loadUserRolesForCourse(Course course, User user)
 	{
 		List<Role> roles = new ArrayList<Role>();
-		CallStoredProcedure proc = null;
+		ICallStoredProcedure proc = null;
 		try
 		{
-			proc = new CallStoredProcedure("spLoadUserRolesForCourse(?, ?)");
+			proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spLoadUserRolesForCourse(?, ?)");
 			proc.setParameter(1, course.getId());
 			proc.setParameter(2, user.getID());
 			ResultSet results = proc.executeWithResults();

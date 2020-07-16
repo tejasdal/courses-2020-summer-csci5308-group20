@@ -2,6 +2,7 @@ package CSCI5308.GroupFormationTool.Security;
 
 import CSCI5308.GroupFormationTool.AccessControl.IUserPersistence;
 import CSCI5308.GroupFormationTool.AccessControl.User;
+import CSCI5308.GroupFormationTool.AccessControl.UserPersistenceAbstractFactory;
 import CSCI5308.GroupFormationTool.CustomExceptions.PasswordPolicyVoidException;
 import CSCI5308.GroupFormationTool.SystemConfig;
 import org.springframework.stereotype.Controller;
@@ -49,8 +50,8 @@ public class SignupController {
                 u.setFirstName(firstName);
                 u.setLastName(lastName);
                 u.setEmail(email);
-                IUserPersistence userDB = SystemConfig.instance().getUserDB();
-                IPasswordEncryption passwordEncryption = SystemConfig.instance().getPasswordEncryption();
+                IUserPersistence userDB = UserPersistenceAbstractFactory.instance().makeUserPersistence();
+                IPasswordEncryption passwordEncryption = PasswordEncryptionAbstractFactory.instance().makePasswordEncryption();
                 success = u.createUser(userDB, passwordEncryption, null);
             }
         } catch (PasswordPolicyVoidException e) {
