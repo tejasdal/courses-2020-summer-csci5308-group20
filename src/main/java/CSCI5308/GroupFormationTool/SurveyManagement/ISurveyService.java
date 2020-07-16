@@ -1,5 +1,8 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
+import CSCI5308.GroupFormationTool.AccessControl.User;
+
+import java.util.List;
 import java.util.Map;
 
 public interface ISurveyService {
@@ -20,4 +23,6 @@ public interface ISurveyService {
     Map<String, Object> displaySurveyQuestionsToStudents(Long courseId, ISurveyPersistence surveyPersistence);
 
     boolean submitAnswers(String bannerId, Long surveyId, Survey survey, ISurveyPersistence surveyPersistence);
+
+    List<List<User>> createGroups(QuestionCriteriaList questionsList, Long surveyId);
 }

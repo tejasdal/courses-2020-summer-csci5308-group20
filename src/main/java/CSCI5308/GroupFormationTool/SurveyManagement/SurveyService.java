@@ -1,5 +1,6 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
+import CSCI5308.GroupFormationTool.AccessControl.User;
 import CSCI5308.GroupFormationTool.Question.Question;
 
 import java.util.HashMap;
@@ -106,5 +107,16 @@ public class SurveyService implements ISurveyService {
 //            q.getAnswers().removeIf(question -> question.getAnswerValue() == null);
 //        }
         return surveyPersistence.submitAnswers(bannerId, surveyId, survey);
+    }
+
+    @Override
+    public List<List<User>> createGroups(QuestionCriteriaList questionsList, Long surveyId) {
+        List<User> users;
+        List<SurveyQuestion> questions;
+        int maxUsersPerGroup;
+        // answers
+//        IGroupFormationAlgorithm algorithm = GroupFormationAlgorithmBuilder.builder().setUsers(users).setQuestions(questions).setUserAnswers(userAnswers).setMaxUsersPerGroup(5).build();
+//        return algorithm.createGroups();
+        return null;
     }
 }

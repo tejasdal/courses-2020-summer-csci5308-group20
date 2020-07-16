@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="col-md-10">
-    <h3>Current List of Questions in the Survey</h3>
+    <h3>Select Criteria for Questions</h3>
     <div th:if="${#lists.isEmpty(questions)}"><h3>Survey is empty - add questions</h3></div>
     <form method="post" action="/survey/generategroups" th:object="${questions}">
         <table th:unless="${#lists.isEmpty(questions)}" class="table table-sm">
@@ -50,6 +50,12 @@
                 </td>
             </tr>
         </table>
+        <div class="col-md-2">
+            <input type="hidden" th:value="${surveyId}" name="surveyId">
+            <input class="form-control" type="number" th:field="*{membersPerGroup}" placeholder="Group Size" min="1"
+                   required>
+        </div>
+        <br>
         <button class="btn btn-primary" type="submit">Generate Groups</button>
     </form>
 </div>

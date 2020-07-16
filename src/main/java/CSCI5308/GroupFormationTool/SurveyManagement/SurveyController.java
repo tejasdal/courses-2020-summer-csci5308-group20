@@ -163,6 +163,7 @@ public class SurveyController {
         Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId, SurveyPersistenceAbstractFactory.instance().makePersistence());
         QuestionCriteriaList questionCriteriaList = new QuestionCriteriaList((List<Question>) result.get("questions"));
         model.addAttribute("questions", questionCriteriaList);
+        model.addAttribute("surveyId", surveyId);
         return "survey/creategroups";
     }
 
@@ -174,6 +175,8 @@ public class SurveyController {
         questionCriteriaList.list.forEach(x -> {
             System.out.println(x.criteriaType + "  " + x.criteriaValue);
         });
+        System.out.println(questionCriteriaList.getSurveyId() + " surveyid ");
+        System.out.println(questionCriteriaList.getMembersPerGroup() + " memebrs per group  ");
         return "index";
     }
 }
