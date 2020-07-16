@@ -3,12 +3,13 @@ package CSCI5308.GroupFormationTool.SurveyManagement;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ISurveyPersistence {
     boolean createSurvey(long courseId);
 
-    long getSurveyIdUsingCourseId(long courseId);
+    long getSurveyIdUsingCourseId(long courseId) throws SQLException;
 
     boolean addQuestionToSurvey(long surveyId, long questionId);
 

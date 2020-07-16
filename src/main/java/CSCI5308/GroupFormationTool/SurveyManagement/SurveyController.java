@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 @Controller
@@ -25,7 +26,7 @@ public class SurveyController {
     public String surveyManagementPage
             (@RequestParam(name = "userId") Long userId,
              @RequestParam(name = "courseId") Long courseId,
-             Model model) {
+             Model model) throws SQLException {
         log.info("Processing a request to load a survey management page to instructor with ID: {} for a course with ID: {}",
                 userId, courseId);
         model.addAttribute("courseId", courseId);
@@ -151,15 +152,22 @@ public class SurveyController {
              Model model) {
         log.info("Processing a request to display all survey questions to student for a course with ID: {}", courseId);
         ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
-        Map<String, Object> result = surveyService.displaySurveyQuestionsToStudents(courseId,
-                PersistenceAbstractFactory.instance().makePersistence());
+        Map<String, Object> result = null;
         model.addAttribute("courseId", courseId);
-        if (result.containsKey("isSurveyPublished")) {
-            model.addAttribute("isSurveyPublished", result.get("isSurveyPublished"));
-        }
-        if (result.containsKey("survey") && result.containsKey("surveyId")) {
-            model.addAttribute("survey", result.get("survey"));
-            model.addAttribute("surveyId", result.get("surveyId"));
+        try {
+            result = surveyService.displaySurveyQuestionsToStudents(courseId,
+                    PersistenceAbstractFactory.instance().makePersistence());
+            if (result.containsKey("isSurveyPublished")) {
+                model.addAttribute("dbError", false);
+                model.addAttribute("isSurveyPublished", result.get("isSurveyPublished"));
+            }
+            if (result.containsKey("survey") && result.containsKey("surveyId")) {
+                model.addAttribute("survey", result.get("survey"));
+                model.addAttribute("surveyId", result.get("surveyId"));
+            }
+        } catch (SQLException e) {
+            model.addAttribute("isSurveyPublished", false);
+            model.addAttribute("dbError", true);
         }
         return "survey/displaySurveyToStudent";
     }

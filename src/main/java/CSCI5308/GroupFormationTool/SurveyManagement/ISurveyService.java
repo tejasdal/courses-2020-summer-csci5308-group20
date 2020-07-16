@@ -1,9 +1,10 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 public interface ISurveyService {
-    Map<String, Object> getAllSurveyQuestions(long courseID, ISurveyPersistence surveyPersistence);
+    Map<String, Object> getAllSurveyQuestions(long courseID, ISurveyPersistence surveyPersistence) throws SQLException;
 
     Map<String, Object> addQuestionPage(long courseId, long surveyId, ISurveyPersistence surveyPersistence);
 
@@ -17,7 +18,7 @@ public interface ISurveyService {
 
     boolean isSurveyPublished(Long surveyId, ISurveyPersistence surveyPersistence);
 
-    Map<String, Object> displaySurveyQuestionsToStudents(Long courseId, ISurveyPersistence surveyPersistence);
+    Map<String, Object> displaySurveyQuestionsToStudents(Long courseId, ISurveyPersistence surveyPersistence) throws SQLException;
 
     boolean submitAnswers(String bannerId, Long surveyId, Survey survey, ISurveyPersistence surveyPersistence);
 }

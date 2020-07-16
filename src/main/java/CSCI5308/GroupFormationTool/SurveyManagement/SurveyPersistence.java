@@ -16,7 +16,7 @@ import java.util.List;
 public class SurveyPersistence implements ISurveyPersistence {
 
     private Logger log = LoggerFactory.getLogger(SurveyPersistence.class);
-    public long getSurveyIdUsingCourseId(long courseId) {
+    public long getSurveyIdUsingCourseId(long courseId) throws SQLException {
         log.trace("Fetching survey ID for a course with ID: {} from database.", courseId);
         CallStoredProcedure proc = null;
         try {
@@ -31,7 +31,7 @@ public class SurveyPersistence implements ISurveyPersistence {
             return (-1);
         } catch (SQLException e) {
             log.error("Error while fetching survey ID for a course with ID: {} from database, error: {}", courseId, e.getMessage());
-            return (-1);
+            throw e;
         } finally {
             if (null != proc) {
                 proc.cleanup();

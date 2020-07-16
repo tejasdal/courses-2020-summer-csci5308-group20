@@ -4,13 +4,16 @@ import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SurveyService implements ISurveyService {
 
-    public Map<String, Object> getAllSurveyQuestions(long courseID, ISurveyPersistence surveyPersistence) {
+    private static final Integer SURVEY_PUBLISHED = 1;
+
+    public Map<String, Object> getAllSurveyQuestions(long courseID, ISurveyPersistence surveyPersistence) throws SQLException {
 
         Map<String, Object> response = new HashMap<>();
         long surveyId = surveyPersistence.getSurveyIdUsingCourseId(courseID);
@@ -71,7 +74,7 @@ public class SurveyService implements ISurveyService {
         return true;
     }
 
-    public Map<String, Object> displaySurveyQuestionsToStudents(Long courseId, ISurveyPersistence surveyPersistence) {
+    public Map<String, Object> displaySurveyQuestionsToStudents(Long courseId, ISurveyPersistence surveyPersistence) throws SQLException {
         Map<String, Object> response = new HashMap<>();
         long surveyId = surveyPersistence.getSurveyIdUsingCourseId(courseId);
         if (surveyId == -1L) {
@@ -92,7 +95,7 @@ public class SurveyService implements ISurveyService {
                     }
                 }
             }
-            response.put("isSurveyPublished", true);
+            response.put("isSurveyPublished", surveyPersistence.getSurveyStatus(surveyId) == SURVEY_PUBLISHED);
             response.put("surveyId", surveyId);
             ISurvey survey = ServiceAbstractFactory.instance().makeSurvey();
             survey.setQuestions(surveyQuestions);
