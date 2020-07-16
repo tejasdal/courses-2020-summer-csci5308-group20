@@ -18,6 +18,11 @@ public class User
 	private String lastName;
 	private String email;
 	
+	@Override
+	public String toString() {
+		return ""+id;
+	}
+	
 	public User()
 	{
 		setDefaults();

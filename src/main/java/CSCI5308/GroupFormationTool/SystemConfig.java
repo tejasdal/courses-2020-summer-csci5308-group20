@@ -19,10 +19,6 @@ import CSCI5308.GroupFormationTool.Question.QuestionService;
 import CSCI5308.GroupFormationTool.Security.BCryptPasswordEncryption;
 import CSCI5308.GroupFormationTool.Security.IPasswordEncryption;
 import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.*;
-import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyPersistence;
-import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyService;
-import CSCI5308.GroupFormationTool.SurveyManagement.SurveyPersistence;
-import CSCI5308.GroupFormationTool.SurveyManagement.SurveyService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +55,9 @@ public class SystemConfig {
     private IPasswordPolicy rememberedPasswordPolicy;
     private ISurveyService surveyService;
     private ISurveyPersistence surveyPersistence;
+    private IQuestionPersistence questionPersistence;
+    private IQuestionService questionService;
+    private IMatchCriteriaFactory defaultMatchCriteriaFactory;
 
 
     // This private constructor ensures that no class other than System can allocate
@@ -80,6 +79,7 @@ public class SystemConfig {
         questionService = new QuestionService();
         surveyPersistence = new SurveyPersistence();
         surveyService = new SurveyService();
+        defaultMatchCriteriaFactory = new SDMatchCriteriaFactory();
     }
 
     // This is the way the rest of the application gets access to the System object.
@@ -116,16 +116,16 @@ public class SystemConfig {
         this.databaseConfiguration = databaseConfiguration;
     }
 
-    public ICoursePersistence getCourseDB() {
-        return courseDB;
-    }
-
     public void setCourseDB(ICoursePersistence courseDB) {
         this.courseDB = courseDB;
     }
 
     public ICourseUserRelationshipPersistence getCourseUserRelationshipDB() {
         return courseUserRelationshipDB;
+    }
+
+    public void setCourseUserRelationshipDB(ICourseUserRelationshipPersistence courseUserRelationshipDB) {
+        this.courseUserRelationshipDB = courseUserRelationshipDB;
     }
 
     public void setCourseUserRelationshipDB(ICourseUserRelationshipPersistence courseUserRelationshipDB) {
@@ -200,5 +200,9 @@ public class SystemConfig {
 
     public ISurveyPersistence getSurveyPersistence() {
         return surveyPersistence;
+    }
+
+    public IMatchCriteriaFactory getMatchCriteriaFactory() {
+    	return defaultMatchCriteriaFactory;
     }
 }
