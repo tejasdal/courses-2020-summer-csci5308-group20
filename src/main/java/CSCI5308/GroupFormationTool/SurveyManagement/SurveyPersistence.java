@@ -173,6 +173,7 @@ public class SurveyPersistence implements ISurveyPersistence {
                     question.setDescription(description);
                     question.setQuestionType(type);
                     question.setCreatedAt(createdOn);
+                    question.setQuestionTypeString(question.getQuestionTypeStringMapping(type));
                     list.add(question);
                 }
                 return list;
