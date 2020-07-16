@@ -15,6 +15,7 @@ public class Question {
         public int compare(Question question1, Question question2) {
             String title1 = question1.getTitle();
             String title2 = question2.getTitle();
+
             return title1.compareTo(title2);
         }
     };

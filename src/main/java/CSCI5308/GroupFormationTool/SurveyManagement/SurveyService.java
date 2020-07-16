@@ -94,7 +94,7 @@ public class SurveyService implements ISurveyService {
             }
             response.put("isSurveyPublished", true);
             response.put("surveyId", surveyId);
-            Survey survey = new Survey();
+            ISurvey survey = ServiceAbstractFactory.instance().makeSurvey();
             survey.setQuestions(surveyQuestions);
             response.put("survey", survey);
 
