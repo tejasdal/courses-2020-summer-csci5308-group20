@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Course Survey</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<div class="container">
+
+    <br><h4 class="text-center">Course Survey</h4><br>
+    <div th:if="${!isSurveyPublished}" class="alert alert-success" role="alert">
+        <h6>
+            Course survey is not published yet. Please try again after some time! <br>
+            Thank you!
+        </h6>
+    </div>
+
+    <div th:unless="${!isSurveyPublished}">
+        <br><h5 >Questions:</h5>
+        <!--    Free text Question-->
+        <form action="#" th:action="@{/student/survey/submit}" method="post" th:object="${survey}">
+            <input type="hidden" th:value="${surveyId}" name="surveyId">
+            <input type="hidden" th:value="${#httpServletRequest.remoteUser}" name="bannerId">
+            <fieldset>
+                <div class="row my-4" th:each="question, status: *{questions}">
+                    <input type="hidden" th:field="*{questions[__${status.index}__].id}">
+                    <div class="col-8">
+                        <h5 th:text="${(status.index+1)  + '. ' + question.description}">What is question?</h5>
+                    </div>
+                    <div class="col-4 input-group" th:if="*{questions[__${status.index}__].questionType} == 1">
+                        <input type="number" class="form-control" id="numericAnswer" placeholder="0" th:field="*{questions[__${status.index}__].answers[0].answerValue}">
+                    </div>
+                    <div class="col-4 form-group" th:if="*{questions[__${status.index}__].questionType} == 4">
+                        <textarea class="form-control" id="freeTextAnswer" placeholder="Type your answer!" th:field="*{questions[__${status.index}__].answers[0].answerValue}"></textarea>
+                    </div>
+                    <div class="col-4 input-group" th:if="*{questions[__${status.index}__].questionType} == 2">
+                        <select class="form-control" id="questionOption" th:field="*{questions[__${status.index}__].answers[0].answerValue}">
+                            <option th:each="option: ${question.questionOptions}" th:value="${option.value}"
+                                    th:text="${option.option}">Option 1
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-4" th:if="${question.questionType} == 3">
+                        <div class="form-check" th:each="option, stat: ${question.questionOptions}">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
+                                   th:value="${option.value}" th:field="*{questions[__${status.index}__].answers[__${stat.index}__].answerValue}">
+                            <label class="form-check-label" for="inlineCheckbox1" th:text="${option.option}">1</label>
+                        </div>
+                    </div>
+                </div>
+
+<!--                Submit and Cancel-->
+                <div class="row my-2">
+                    <div class="col-1 input-group">
+                        <input type="submit" class="btn btn-primary btn-md" id="save" value="Submit">
+                    </div>
+                    <div class="col-1 input-group">
+                        <input type="reset" class="btn btn-secondary btn-md" id="cancel" value="Cancel">
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+</body>
+</html>

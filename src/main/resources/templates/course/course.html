@@ -20,5 +20,9 @@
 			<br/>
 			<a th:href="@{/course/instructoradmin(id=${course.id})}">Course Administration</a>
 		</div>
+		<div th:if="${student}">
+			<br/>
+			<a th:href="@{/student/survey/questions(courseId=${course.id})}">Participate Course Survey</a>
+		</div>
 	</body>
 </html>

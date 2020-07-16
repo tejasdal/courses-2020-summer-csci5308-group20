@@ -1,4 +1,4 @@
-package CSCI5308.GroupFormationTool.Question;
+package CSCI5308.GroupFormationTool.CustomExceptions;
 
 public class QuestionException extends Exception {
 

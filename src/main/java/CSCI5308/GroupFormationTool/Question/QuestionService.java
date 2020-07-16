@@ -1,5 +1,6 @@
 package CSCI5308.GroupFormationTool.Question;
 
+import CSCI5308.GroupFormationTool.CustomExceptions.QuestionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
