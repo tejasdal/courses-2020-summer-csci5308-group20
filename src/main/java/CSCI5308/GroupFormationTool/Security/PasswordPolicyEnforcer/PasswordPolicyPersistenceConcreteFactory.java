@@ -1,0 +1,4 @@
+package CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer;
+
+public class PasswordPolicyPersistenceConcreteFactory extends PasswordPolicyPersistenceAbstractFactory {
+}
