@@ -1,6 +1,8 @@
 /.gradle/
 /build/
 application-tejas.properties
+GroupFormationTool.log
+tests.log
 ### IntelliJ IDEA ###
 .idea
 *.iws
