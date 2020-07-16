@@ -35,7 +35,7 @@ public class QuestionService implements IQuestionService {
     }
 
     @Override
-    public List<Question> getAllUserQuestions
+    public List<IQuestion> getAllUserQuestions
             (Long userId, IQuestionPersistence questionPersistence) {
         return questionPersistence.getAllUserQuestions(userId);
     }
@@ -46,15 +46,15 @@ public class QuestionService implements IQuestionService {
     }
 
     @Override
-    public List<Question> getAllUserQuestionsSortedByTitle(Long userId, IQuestionPersistence questionPersistence) {
-        List<Question> questions = questionPersistence.getAllUserQuestions(userId);
+    public List<IQuestion> getAllUserQuestionsSortedByTitle(Long userId, IQuestionPersistence questionPersistence) {
+        List<IQuestion> questions = questionPersistence.getAllUserQuestions(userId);
         Collections.sort(questions,Question.titleComparator);
         return questions;
     }
 
     @Override
-    public List<Question> getAllUserQuestionsSortedByDate(Long userId, IQuestionPersistence questionPersistence) {
-        List<Question> questions = questionPersistence.getAllUserQuestions(userId);
+    public List<IQuestion> getAllUserQuestionsSortedByDate(Long userId, IQuestionPersistence questionPersistence) {
+        List<IQuestion> questions = questionPersistence.getAllUserQuestions(userId);
         Collections.sort(questions,Question.dateComparator);
         return questions;
     }

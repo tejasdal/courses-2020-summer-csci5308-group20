@@ -24,24 +24,20 @@
     <br><h4>Create a New Question</h4><br>
     <form action="#" th:action="@{/question/prototype/0}" th:object="${question}" method="post">
         <fieldset>
-            <!--       User ID-->
             <div class="col-12 input-group">
                 <input type="text" class="form-control" id="userId" name="userId" th:field="*{userId}"
                        placeholder="UserId" hidden>
             </div>
-            <!--       Question Title-->
             <label for="title"> Question Title</label>
             <div class="col-12 input-group">
                 <input type="text" class="form-control" id="title" name="title" th:field="*{title}"
                        placeholder="Title">
             </div>
-            <!--        Question Description-->
             <label for="description"> Question Description</label>
             <div class="col-12 input-group">
                 <input type="text" class="form-control" id="description" name="description" th:field="*{description}"
                        placeholder="Description">
             </div>
-            <!--        Question Type Dropdown-->
             <label for="questionType"> Question Type</label>
             <div class="col-12 input-group">
                 <select class="form-control" id="questionType" th:field="*{questionType}">
@@ -51,7 +47,6 @@
                     <option th:value="4">Free Text</option>
                 </select>
             </div>
-            <!--        Next button-->
             <div class="row">
                 <div class="col-1 input-group my-3">
                     <input type="submit" class="btn btn-primary btn-primary-md" id="next" value="Next">

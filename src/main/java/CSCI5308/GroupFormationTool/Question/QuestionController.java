@@ -1,7 +1,6 @@
 package CSCI5308.GroupFormationTool.Question;
 
 import CSCI5308.GroupFormationTool.CustomExceptions.QuestionException;
-import CSCI5308.GroupFormationTool.SystemConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +15,9 @@ public class QuestionController {
     public String getAllUserQuestions
             (@RequestParam(name="userId") Long userId,
              Model model){
-        IQuestionService questionService = SystemConfig.instance().getQuestionService();
-        IQuestionPersistence questionPersistence = SystemConfig.instance().getQuestionPersistence();
-        List<Question> questions = questionService.getAllUserQuestions(userId, questionPersistence);
+        IQuestionService questionService = QuestionServiceAbstractFactory.instance().makeService();
+        IQuestionPersistence questionPersistence = QuestionPersistenceAbstractFactory.instance().makePersistence();
+        List<IQuestion> questions = questionService.getAllUserQuestions(userId, questionPersistence);
         model.addAttribute("questions",questions);
         model.addAttribute("userId",userId);
         return "questions/AllUserQuestions";
@@ -28,9 +27,9 @@ public class QuestionController {
     public String getAllUserQuestionsSortedTitle
             (@RequestParam(name="userId") Long userId,
              Model model){
-        IQuestionService questionService = SystemConfig.instance().getQuestionService();
-        IQuestionPersistence questionPersistence = SystemConfig.instance().getQuestionPersistence();
-        List<Question> questions = questionService.getAllUserQuestionsSortedByTitle(userId, questionPersistence);
+        IQuestionService questionService = QuestionServiceAbstractFactory.instance().makeService();
+        IQuestionPersistence questionPersistence = QuestionPersistenceAbstractFactory.instance().makePersistence();
+        List<IQuestion> questions = questionService.getAllUserQuestionsSortedByTitle(userId, questionPersistence);
         model.addAttribute("questions",questions);
         model.addAttribute("userId",userId);
         return "questions/AllUserQuestions";
@@ -40,9 +39,9 @@ public class QuestionController {
     public String getAllUserQuestionsSortedDate
             (@RequestParam(name="userId") Long userId,
              Model model){
-        IQuestionService questionService = SystemConfig.instance().getQuestionService();
-        IQuestionPersistence questionPersistence = SystemConfig.instance().getQuestionPersistence();
-        List<Question> questions = questionService.getAllUserQuestionsSortedByDate(userId, questionPersistence);
+        IQuestionService questionService = QuestionServiceAbstractFactory.instance().makeService();
+        IQuestionPersistence questionPersistence = QuestionPersistenceAbstractFactory.instance().makePersistence();
+        List<IQuestion> questions = questionService.getAllUserQuestionsSortedByDate(userId, questionPersistence);
         model.addAttribute("questions",questions);
         model.addAttribute("userId",userId);
         return "questions/AllUserQuestions";
@@ -52,8 +51,8 @@ public class QuestionController {
     public String deleteQuestion(@RequestParam(name="questionId") Long questionId,
                                  @RequestParam(name="userId") Long userId,
                                  RedirectAttributes redirectAttributes){
-        IQuestionService questionService = SystemConfig.instance().getQuestionService();
-        IQuestionPersistence questionPersistence = SystemConfig.instance().getQuestionPersistence();
+        IQuestionService questionService = QuestionServiceAbstractFactory.instance().makeService();
+        IQuestionPersistence questionPersistence = QuestionPersistenceAbstractFactory.instance().makePersistence();
         questionService.deleteQuestion(questionId,questionPersistence);
         redirectAttributes.addAttribute("userId",userId);
         return "redirect:/instructor/questions";
@@ -61,7 +60,7 @@ public class QuestionController {
 
     @GetMapping("/instructor/{id}/question/create")
     public String createQuestion(Model model, @PathVariable("id") Long instructorId){
-        Question question = new Question();
+        IQuestion question = QuestionServiceAbstractFactory.instance().makeQuestion();
         question.setUserId(instructorId);
         model.addAttribute("question",question);
         return "questions/createQuestion";
@@ -70,8 +69,8 @@ public class QuestionController {
     @PostMapping(value = "/question/create")
     public String createQuestion(Model model,@ModelAttribute Question question, RedirectAttributes redirectAttributes){
         try {
-            IQuestionService questionService = SystemConfig.instance().getQuestionService();
-            questionService.createQuestion(question, SystemConfig.instance().getQuestionPersistence());
+            IQuestionService questionService = QuestionServiceAbstractFactory.instance().makeService();
+            questionService.createQuestion(question, QuestionPersistenceAbstractFactory.instance().makePersistence());
         } catch (QuestionException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
@@ -87,7 +86,7 @@ public class QuestionController {
         if (next != null){
             return "questions/displayQuestionPrototype";
         }
-        question.getQuestionOptions().add(new QuestionOption());
+        question.getQuestionOptions().add(QuestionServiceAbstractFactory.instance().makeQuestionOption());
         return "questions/addOptionToQuestion";
     }
 
@@ -97,7 +96,7 @@ public class QuestionController {
 
         if ((question.getQuestionType() == Question.getMultipleChoiceChooseOne()
                 || question.getQuestionType() == Question.getMultipleChoiceChooseMany()) && isMcqPrototype != 1){
-            question.getQuestionOptions().add(new QuestionOption());
+            question.getQuestionOptions().add(QuestionServiceAbstractFactory.instance().makeQuestionOption());
             model.addAttribute("question", question);
             return "questions/addOptionToQuestion";
         }

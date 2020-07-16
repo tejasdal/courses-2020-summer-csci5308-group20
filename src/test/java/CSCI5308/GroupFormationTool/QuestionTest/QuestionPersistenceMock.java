@@ -1,8 +1,6 @@
 package CSCI5308.GroupFormationTool.QuestionTest;
 
-import CSCI5308.GroupFormationTool.Question.IQuestionPersistence;
-import CSCI5308.GroupFormationTool.Question.Question;
-import CSCI5308.GroupFormationTool.Question.QuestionOption;
+import CSCI5308.GroupFormationTool.Question.*;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -12,7 +10,7 @@ import java.util.List;
 class QuestionPersistenceMock implements IQuestionPersistence {
 
     @Override
-    public boolean createQuestion(Question question) throws SQLException {
+    public boolean createQuestion(IQuestion question) throws SQLException {
         return true;
     }
 
@@ -22,9 +20,9 @@ class QuestionPersistenceMock implements IQuestionPersistence {
     }
 
     @Override
-    public List<Question> getAllUserQuestions(Long userId) {
-        List<Question> questions = new ArrayList<>();
-        List<QuestionOption> questionOptions = new ArrayList<>();
+    public List<IQuestion> getAllUserQuestions(Long userId) {
+        List<IQuestion> questions = new ArrayList<>();
+        List<IQuestionOption> questionOptions = new ArrayList<>();
         questionOptions.add(new QuestionOption(1L, "Option 1", 1));
         questionOptions.add(new QuestionOption(2L, "Option 2", 2));
         questionOptions.add(new QuestionOption(3L, "Option 3", 3));

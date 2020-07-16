@@ -1,5 +1,6 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
+import CSCI5308.GroupFormationTool.Question.IQuestionOption;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
 
@@ -24,7 +25,7 @@ public interface ISurveyPersistence {
 
     List<Question> getAllInstructorQuestionsUsingCourseId(long courseId, long surveyId);
 
-    List<QuestionOption> getSurveyQuestionOption(Long questionId);
+    List<IQuestionOption> getSurveyQuestionOption(Long questionId);
 
     boolean submitAnswers(String bannerId, Long surveyId, Survey survey);
 }
