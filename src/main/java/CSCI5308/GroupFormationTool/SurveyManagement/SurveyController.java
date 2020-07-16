@@ -161,7 +161,7 @@ public class SurveyController {
                               Model model) {
         ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
         Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId, SurveyPersistenceAbstractFactory.instance().makePersistence());
-        QuestionCriteriaList questionCriteriaList = new QuestionCriteriaList((List<Question>) result.get("questions"));
+        IQuestionCriteriaList questionCriteriaList = SurveyServiceAbstractFactory.instance().makeQuestionCriteriaListUsingList((List<Question>) result.get("questions"));
         model.addAttribute("questions", questionCriteriaList);
         model.addAttribute("surveyId", surveyId);
         return "survey/creategroups";
@@ -173,7 +173,7 @@ public class SurveyController {
              @RequestParam(name = "surveyId", required = false) Long surveyId,
              @RequestParam(name = "bannerId", required = false) String bannerId) {
         questionCriteriaList.list.forEach(x -> {
-            System.out.println(x.criteriaType + "  " + x.criteriaValue);
+            System.out.println(x.getCriteriaType() + "  " + x.getCriteriaValue());
         });
         System.out.println(questionCriteriaList.getSurveyId() + " surveyid ");
         System.out.println(questionCriteriaList.getMembersPerGroup() + " memebrs per group  ");

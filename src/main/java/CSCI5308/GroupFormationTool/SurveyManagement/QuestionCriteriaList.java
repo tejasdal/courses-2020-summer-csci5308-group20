@@ -5,7 +5,7 @@ import CSCI5308.GroupFormationTool.Question.Question;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionCriteriaList {
+public class QuestionCriteriaList implements IQuestionCriteriaList {
 
     List<QuestionWithCriteriaDetails> list = new ArrayList<>();
     int membersPerGroup = 0;
@@ -14,10 +14,10 @@ public class QuestionCriteriaList {
     public QuestionCriteriaList() {
     }
 
-    QuestionCriteriaList(List<Question> questionList) {
+    public QuestionCriteriaList(List<Question> questionList) {
         list = new ArrayList<>();
         questionList.forEach(question -> {
-            list.add(new QuestionWithCriteriaDetails(question, -1, 0));
+            list.add(SurveyServiceAbstractFactory.instance().makeQuestionWithCriteriaDetails(question, -1, 0));
         });
     }
 

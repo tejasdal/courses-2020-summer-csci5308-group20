@@ -1,9 +1,9 @@
 package CSCI5308.GroupFormationTool.SurveyManagementTest;
 
-import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyPersistence;
-import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyService;
-import CSCI5308.GroupFormationTool.SurveyManagement.SurveyPersistence;
-import CSCI5308.GroupFormationTool.SurveyManagement.SurveyService;
+import CSCI5308.GroupFormationTool.Question.Question;
+import CSCI5308.GroupFormationTool.SurveyManagement.*;
+
+import java.util.List;
 
 import static org.mockito.Mockito.mock;
 
@@ -32,5 +32,17 @@ public class SurveyManagementAbstractFactoryTest {
 
     public ISurveyService getSurveyService() {
         return surveyService;
+    }
+
+    public IQuestionCriteriaList makeQuestionCriteriaList() {
+        return new QuestionCriteriaList();
+    }
+
+    public IQuestionCriteriaList makeQuestionCriteriaListUsingList(List<Question> questionList) {
+        return new QuestionCriteriaList(questionList);
+    }
+
+    public QuestionWithCriteriaDetails makeQuestionWithCriteriaDetails(Question q, int criteriaType, int criteriaValue) {
+        return new QuestionWithCriteriaDetails(q, criteriaType, criteriaType);
     }
 }
