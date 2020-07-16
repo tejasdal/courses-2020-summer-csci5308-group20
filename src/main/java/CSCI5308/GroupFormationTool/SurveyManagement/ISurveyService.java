@@ -7,7 +7,7 @@ public interface ISurveyService {
 
     Map<String, Object> addQuestionPage(long courseId, long surveyId, ISurveyPersistence surveyPersistence);
 
-    void addQuestionToSurvey(long surveyId, long questionId, ISurveyPersistence surveyPersistence);
+    void addQuestionToSurvey(long surveyId, long questionId, int criteriaType, int criteriaValue, ISurveyPersistence surveyPersistence);
 
     void deleteQuestionFromSurvey(Long surveyId, Long questionId, ISurveyPersistence surveyPersistence);
 

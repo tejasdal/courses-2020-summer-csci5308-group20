@@ -1,7 +1,5 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
-import CSCI5308.GroupFormationTool.Question.Answers;
-import CSCI5308.GroupFormationTool.Question.IQuestionOption;
 import CSCI5308.GroupFormationTool.Question.Question;
 
 import java.util.HashMap;
@@ -42,9 +40,9 @@ public class SurveyService implements ISurveyService {
         return response;
     }
 
-    public void addQuestionToSurvey(long surveyId, long questionId, ISurveyPersistence surveyPersistence) {
+    public void addQuestionToSurvey(long surveyId, long questionId, int criteriaType, int criteriaValue, ISurveyPersistence surveyPersistence) {
         if (isSurveyPublished(surveyId, surveyPersistence) == false) {
-            surveyPersistence.addQuestionToSurvey(surveyId, questionId);
+            surveyPersistence.addQuestionToSurvey(surveyId, questionId, criteriaType, criteriaValue);
         }
     }
 
@@ -84,7 +82,7 @@ public class SurveyService implements ISurveyService {
 
                     List<IQuestionOption> options = surveyPersistence.getSurveyQuestionOption(surveyQuestion.getId());
                     for (IQuestionOption option : options) {
-                        surveyQuestion.getUserAnswers().add(new Answers());
+                        surveyQuestion.getAnswers().add(new Answers());
                     }
 
                     if (null != options) {

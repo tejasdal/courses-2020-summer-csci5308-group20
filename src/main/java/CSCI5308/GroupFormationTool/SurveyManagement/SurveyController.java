@@ -57,13 +57,15 @@ public class SurveyController {
              @RequestParam(name = "surveyId") Long surveyId,
              @RequestParam(name = "userId") Long userId,
              @RequestParam(name = "questionId") Long questionId,
+             @RequestParam(name = "criteriaType") int criteriaType,
+             @RequestParam(name = "criteriaValue") int criteriaValue,
              Model model) {
         model.addAttribute("surveyId", surveyId);
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
         ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
-        surveyService.addQuestionToSurvey(surveyId, questionId, SurveyPersistenceAbstractFactory.instance().makePersistence());
+        surveyService.addQuestionToSurvey(surveyId, questionId, criteriaType, criteriaValue, SurveyPersistenceAbstractFactory.instance().makePersistence());
 
         Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId, SurveyPersistenceAbstractFactory.instance().makePersistence());
 

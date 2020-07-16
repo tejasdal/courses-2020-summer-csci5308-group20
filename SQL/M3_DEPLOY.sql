@@ -48,3 +48,11 @@ CREATE TABLE SurveyAnswers (
 ALTER TABLE SurveyAnswers
 ADD COLUMN answerIndex INT NULL AFTER answerValue;
 
+ALTER TABLE SurveyQuestions
+ADD COLUMN questioncriteria INT NULL AFTER questionid;
+
+CREATE TABLE QuestionCriteria (
+  id INT NOT NULL AUTO_INCREMENT,
+  criteriatype INT NULL,
+  criteriavalue INT NULL,
+  PRIMARY KEY (id));

@@ -2,7 +2,6 @@ package CSCI5308.GroupFormationTool.SurveyManagement;
 
 import CSCI5308.GroupFormationTool.Question.IQuestionOption;
 import CSCI5308.GroupFormationTool.Question.Question;
-import CSCI5308.GroupFormationTool.Question.QuestionOption;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ public interface ISurveyPersistence {
 
     long getSurveyIdUsingCourseId(long courseId);
 
-    boolean addQuestionToSurvey(long surveyId, long questionId);
+    boolean addQuestionToSurvey(long surveyId, long questionId, int criteriaType, int criteriaValue);
 
     boolean deleteQuestionFromSurvey(Long surveyId, Long questionId);
 
