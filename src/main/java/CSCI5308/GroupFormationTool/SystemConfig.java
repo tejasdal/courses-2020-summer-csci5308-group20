@@ -22,8 +22,8 @@ import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.*;
 import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyPersistence;
 import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyService;
 import CSCI5308.GroupFormationTool.SurveyManagement.SurveyPersistence;
-import CSCI5308.GroupFormationTool.survey.matchcriteria.IMatchCriteriaFactory;
-import CSCI5308.GroupFormationTool.survey.matchcriteria.standarddeviation.SDMatchCriteriaFactory;
+import CSCI5308.GroupFormationTool.SurveyManagement.matchcriteria.IMatchCriteriaFactory;
+import CSCI5308.GroupFormationTool.SurveyManagement.matchcriteria.standarddeviation.SDMatchCriteriaFactory;
 
 import java.util.ArrayList;
 import java.util.List;
