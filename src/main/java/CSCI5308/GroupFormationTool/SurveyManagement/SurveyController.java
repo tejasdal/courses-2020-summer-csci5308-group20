@@ -21,7 +21,7 @@ public class SurveyController {
         model.addAttribute("userId", userId);
 
         ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
-        Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId);
+        Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId, SurveyAbstractFactory.instance().getPersistence());
 
         if (result != null && result.isEmpty() == false) {
             model.addAttribute("questions", result.get("questions"));
@@ -42,7 +42,7 @@ public class SurveyController {
         model.addAttribute("userId", userId);
 
         ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
-        Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId);
+        Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId, SurveyAbstractFactory.instance().getPersistence());
         if (result != null && result.isEmpty() == false) {
             model.addAttribute("available", result.get("availableQuestions"));
             model.addAttribute("added", result.get("addedQuestion"));
@@ -63,9 +63,9 @@ public class SurveyController {
         model.addAttribute("userId", userId);
 
         ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
-        surveyService.addQuestionToSurvey(surveyId, questionId);
+        surveyService.addQuestionToSurvey(surveyId, questionId, SurveyAbstractFactory.instance().getPersistence());
 
-        Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId);
+        Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId, SurveyAbstractFactory.instance().getPersistence());
 
         model.addAttribute("available", result.get("availableQuestions"));
         model.addAttribute("added", result.get("addedQuestion"));
@@ -84,7 +84,7 @@ public class SurveyController {
         model.addAttribute("userId", userId);
         ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
 
-        surveyService.deleteQuestionFromSurvey(surveyId, questionId);
+        surveyService.deleteQuestionFromSurvey(surveyId, questionId, SurveyAbstractFactory.instance().getPersistence());
         return new ModelAndView("redirect:/instructor/survey/addquestions", model);
     }
 
@@ -100,7 +100,7 @@ public class SurveyController {
         model.addAttribute("userId", userId);
 
         ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
-        if (surveyService.publishSurvey(surveyId)) {
+        if (surveyService.publishSurvey(surveyId, SurveyAbstractFactory.instance().getPersistence())) {
             redirectAttributes.addFlashAttribute("publishSuccess", true);
         }
         return new ModelAndView("redirect:/instructor/survey/", model);
@@ -119,7 +119,7 @@ public class SurveyController {
         model.addAttribute("userId", userId);
 
         ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
-        if (surveyService.unpublishSurvey(surveyId)) {
+        if (surveyService.unpublishSurvey(surveyId, SurveyAbstractFactory.instance().getPersistence())) {
             redirectAttributes.addFlashAttribute("unpublishSuccess", true);
         }
         return new ModelAndView("redirect:/instructor/survey/", model);
@@ -149,7 +149,7 @@ public class SurveyController {
              @RequestParam(name = "surveyId") Long surveyId,
              @RequestParam(name = "bannerId") String bannerId) {
         ISurveyService surveyService = SurveyAbstractFactory.instance().getService();
-        surveyService.submitAnswers(bannerId,surveyId,survey,SurveyAbstractFactory.instance().getPersistence());
+        surveyService.submitAnswers(bannerId, surveyId, survey, SurveyAbstractFactory.instance().getPersistence());
         return "redirect:/";
     }
 }

@@ -16,7 +16,7 @@ public class SurveyManagementAbstractFactoryTest {
 
     private SurveyManagementAbstractFactoryTest() {
         surveyPersistenceMock = mock(SurveyPersistence.class);
-        surveyService = new SurveyService(surveyPersistenceMock);
+        surveyService = new SurveyService();
     }
 
     public static SurveyManagementAbstractFactoryTest instance() {

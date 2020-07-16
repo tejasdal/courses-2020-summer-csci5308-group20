@@ -10,13 +10,7 @@ import java.util.Map;
 
 public class SurveyService implements ISurveyService {
 
-    ISurveyPersistence surveyPersistence;
-
-    public SurveyService(ISurveyPersistence surveyPersistence) {
-        this.surveyPersistence = surveyPersistence;
-    }
-
-    public Map<String, Object> getAllSurveyQuestions(long courseID) {
+    public Map<String, Object> getAllSurveyQuestions(long courseID, ISurveyPersistence surveyPersistence) {
 
         Map<String, Object> response = new HashMap<>();
         long surveyId = surveyPersistence.getSurveyIdUsingCourseId(courseID);
@@ -27,7 +21,7 @@ public class SurveyService implements ISurveyService {
         }
         response.put("surveyId", surveyId);
         if (surveyId != (-1)) {
-            boolean status = isSurveyPublished(surveyId);
+            boolean status = isSurveyPublished(surveyId, surveyPersistence);
             response.put("status", status);
             List<Question> list = surveyPersistence.getAllSurveyQuestions(surveyId);
             if (list != null) {
@@ -39,7 +33,7 @@ public class SurveyService implements ISurveyService {
     }
 
 
-    public Map<String, Object> addQuestionPage(long courseId, long surveyId) {
+    public Map<String, Object> addQuestionPage(long courseId, long surveyId, ISurveyPersistence surveyPersistence) {
         Map<String, Object> response = new HashMap<>();
         List<Question> allQuestions = surveyPersistence.getAllInstructorQuestionsUsingCourseId(courseId, surveyId);
         List<Question> addedQuestions = surveyPersistence.getAllSurveyQuestions(surveyId);
@@ -48,28 +42,28 @@ public class SurveyService implements ISurveyService {
         return response;
     }
 
-    public void addQuestionToSurvey(long surveyId, long questionId) {
-        if (isSurveyPublished(surveyId) == false) {
+    public void addQuestionToSurvey(long surveyId, long questionId, ISurveyPersistence surveyPersistence) {
+        if (isSurveyPublished(surveyId, surveyPersistence) == false) {
             surveyPersistence.addQuestionToSurvey(surveyId, questionId);
         }
     }
 
-    public void deleteQuestionFromSurvey(Long surveyId, Long questionId) {
-        if (isSurveyPublished(surveyId) == false) {
+    public void deleteQuestionFromSurvey(Long surveyId, Long questionId, ISurveyPersistence surveyPersistence) {
+        if (isSurveyPublished(surveyId, surveyPersistence) == false) {
             surveyPersistence.deleteQuestionFromSurvey(surveyId, questionId);
         }
     }
 
-    public boolean publishSurvey(long surveyId) {
+    public boolean publishSurvey(long surveyId, ISurveyPersistence surveyPersistence) {
         return surveyPersistence.publishSurvey(surveyId);
     }
 
 
-    public boolean unpublishSurvey(long surveyId) {
+    public boolean unpublishSurvey(long surveyId, ISurveyPersistence surveyPersistence) {
         return surveyPersistence.unpublishSurvey(surveyId);
     }
 
-    public boolean isSurveyPublished(Long surveyId) {
+    public boolean isSurveyPublished(Long surveyId, ISurveyPersistence surveyPersistence) {
         int status = surveyPersistence.getSurveyStatus(surveyId);
         if (status == 0) {
             return false;
@@ -80,20 +74,20 @@ public class SurveyService implements ISurveyService {
     public Map<String, Object> displaySurveyQuestionsToStudents(Long courseId, ISurveyPersistence surveyPersistence) {
         Map<String, Object> response = new HashMap<>();
         long surveyId = surveyPersistence.getSurveyIdUsingCourseId(courseId);
-        if(surveyId == -1L){
+        if (surveyId == -1L) {
             response.put("isSurveyPublished", false);
-        }else{
+        } else {
             List<Question> surveyQuestions = surveyPersistence.getAllSurveyQuestions(surveyId);
-            for (Question surveyQuestion: surveyQuestions) {
-                if(surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_ONE
-                        || surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_MANY){
+            for (Question surveyQuestion : surveyQuestions) {
+                if (surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_ONE
+                        || surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_MANY) {
 
                     List<QuestionOption> options = surveyPersistence.getSurveyQuestionOption(surveyQuestion.getId());
-                    for(QuestionOption option: options){
+                    for (QuestionOption option : options) {
                         surveyQuestion.getAnswers().add(new Answers());
                     }
 
-                    if(null != options) {
+                    if (null != options) {
                         surveyQuestion.setQuestionOptions(options);
                     }
                 }
@@ -110,9 +104,9 @@ public class SurveyService implements ISurveyService {
 
     @Override
     public boolean submitAnswers(String bannerId, Long surveyId, Survey survey, ISurveyPersistence surveyPersistence) {
-        for(Question q: survey.getQuestions()){
-            q.getAnswers().removeIf(question->question.getAnswerValue() == null);
+        for (Question q : survey.getQuestions()) {
+            q.getAnswers().removeIf(question -> question.getAnswerValue() == null);
         }
-        return surveyPersistence.submitAnswers(bannerId,surveyId,survey);
+        return surveyPersistence.submitAnswers(bannerId, surveyId, survey);
     }
 }

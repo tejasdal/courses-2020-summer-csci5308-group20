@@ -29,24 +29,24 @@ public class SurveyServiceTest {
     public void isSurveyPublishedTest() {
         long surveyId = 1L;
         Mockito.when(surveyPersistence.getSurveyStatus(surveyId)).thenReturn(1);
-        assertTrue(surveyService.isSurveyPublished(surveyId));
-        assertFalse(surveyService.isSurveyPublished(surveyId + 1));
+        assertTrue(surveyService.isSurveyPublished(surveyId, surveyPersistence));
+        assertFalse(surveyService.isSurveyPublished(surveyId + 1, surveyPersistence));
     }
 
     @Test
     public void getAllSurveyQuestionsTest() {
-        long courseId = 1;
-        long surveyId = 1;
+        long courseId = 1L;
+        long surveyId = 1L;
         Mockito.when(surveyPersistence.getSurveyIdUsingCourseId(courseId)).thenReturn(surveyId);
-        Mockito.when(surveyPersistence.createSurvey(courseId)).thenReturn(true);
+        Mockito.when(surveyPersistence.getSurveyStatus(surveyId)).thenReturn(0);
         Mockito.when(surveyPersistence.getAllSurveyQuestions(1L)).thenReturn(new ArrayList<Question>() {
         });
         Map<String, Object> response = new HashMap<>();
         response.put("surveyId", surveyId);
-        response.put("status", true);
+        response.put("status", false);
         response.put("questions", new ArrayList<Question>() {
         });
-        assertEquals(surveyService.getAllSurveyQuestions(courseId), response);
+        assertEquals(surveyService.getAllSurveyQuestions(courseId, surveyPersistence), response);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class SurveyServiceTest {
         Map<String, Object> response = new HashMap<>();
         response.put("addedQuestion", new ArrayList<Question>());
         response.put("availableQuestions", new ArrayList<Question>());
-        assertEquals(surveyService.addQuestionPage(courseId, surveyId), response);
+        assertEquals(surveyService.addQuestionPage(courseId, surveyId, surveyPersistence), response);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class SurveyServiceTest {
         long surveyId = 1;
         Mockito.when(surveyPersistence.addQuestionToSurvey(surveyId, questionId)).thenReturn(true);
         Mockito.when(surveyPersistence.getSurveyStatus(surveyId)).thenReturn(1);
-        surveyService.addQuestionToSurvey(surveyId, questionId);
+        surveyService.addQuestionToSurvey(surveyId, questionId, surveyPersistence);
     }
 
     @Test
@@ -77,21 +77,21 @@ public class SurveyServiceTest {
         long surveyId = 1;
         Mockito.when(surveyPersistence.deleteQuestionFromSurvey(surveyId, questionId)).thenReturn(true);
         Mockito.when(surveyPersistence.getSurveyStatus(surveyId)).thenReturn(1);
-        surveyService.deleteQuestionFromSurvey(surveyId, questionId);
+        surveyService.deleteQuestionFromSurvey(surveyId, questionId, surveyPersistence);
     }
 
     @Test
     public void publishSurveyTest() {
         long surveyId = 1;
         Mockito.when(surveyPersistence.publishSurvey(surveyId)).thenReturn(true);
-        assertTrue(surveyService.publishSurvey(surveyId));
+        assertTrue(surveyService.publishSurvey(surveyId, surveyPersistence));
     }
 
     @Test
     public void unpublishSurveyTest() {
         long surveyId = 1;
         Mockito.when(surveyPersistence.unpublishSurvey(surveyId)).thenReturn(true);
-        assertTrue(surveyService.unpublishSurvey(surveyId));
+        assertTrue(surveyService.unpublishSurvey(surveyId, surveyPersistence));
     }
 
     @Test

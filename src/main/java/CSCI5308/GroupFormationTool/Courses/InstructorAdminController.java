@@ -1,9 +1,8 @@
 package CSCI5308.GroupFormationTool.Courses;
 
-import java.util.List;
-
 import CSCI5308.GroupFormationTool.AccessControl.CurrentUser;
 import CSCI5308.GroupFormationTool.AccessControl.User;
+import CSCI5308.GroupFormationTool.SystemConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import CSCI5308.GroupFormationTool.SystemConfig;
+import java.util.List;
 
 @Controller
 public class InstructorAdminController
@@ -32,29 +31,25 @@ public class InstructorAdminController
 		model.addAttribute("course", course);
 		model.addAttribute("displayresults", false);
 		if (course.isCurrentUserEnrolledAsRoleInCourse(Role.INSTRUCTOR) ||
-			 course.isCurrentUserEnrolledAsRoleInCourse(Role.TA))
-		{
+				course.isCurrentUserEnrolledAsRoleInCourse(Role.TA)) {
 			User currentUser = CurrentUser.instance().getCurrentAuthenticatedUser();
 			if (null != currentUser) {
 				model.addAttribute("isInstructor", course.isCurrentUserEnrolledAsRoleInCourse(Role.INSTRUCTOR));
 				model.addAttribute("instructorId", currentUser.getID());
 			}
 			return "course/instructoradmin";
-		}
-		else
-		{
-			return "logout";
+		} else {
+			return "index";
 		}
 	}
 
 	@GetMapping("/course/instructoradminresults")
-	public String instructorAdmin(
+	public String instructorAdminResults(
 			Model model,
 			@RequestParam(name = ID) long courseID,
 			@RequestParam(name = SUCCESSFUL, required = false) List<String> successful,
 			@RequestParam(name = FAILURES, required = false) List<String> failures,
-			@RequestParam(name = DISPLAY_RESULTS) boolean displayResults)
-	{
+			@RequestParam(name = DISPLAY_RESULTS) boolean displayResults) {
 		ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
 		Course course = new Course();
 		courseDB.loadCourseByID(courseID, course);
@@ -64,13 +59,10 @@ public class InstructorAdminController
 		model.addAttribute(FAILURES, failures);
 		model.addAttribute(DISPLAY_RESULTS, displayResults);
 		if (course.isCurrentUserEnrolledAsRoleInCourse(Role.INSTRUCTOR) ||
-			 course.isCurrentUserEnrolledAsRoleInCourse(Role.TA))
-		{
+				course.isCurrentUserEnrolledAsRoleInCourse(Role.TA)) {
 			return "course/instructoradmin";
-		}
-		else
-		{
-			return "logout";
+		} else {
+			return "index";
 		}
 	}
 
@@ -83,13 +75,10 @@ public class InstructorAdminController
 		courseDB.loadCourseByID(courseID, course);
 		model.addAttribute("course", course);
 		if (course.isCurrentUserEnrolledAsRoleInCourse(Role.INSTRUCTOR) ||
-			 course.isCurrentUserEnrolledAsRoleInCourse(Role.TA))
-		{
+				course.isCurrentUserEnrolledAsRoleInCourse(Role.TA)) {
 			return "course/enrollta";
-		}
-		else
-		{
-			return "logout";
+		} else {
+			return "index";
 		}
 	}
 
