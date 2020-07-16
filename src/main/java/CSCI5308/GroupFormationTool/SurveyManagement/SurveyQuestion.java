@@ -3,8 +3,8 @@ package CSCI5308.GroupFormationTool.SurveyManagement;
 import java.sql.Date;
 import java.util.List;
 
-import CSCI5308.GroupFormationTool.Question.IQuestionOption;
 import CSCI5308.GroupFormationTool.Question.Question;
+import CSCI5308.GroupFormationTool.Question.QuestionOption;
 import CSCI5308.GroupFormationTool.SurveyManagement.matchcriteria.IMatchCriteria;
 
 public class SurveyQuestion extends Question {
@@ -13,7 +13,7 @@ public class SurveyQuestion extends Question {
 
 	public SurveyQuestion(Long surveyId, IMatchCriteria matchCriteria, Long id,
 						  String title, String description, Long userId, int questionType,
-						  Date createdAt, List<IQuestionOption> questionOptions) {
+						  Date createdAt, List<QuestionOption> questionOptions) {
 		super(id, title, description, userId, questionType, createdAt, questionOptions);
 		this.surveyId = surveyId;
 		this.matchCriteria = matchCriteria;

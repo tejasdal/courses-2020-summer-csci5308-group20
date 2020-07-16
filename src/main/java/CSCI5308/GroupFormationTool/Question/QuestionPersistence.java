@@ -34,7 +34,7 @@ public class QuestionPersistence implements IQuestionPersistence {
         }
     }
 
-    private static void createQuestionOptions(List<IQuestionOption> questionOptions, Long questionId) throws SQLException {
+    private static void createQuestionOptions(List<QuestionOption> questionOptions, Long questionId) throws SQLException {
         CallStoredProcedure proc = null;
         try{
             proc = new CallStoredProcedure("spCreateQuestionOption( ?, ?, ?)");

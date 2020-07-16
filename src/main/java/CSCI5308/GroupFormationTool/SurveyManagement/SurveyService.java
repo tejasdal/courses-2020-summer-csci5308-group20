@@ -10,8 +10,8 @@ import CSCI5308.GroupFormationTool.SystemConfig;
 import CSCI5308.GroupFormationTool.AccessControl.User;
 import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.IQuestion;
-import CSCI5308.GroupFormationTool.Question.IQuestionOption;
 import CSCI5308.GroupFormationTool.Question.Question;
+import CSCI5308.GroupFormationTool.Question.QuestionOption;
 import CSCI5308.GroupFormationTool.SurveyManagement.algorithm.GroupFormationAlgorithmBuilder;
 import CSCI5308.GroupFormationTool.SurveyManagement.algorithm.IGroupFormationAlgorithm;
 import CSCI5308.GroupFormationTool.SurveyManagement.matchcriteria.IMatchCriteria;
@@ -89,8 +89,8 @@ public class SurveyService implements ISurveyService {
                 if (surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_ONE
                         || surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_MANY) {
 
-                    List<IQuestionOption> options = surveyPersistence.getSurveyQuestionOption(surveyQuestion.getId());
-                    for (IQuestionOption option : options) {
+                    List<QuestionOption> options = surveyPersistence.getSurveyQuestionOption(surveyQuestion.getId());
+                    for (QuestionOption option : options) {
                         surveyQuestion.getAnswers().add(new Answers());
                     }
 

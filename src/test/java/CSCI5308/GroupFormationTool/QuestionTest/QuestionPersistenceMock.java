@@ -22,7 +22,7 @@ class QuestionPersistenceMock implements IQuestionPersistence {
     @Override
     public List<IQuestion> getAllUserQuestions(Long userId) {
         List<IQuestion> questions = new ArrayList<>();
-        List<IQuestionOption> questionOptions = new ArrayList<>();
+        List<QuestionOption> questionOptions = new ArrayList<>();
         questionOptions.add(new QuestionOption(1L, "Option 1", 1));
         questionOptions.add(new QuestionOption(2L, "Option 2", 2));
         questionOptions.add(new QuestionOption(3L, "Option 3", 3));
