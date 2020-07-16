@@ -14,10 +14,10 @@ public class QuestionCriteriaList {
     public QuestionCriteriaList() {
     }
 
-    QuestionCriteriaList(List<Question> questionList) {
+    public QuestionCriteriaList(List<Question> questionList) {
         list = new ArrayList<>();
         questionList.forEach(question -> {
-            list.add(new QuestionWithCriteriaDetails(question, -1, 0));
+            list.add(new QuestionWithCriteriaDetails(question, 0, 0));
         });
     }
 

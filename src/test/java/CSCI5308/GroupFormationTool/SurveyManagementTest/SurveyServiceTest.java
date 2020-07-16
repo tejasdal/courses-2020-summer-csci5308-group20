@@ -1,14 +1,8 @@
 package CSCI5308.GroupFormationTool.SurveyManagementTest;
 
-import CSCI5308.GroupFormationTool.Question.IQuestionOption;
-import CSCI5308.GroupFormationTool.Question.Question;
-import CSCI5308.GroupFormationTool.Question.QuestionOption;
-import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyPersistence;
-import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyService;
-import CSCI5308.GroupFormationTool.SurveyManagement.Survey;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -16,7 +10,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import CSCI5308.GroupFormationTool.Question.IQuestion;
+import CSCI5308.GroupFormationTool.Question.IQuestionOption;
+import CSCI5308.GroupFormationTool.Question.Question;
+import CSCI5308.GroupFormationTool.Question.QuestionOption;
+import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyPersistence;
+import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyService;
+import CSCI5308.GroupFormationTool.SurveyManagement.QuestionCriteriaList;
+import CSCI5308.GroupFormationTool.SurveyManagement.Survey;
+import CSCI5308.GroupFormationTool.SurveyManagement.SurveyFactory;
+import CSCI5308.GroupFormationTool.SurveyManagement.SurveyPersistence;
 
 public class SurveyServiceTest {
 
@@ -25,8 +32,8 @@ public class SurveyServiceTest {
 
     @BeforeEach
     void initiateObjects() {
-        surveyPersistence = SurveyManagementAbstractFactoryTest.instance().getSurveyPersistenceMock();
-        surveyService = SurveyManagementAbstractFactoryTest.instance().getSurveyService();
+        surveyPersistence = Mockito.mock(SurveyPersistence.class);
+        surveyService = SurveyFactory.instance().createService();
     }
 
 
@@ -44,7 +51,7 @@ public class SurveyServiceTest {
         long surveyId = 1L;
         Mockito.when(surveyPersistence.getSurveyIdUsingCourseId(courseId)).thenReturn(surveyId);
         Mockito.when(surveyPersistence.getSurveyStatus(surveyId)).thenReturn(0);
-        Mockito.when(surveyPersistence.getAllSurveyQuestions(1L)).thenReturn(new ArrayList<Question>() {
+        Mockito.when(surveyPersistence.getAllSurveyQuestions(1L)).thenReturn(new ArrayList<IQuestion>() {
         });
         Map<String, Object> response = new HashMap<>();
         response.put("surveyId", surveyId);
@@ -59,7 +66,7 @@ public class SurveyServiceTest {
         long courseId = 1;
         long surveyId = 1;
         Mockito.when(surveyPersistence.getAllInstructorQuestionsUsingCourseId(courseId, surveyId)).thenReturn(new ArrayList<>());
-        Mockito.when(surveyPersistence.getAllSurveyQuestions(surveyId)).thenReturn(new ArrayList<Question>() {
+        Mockito.when(surveyPersistence.getAllSurveyQuestions(surveyId)).thenReturn(new ArrayList<IQuestion>() {
         });
         Map<String, Object> response = new HashMap<>();
         response.put("addedQuestion", new ArrayList<Question>());
@@ -148,4 +155,12 @@ public class SurveyServiceTest {
         return options;
     }
 
+    @Test
+    public void validateQuestionCriteriaListTest() throws Exception {
+    	List<Question> sampleQuestions = getSampleQuestions();
+    	QuestionCriteriaList list = new QuestionCriteriaList(sampleQuestions);
+    	list.setMembersPerGroup(5);
+    	assertTrue(SurveyFactory.instance().createService().validateQuestionCriteriaList(list));
+    }
+    
 }
