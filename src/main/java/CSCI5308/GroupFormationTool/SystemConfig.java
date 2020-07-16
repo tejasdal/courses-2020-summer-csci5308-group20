@@ -1,5 +1,9 @@
 package CSCI5308.GroupFormationTool;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import CSCI5308.GroupFormationTool.AccessControl.IUserPersistence;
 import CSCI5308.GroupFormationTool.AccessControl.UserDB;
 import CSCI5308.GroupFormationTool.AdminConfig.AdminConfigPersistence;
@@ -18,11 +22,20 @@ import CSCI5308.GroupFormationTool.Question.QuestionPersistence;
 import CSCI5308.GroupFormationTool.Question.QuestionService;
 import CSCI5308.GroupFormationTool.Security.BCryptPasswordEncryption;
 import CSCI5308.GroupFormationTool.Security.IPasswordEncryption;
-import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.IPasswordPersistence;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.IPasswordPolicy;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.IPasswordPolicyService;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.MaxLengthPolicy;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.MinLengthPolicy;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.MinLowerCasePolicy;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.MinSymbolPolicy;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.MinUpperCasePolicy;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.PasswordPolicyPersistence;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.PasswordPolicyService;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.RememberedPasswordPolicy;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.RestrictedSymbolCasePolicy;
+import CSCI5308.GroupFormationTool.survey.matchcriteria.IMatchCriteriaFactory;
+import CSCI5308.GroupFormationTool.survey.matchcriteria.standarddeviation.SDMatchCriteriaFactory;
 
 /*
  * This is a singleton, we will learn about these when we learn design patterns.
@@ -54,6 +67,7 @@ public class SystemConfig {
     private IPasswordPolicy rememberedPasswordPolicy;
     private IQuestionPersistence questionPersistence;
     private IQuestionService questionService;
+    private IMatchCriteriaFactory defaultMatchCriteriaFactory;
 
 
     // This private constructor ensures that no class other than System can allocate
@@ -73,6 +87,7 @@ public class SystemConfig {
         passwordPersistence = new PasswordPolicyPersistence();
         questionPersistence = new QuestionPersistence();
         questionService = new QuestionService();
+        defaultMatchCriteriaFactory = new SDMatchCriteriaFactory();
     }
 
     // This is the way the rest of the application gets access to the System object.
@@ -185,5 +200,9 @@ public class SystemConfig {
 
     public IQuestionService getQuestionService() {
         return questionService;
+    }
+    
+    public IMatchCriteriaFactory getMatchCriteriaFactory() {
+    	return defaultMatchCriteriaFactory;
     }
 }
