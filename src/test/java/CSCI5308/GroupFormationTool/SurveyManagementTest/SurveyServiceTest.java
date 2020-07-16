@@ -1,5 +1,7 @@
 package CSCI5308.GroupFormationTool.SurveyManagementTest;
 
+import CSCI5308.GroupFormationTool.Question.IQuestion;
+import CSCI5308.GroupFormationTool.Question.IQuestionOption;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
 import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyPersistence;
@@ -139,8 +141,8 @@ public class SurveyServiceTest {
         return questions;
     }
 
-    private List<QuestionOption> getSampleQuestionOptions(){
-        List<QuestionOption> options = new ArrayList<>();
+    private List<IQuestionOption> getSampleQuestionOptions(){
+        List<IQuestionOption> options = new ArrayList<>();
         options.add(new QuestionOption(1L, "Test Option 1", 1));
         options.add(new QuestionOption(2L, "Test Option 2", 2));
         options.add(new QuestionOption(3L, "Test Option 3", 3));

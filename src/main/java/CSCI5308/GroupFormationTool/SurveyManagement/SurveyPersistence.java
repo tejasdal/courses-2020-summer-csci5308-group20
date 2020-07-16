@@ -2,6 +2,7 @@ package CSCI5308.GroupFormationTool.SurveyManagement;
 
 import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
 import CSCI5308.GroupFormationTool.Question.Answers;
+import CSCI5308.GroupFormationTool.Question.IQuestionOption;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
 
@@ -214,16 +215,16 @@ public class SurveyPersistence implements ISurveyPersistence {
         }
     }
 
-    public List<QuestionOption> getSurveyQuestionOption(Long questionId) {
+    public List<IQuestionOption> getSurveyQuestionOption(Long questionId) {
         CallStoredProcedure proc = null;
         try {
             proc = new CallStoredProcedure("spGetSurveyQuestionOption(?)");
             proc.setParameter(1, questionId);
             ResultSet resultSet = proc.executeWithResults();
             if (resultSet != null) {
-                List<QuestionOption> list = new ArrayList<>();
+                List<IQuestionOption> list = new ArrayList<>();
                 while (resultSet.next()) {
-                    QuestionOption questionOption = new QuestionOption();
+                    IQuestionOption questionOption = new QuestionOption();
                     Long id = resultSet.getLong(1);
                     Long queId = resultSet.getLong(2);
                     String options = resultSet.getString(3);

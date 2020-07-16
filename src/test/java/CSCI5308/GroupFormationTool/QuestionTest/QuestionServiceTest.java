@@ -1,5 +1,6 @@
 package CSCI5308.GroupFormationTool.QuestionTest;
 
+import CSCI5308.GroupFormationTool.Question.IQuestion;
 import CSCI5308.GroupFormationTool.Question.IQuestionPersistence;
 import CSCI5308.GroupFormationTool.Question.Question;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ class QuestionServiceTest {
     @Test
     void getAllUserQuestionsTest() {
         IQuestionPersistence questionPersistence = new QuestionPersistenceMock();
-        List<Question> questionList = questionPersistence.getAllUserQuestions(1L);
+        List<IQuestion> questionList = questionPersistence.getAllUserQuestions(1L);
         assertEquals(3,questionList.size());
 
     }
@@ -38,7 +39,6 @@ class QuestionServiceTest {
         IQuestionPersistence questionPersistence = new QuestionPersistenceMock();
         boolean status = questionPersistence.deleteQuestion(1L);
         assertTrue(status);
-
 
     }
 }

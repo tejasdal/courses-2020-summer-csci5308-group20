@@ -11,7 +11,7 @@ import java.util.List;
 public class QuestionPersistence implements IQuestionPersistence {
 
     @Override
-    public boolean createQuestion(Question question) throws SQLException {
+    public boolean createQuestion(IQuestion question) throws SQLException {
         CallStoredProcedure proc = null;
         try{
             proc = new CallStoredProcedure("spCreateQuestion(?,?,?,?,?,?)");
@@ -34,11 +34,11 @@ public class QuestionPersistence implements IQuestionPersistence {
         }
     }
 
-    private static void createQuestionOptions(List<QuestionOption> questionOptions, Long questionId) throws SQLException {
+    private static void createQuestionOptions(List<IQuestionOption> questionOptions, Long questionId) throws SQLException {
         CallStoredProcedure proc = null;
         try{
             proc = new CallStoredProcedure("spCreateQuestionOption( ?, ?, ?)");
-            for (QuestionOption questionOption : questionOptions) {
+            for (IQuestionOption questionOption : questionOptions) {
                 proc.setParameter(1, questionId);
                 proc.setParameter(2, questionOption.getOption());
                 proc.setParameter(3, questionOption.getValue());
@@ -75,8 +75,8 @@ public class QuestionPersistence implements IQuestionPersistence {
     }
 
     @Override
-    public List<Question> getAllUserQuestions(Long userId) {
-        List<Question> questions = new ArrayList<Question>();
+    public List<IQuestion> getAllUserQuestions(Long userId) {
+        List<IQuestion> questions = new ArrayList<IQuestion>();
         CallStoredProcedure proc = null;
         try{
             proc = new CallStoredProcedure("spGetAllQuestionUser(?)");
@@ -84,7 +84,7 @@ public class QuestionPersistence implements IQuestionPersistence {
             ResultSet rs = proc.executeWithResults();
             if(rs!=null){
                 while(rs.next()){
-                    Question question = new Question();
+                    IQuestion question = ServiceAbstractFactory.instance().makeQuestion();
                     Long id = rs.getLong(1);
                     String title = rs.getString(2);
                     String description = rs.getString(3);
