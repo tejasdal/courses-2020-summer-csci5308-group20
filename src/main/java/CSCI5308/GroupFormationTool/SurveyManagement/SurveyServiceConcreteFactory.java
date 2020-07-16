@@ -1,6 +1,6 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
-public class ServiceConcreteFactory extends ServiceAbstractFactory {
+public class SurveyServiceConcreteFactory extends SurveyServiceAbstractFactory {
     @Override
     public ISurveyService makeService() {
         return new SurveyService();

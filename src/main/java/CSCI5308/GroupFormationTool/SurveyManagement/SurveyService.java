@@ -3,7 +3,6 @@ package CSCI5308.GroupFormationTool.SurveyManagement;
 import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.IQuestionOption;
 import CSCI5308.GroupFormationTool.Question.Question;
-import CSCI5308.GroupFormationTool.Question.QuestionOption;
 
 import java.util.HashMap;
 import java.util.List;
@@ -95,7 +94,7 @@ public class SurveyService implements ISurveyService {
             }
             response.put("isSurveyPublished", true);
             response.put("surveyId", surveyId);
-            ISurvey survey = ServiceAbstractFactory.instance().makeSurvey();
+            ISurvey survey = SurveyServiceAbstractFactory.instance().makeSurvey();
             survey.setQuestions(surveyQuestions);
             response.put("survey", survey);
 

@@ -84,7 +84,7 @@ public class QuestionPersistence implements IQuestionPersistence {
             ResultSet rs = proc.executeWithResults();
             if(rs!=null){
                 while(rs.next()){
-                    IQuestion question = ServiceAbstractFactory.instance().makeQuestion();
+                    IQuestion question = QuestionServiceAbstractFactory.instance().makeQuestion();
                     Long id = rs.getLong(1);
                     String title = rs.getString(2);
                     String description = rs.getString(3);

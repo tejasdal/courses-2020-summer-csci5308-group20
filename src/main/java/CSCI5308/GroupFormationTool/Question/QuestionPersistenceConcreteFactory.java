@@ -1,6 +1,6 @@
 package CSCI5308.GroupFormationTool.Question;
 
-public class PersistenceConcreteFactory extends PersistenceAbstractFactory {
+public class QuestionPersistenceConcreteFactory extends QuestionPersistenceAbstractFactory {
 
     @Override
     public IQuestionPersistence makePersistence() {

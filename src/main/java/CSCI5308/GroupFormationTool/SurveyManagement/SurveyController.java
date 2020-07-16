@@ -20,8 +20,8 @@ public class SurveyController {
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
-        ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
-        Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId, PersistenceAbstractFactory.instance().makePersistence());
+        ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
+        Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId, SurveyPersistenceAbstractFactory.instance().makePersistence());
 
         if (result != null && result.isEmpty() == false) {
             model.addAttribute("questions", result.get("questions"));
@@ -41,8 +41,8 @@ public class SurveyController {
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
-        ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
-        Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId, PersistenceAbstractFactory.instance().makePersistence());
+        ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
+        Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId, SurveyPersistenceAbstractFactory.instance().makePersistence());
         if (result != null && result.isEmpty() == false) {
             model.addAttribute("available", result.get("availableQuestions"));
             model.addAttribute("added", result.get("addedQuestion"));
@@ -62,10 +62,10 @@ public class SurveyController {
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
-        ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
-        surveyService.addQuestionToSurvey(surveyId, questionId, PersistenceAbstractFactory.instance().makePersistence());
+        ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
+        surveyService.addQuestionToSurvey(surveyId, questionId, SurveyPersistenceAbstractFactory.instance().makePersistence());
 
-        Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId, PersistenceAbstractFactory.instance().makePersistence());
+        Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId, SurveyPersistenceAbstractFactory.instance().makePersistence());
 
         model.addAttribute("available", result.get("availableQuestions"));
         model.addAttribute("added", result.get("addedQuestion"));
@@ -82,9 +82,9 @@ public class SurveyController {
         model.addAttribute("surveyId", surveyId);
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
-        ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
+        ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
 
-        surveyService.deleteQuestionFromSurvey(surveyId, questionId, PersistenceAbstractFactory.instance().makePersistence());
+        surveyService.deleteQuestionFromSurvey(surveyId, questionId, SurveyPersistenceAbstractFactory.instance().makePersistence());
         return new ModelAndView("redirect:/instructor/survey/addquestions", model);
     }
 
@@ -99,8 +99,8 @@ public class SurveyController {
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
-        ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
-        if (surveyService.publishSurvey(surveyId, PersistenceAbstractFactory.instance().makePersistence())) {
+        ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
+        if (surveyService.publishSurvey(surveyId, SurveyPersistenceAbstractFactory.instance().makePersistence())) {
             redirectAttributes.addFlashAttribute("publishSuccess", true);
         }
         return new ModelAndView("redirect:/instructor/survey/", model);
@@ -118,8 +118,8 @@ public class SurveyController {
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
-        ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
-        if (surveyService.unpublishSurvey(surveyId, PersistenceAbstractFactory.instance().makePersistence())) {
+        ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
+        if (surveyService.unpublishSurvey(surveyId, SurveyPersistenceAbstractFactory.instance().makePersistence())) {
             redirectAttributes.addFlashAttribute("unpublishSuccess", true);
         }
         return new ModelAndView("redirect:/instructor/survey/", model);
@@ -129,9 +129,9 @@ public class SurveyController {
     public String displaySurveyQuestionToStudent
             (@RequestParam(name = "courseId") Long courseId,
              Model model) {
-        ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
+        ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
         Map<String, Object> result = surveyService.displaySurveyQuestionsToStudents(courseId,
-                PersistenceAbstractFactory.instance().makePersistence());
+                SurveyPersistenceAbstractFactory.instance().makePersistence());
         model.addAttribute("courseId", courseId);
         if (result.containsKey("isSurveyPublished")) {
             model.addAttribute("isSurveyPublished", result.get("isSurveyPublished"));
@@ -148,8 +148,8 @@ public class SurveyController {
             (@ModelAttribute Survey survey,
              @RequestParam(name = "surveyId") Long surveyId,
              @RequestParam(name = "bannerId") String bannerId) {
-        ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
-        surveyService.submitAnswers(bannerId, surveyId, survey, PersistenceAbstractFactory.instance().makePersistence());
+        ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
+        surveyService.submitAnswers(bannerId, surveyId, survey, SurveyPersistenceAbstractFactory.instance().makePersistence());
         return "redirect:/";
     }
 }

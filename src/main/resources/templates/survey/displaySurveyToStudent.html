@@ -32,7 +32,6 @@
 
     <div th:unless="${!isSurveyPublished}">
         <br><h5 >Questions:</h5>
-        <!--    Free text Question-->
         <form action="#" th:action="@{/student/survey/submit}" method="post" th:object="${survey}">
             <input type="hidden" th:value="${surveyId}" name="surveyId">
             <input type="hidden" th:value="${#httpServletRequest.remoteUser}" name="bannerId">
@@ -64,7 +63,6 @@
                     </div>
                 </div>
 
-<!--                Submit and Cancel-->
                 <div class="row my-2">
                     <div class="col-1 input-group">
                         <input type="submit" class="btn btn-primary btn-md" id="save" value="Submit">

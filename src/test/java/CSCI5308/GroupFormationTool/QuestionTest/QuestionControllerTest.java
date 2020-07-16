@@ -40,6 +40,26 @@ public class QuestionControllerTest {
     }
 
     @Test
+    public void getAllUserQuestionsSortedDateTest() throws Exception {
+        mockMvc.perform(get("/instructor/questions/dateSort")
+                .param("userId",userId))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("questions","userId"));
+
+    }
+
+    @Test
+    public void getAllUserQuestionsSortedTitleTest() throws Exception {
+        mockMvc.perform(get("/instructor/questions/titleSort")
+                .param("userId",userId))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("questions","userId"));
+
+    }
+
+    @Test
     public void deleteQuestionTest() throws Exception {
         mockMvc.perform(post("/instructor/deletequestion")
                 .param("questionId",questionId)

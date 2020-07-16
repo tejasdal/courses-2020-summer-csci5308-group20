@@ -1,6 +1,6 @@
 package CSCI5308.GroupFormationTool.Question;
 
-public class ServiceConcreteFactory extends ServiceAbstractFactory {
+public class QuestionServiceConcreteFactory extends QuestionServiceAbstractFactory {
     @Override
     public IQuestionService makeService() {
         return new QuestionService();
