@@ -20,7 +20,7 @@ public class IndexController
 		if (authentication.isAuthenticated())
 		{
 			ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
-			List<Course> allCourses = courseDB.loadAllCourses();
+			List<ICourse> allCourses = courseDB.loadAllCourses();
 			model.addAttribute("courses", allCourses);
 		}
 		return "index";

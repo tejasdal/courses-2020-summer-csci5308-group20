@@ -1,18 +1,15 @@
 package CSCI5308.GroupFormationTool.Courses;
 
-import CSCI5308.GroupFormationTool.AccessControl.User;
+import CSCI5308.GroupFormationTool.AccessControl.IUser;
 
 import java.util.List;
 
 public interface ICourse {
+
     void setDefaults();
 
-    // I don't want to name this method this way, but unfortunately Spring and Thymeleaf are
-    // full of magical underneath the hood connection mechanisms that force me to name it this way.
     void setId(long id);
 
-    // I don't want to name this method this way, but unfortunately Spring and Thymeleaf are
-    // full of magical underneath the hood connection mechanisms that force me to name it this way.
     long getId();
 
     void setTitle(String title);
@@ -23,7 +20,7 @@ public interface ICourse {
 
     boolean createCourse(ICoursePersistence courseDB);
 
-    boolean enrollUserInCourse(Role role, User user);
+    boolean enrollUserInCourse(Role role, IUser user);
 
     boolean isCurrentUserEnrolledAsRoleInCourse(Role role);
 

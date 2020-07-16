@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 public class CourseDB implements ICoursePersistence
 {
-	public List<Course> loadAllCourses()
+	public List<ICourse> loadAllCourses()
 	{
-		List<Course> courses = new ArrayList<Course>();
+		List<ICourse> courses = new ArrayList<>();
 		ICallStoredProcedure proc = null;
 		try
 		{
@@ -77,7 +77,7 @@ public class CourseDB implements ICoursePersistence
 		}
 	}
 	
-	public boolean createCourse(Course course)
+	public boolean createCourse(ICourse course)
 	{
 		ICallStoredProcedure proc = null;
 		try

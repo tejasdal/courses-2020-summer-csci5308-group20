@@ -5,15 +5,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import CSCI5308.GroupFormationTool.AccessControl.IUser;
 import CSCI5308.GroupFormationTool.AccessControl.User;
 import CSCI5308.GroupFormationTool.Database.DatabaseAbstractFactory;
 import CSCI5308.GroupFormationTool.Database.ICallStoredProcedure;
 
 public class CourseUserRelationshipDB implements ICourseUserRelationshipPersistence
 {
-	public List<User> findAllUsersWithoutCourseRole(Role role, long courseID)
+	public List<IUser> findAllUsersWithoutCourseRole(Role role, long courseID)
 	{
-		List<User> users = new ArrayList<User>();
+		List<IUser> users = new ArrayList<>();
 		ICallStoredProcedure proc = null;
 		try
 		{
@@ -52,9 +53,9 @@ public class CourseUserRelationshipDB implements ICourseUserRelationshipPersiste
 		return users;
 	}
 
-	public List<User> findAllUsersWithCourseRole(Role role, long courseID)
+	public List<IUser> findAllUsersWithCourseRole(Role role, long courseID)
 	{
-		List<User> users = new ArrayList<User>();
+		List<IUser> users = new ArrayList<>();
 		ICallStoredProcedure proc = null;
 		try
 		{
@@ -87,7 +88,7 @@ public class CourseUserRelationshipDB implements ICourseUserRelationshipPersiste
 		return users;
 	}
 	
-	public boolean enrollUser(Course course, User user, Role role)
+	public boolean enrollUser(ICourse course, IUser user, Role role)
 	{
 		ICallStoredProcedure proc = null;
 		try
@@ -113,7 +114,7 @@ public class CourseUserRelationshipDB implements ICourseUserRelationshipPersiste
 		return true;
 	}
 
-	public List<Role> loadUserRolesForCourse(Course course, User user)
+	public List<Role> loadUserRolesForCourse(ICourse course, IUser user)
 	{
 		List<Role> roles = new ArrayList<Role>();
 		ICallStoredProcedure proc = null;

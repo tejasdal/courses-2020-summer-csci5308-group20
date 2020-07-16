@@ -3,7 +3,7 @@ package CSCI5308.GroupFormationTool.Courses;
 import java.util.List;
 
 import CSCI5308.GroupFormationTool.AccessControl.CurrentUser;
-import CSCI5308.GroupFormationTool.AccessControl.User;
+import CSCI5308.GroupFormationTool.AccessControl.IUser;
 
 public class Course implements ICourse {
 	private long id;
@@ -28,17 +28,13 @@ public class Course implements ICourse {
 		title = "";
 		userRoleDecider = new CourseUserRelationship();
 	}
-	
-	// I don't want to name this method this way, but unfortunately Spring and Thymeleaf are
-	// full of magical underneath the hood connection mechanisms that force me to name it this way.
+
 	@Override
 	public void setId(long id)
 	{
 		this.id = id;
 	}
-	
-	// I don't want to name this method this way, but unfortunately Spring and Thymeleaf are
-	// full of magical underneath the hood connection mechanisms that force me to name it this way.
+
 	@Override
 	public long getId()
 	{
@@ -70,7 +66,7 @@ public class Course implements ICourse {
 	}
 	
 	@Override
-	public boolean enrollUserInCourse(Role role, User user)
+	public boolean enrollUserInCourse(Role role, IUser user)
 	{
 		return userRoleDecider.enrollUserInCourse(user, this, role);
 	}
