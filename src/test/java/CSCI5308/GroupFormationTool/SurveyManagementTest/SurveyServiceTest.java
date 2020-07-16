@@ -1,14 +1,18 @@
 package CSCI5308.GroupFormationTool.SurveyManagementTest;
 
 import CSCI5308.GroupFormationTool.Question.Question;
+import CSCI5308.GroupFormationTool.Question.QuestionOption;
 import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyPersistence;
 import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyService;
+import CSCI5308.GroupFormationTool.SurveyManagement.Survey;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -96,6 +100,51 @@ public class SurveyServiceTest {
 
     @Test
     public void displaySurveyQuestionsToStudentsTest() {
-        //TODO jaspreet will write
+        long courseId = 1;
+        long surveyId = 1;
+        Mockito.when(surveyPersistence.getSurveyIdUsingCourseId(courseId)).thenReturn(surveyId);
+        Mockito.when(surveyPersistence.getAllSurveyQuestions(1L)).thenReturn(this.getSampleQuestions());
+        Mockito.when(surveyPersistence.getSurveyQuestionOption(2L)).thenReturn(this.getSampleQuestionOptions());
+
+        Map<String, Object> response = surveyService.displaySurveyQuestionsToStudents(1L, surveyPersistence);
+
+        assertNotNull(response);
+        assertTrue( (boolean) response.get("isSurveyPublished"));
+        assertTrue( surveyId == (long) response.get("surveyId"));
+        List<Question> surveyQuestionToBeTested = ((Survey) response.get("survey")).getQuestions();
+        assertNotNull( surveyQuestionToBeTested);
+
+        List<Question> answers = this.getSampleQuestions();
+        assertTrue( answers.get(0).getTitle().equals(surveyQuestionToBeTested.get(0).getTitle()));
+        assertTrue( answers.get(1).getQuestionOptions().get(0).getOption().equals(
+                surveyQuestionToBeTested.get(1).getQuestionOptions().get(0).getOption()));
     }
+
+    @Test
+    public void submitAnswersTest(){
+        String bannerId = "B00841234";
+        Long surveyId = 1L;
+        Survey survey = new Survey();
+        Mockito.when(surveyPersistence.submitAnswers(bannerId, surveyId, survey)).thenReturn(true);
+        assertTrue(surveyService.submitAnswers(bannerId, surveyId, survey, surveyPersistence));
+    }
+
+    private List<Question> getSampleQuestions(){
+        List<Question> questions = new ArrayList<>();
+
+        questions.add(new Question(1L, "Test Numeric Question", "What is Test Question?", 1L,
+                Question.NUMERIC, new Date(System.currentTimeMillis()), new ArrayList<>()));
+        questions.add(new Question(2L, "Test MCQ One Question", "What is Test Question?", 1L,
+                Question.MULTIPLE_CHOICE_CHOOSE_ONE, new Date(System.currentTimeMillis()), this.getSampleQuestionOptions()));
+        return questions;
+    }
+
+    private List<QuestionOption> getSampleQuestionOptions(){
+        List<QuestionOption> options = new ArrayList<>();
+        options.add(new QuestionOption(1L, "Test Option 1", 1));
+        options.add(new QuestionOption(2L, "Test Option 2", 2));
+        options.add(new QuestionOption(3L, "Test Option 3", 3));
+        return options;
+    }
+
 }
