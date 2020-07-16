@@ -84,7 +84,7 @@ public class SurveyService implements ISurveyService {
 
                     List<IQuestionOption> options = surveyPersistence.getSurveyQuestionOption(surveyQuestion.getId());
                     for (IQuestionOption option : options) {
-                        surveyQuestion.getAnswers().add(new Answers());
+                        surveyQuestion.getUserAnswers().add(new Answers());
                     }
 
                     if (null != options) {

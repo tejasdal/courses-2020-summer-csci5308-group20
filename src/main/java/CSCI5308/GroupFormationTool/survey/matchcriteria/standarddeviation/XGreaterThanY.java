@@ -1,9 +1,9 @@
 package CSCI5308.GroupFormationTool.survey.matchcriteria.standarddeviation;
 
-import java.util.List;
-
-import CSCI5308.GroupFormationTool.survey.UserAnswer;
+import CSCI5308.GroupFormationTool.SurveyManagement.UserAnswer;
 import CSCI5308.GroupFormationTool.survey.matchcriteria.IMatchCriteria;
+
+import java.util.List;
 
 class XGreaterThanY implements IMatchCriteria {
 	private int x, y;

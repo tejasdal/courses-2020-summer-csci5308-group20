@@ -1,13 +1,9 @@
 package CSCI5308.GroupFormationTool.survey.matchcriteria.standarddeviation;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import CSCI5308.GroupFormationTool.survey.UserAnswer;
+import CSCI5308.GroupFormationTool.SurveyManagement.UserAnswer;
 import CSCI5308.GroupFormationTool.survey.matchcriteria.IMatchCriteria;
+
+import java.util.*;
 
 class Dissimilar implements IMatchCriteria {
 

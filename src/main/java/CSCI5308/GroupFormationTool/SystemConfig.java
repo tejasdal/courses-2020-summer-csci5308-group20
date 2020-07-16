@@ -19,6 +19,11 @@ import CSCI5308.GroupFormationTool.Question.QuestionService;
 import CSCI5308.GroupFormationTool.Security.BCryptPasswordEncryption;
 import CSCI5308.GroupFormationTool.Security.IPasswordEncryption;
 import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.*;
+import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyPersistence;
+import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyService;
+import CSCI5308.GroupFormationTool.SurveyManagement.SurveyPersistence;
+import CSCI5308.GroupFormationTool.survey.matchcriteria.IMatchCriteriaFactory;
+import CSCI5308.GroupFormationTool.survey.matchcriteria.standarddeviation.SDMatchCriteriaFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +60,6 @@ public class SystemConfig {
     private IPasswordPolicy rememberedPasswordPolicy;
     private ISurveyService surveyService;
     private ISurveyPersistence surveyPersistence;
-    private IQuestionPersistence questionPersistence;
-    private IQuestionService questionService;
     private IMatchCriteriaFactory defaultMatchCriteriaFactory;
 
 
@@ -78,7 +81,7 @@ public class SystemConfig {
         questionPersistence = new QuestionPersistence();
         questionService = new QuestionService();
         surveyPersistence = new SurveyPersistence();
-        surveyService = new SurveyService();
+//        surveyService = new SurveyService();
         defaultMatchCriteriaFactory = new SDMatchCriteriaFactory();
     }
 
@@ -116,16 +119,17 @@ public class SystemConfig {
         this.databaseConfiguration = databaseConfiguration;
     }
 
+    public ICoursePersistence getCourseDB() {
+        return courseDB;
+    }
+
+
     public void setCourseDB(ICoursePersistence courseDB) {
         this.courseDB = courseDB;
     }
 
     public ICourseUserRelationshipPersistence getCourseUserRelationshipDB() {
         return courseUserRelationshipDB;
-    }
-
-    public void setCourseUserRelationshipDB(ICourseUserRelationshipPersistence courseUserRelationshipDB) {
-        this.courseUserRelationshipDB = courseUserRelationshipDB;
     }
 
     public void setCourseUserRelationshipDB(ICourseUserRelationshipPersistence courseUserRelationshipDB) {
@@ -203,6 +207,6 @@ public class SystemConfig {
     }
 
     public IMatchCriteriaFactory getMatchCriteriaFactory() {
-    	return defaultMatchCriteriaFactory;
+        return defaultMatchCriteriaFactory;
     }
 }

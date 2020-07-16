@@ -1,13 +1,12 @@
 package CSCI5308.GroupFormationTool.survey;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import CSCI5308.GroupFormationTool.SurveyManagement.UserAnswer;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class UserAnswerTest {
-	
+
 	@Test
 	public void constructorTest() {
 		final String answerRaw = "hello";

@@ -38,7 +38,4 @@ public interface IQuestion {
 
     String getQuestionTypeStringMapping(int questionType);
 
-    List<Answers> getAnswers();
-
-    void setAnswers(List<Answers> answers);
 }

@@ -1,15 +1,14 @@
 package CSCI5308.GroupFormationTool.survey.matchcriteria.standarddeviation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import CSCI5308.GroupFormationTool.SurveyManagement.UserAnswer;
+import CSCI5308.GroupFormationTool.survey.matchcriteria.IMatchCriteria;
+import CSCI5308.GroupFormationTool.survey.matchcriteria.IMatchCriteriaFactory;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
-import CSCI5308.GroupFormationTool.survey.UserAnswer;
-import CSCI5308.GroupFormationTool.survey.matchcriteria.IMatchCriteria;
-import CSCI5308.GroupFormationTool.survey.matchcriteria.IMatchCriteriaFactory;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SDMatchCriteriaFactoryTest {
 	private static final IMatchCriteriaFactory FACTORY = new SDMatchCriteriaFactory();

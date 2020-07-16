@@ -1,11 +1,11 @@
 package CSCI5308.GroupFormationTool.survey.algorithm;
 
+import CSCI5308.GroupFormationTool.AccessControl.User;
+import CSCI5308.GroupFormationTool.SurveyManagement.SurveyQuestion;
+import CSCI5308.GroupFormationTool.SurveyManagement.UserAnswer;
+
 import java.util.List;
 import java.util.Map;
-
-import CSCI5308.GroupFormationTool.AccessControl.User;
-import CSCI5308.GroupFormationTool.survey.SurveyQuestion;
-import CSCI5308.GroupFormationTool.survey.UserAnswer;
 
 public class GroupFormationAlgorithmBuilder {
 	private List<SurveyQuestion> questions;

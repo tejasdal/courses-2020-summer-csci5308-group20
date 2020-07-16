@@ -1,7 +1,11 @@
 package CSCI5308.GroupFormationTool.survey.algorithm;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import CSCI5308.GroupFormationTool.AccessControl.User;
+import CSCI5308.GroupFormationTool.SurveyManagement.SurveyQuestion;
+import CSCI5308.GroupFormationTool.SurveyManagement.UserAnswer;
+import CSCI5308.GroupFormationTool.SystemConfig;
+import CSCI5308.GroupFormationTool.survey.matchcriteria.IMatchCriteria;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -9,13 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.Test;
-
-import CSCI5308.GroupFormationTool.SystemConfig;
-import CSCI5308.GroupFormationTool.AccessControl.User;
-import CSCI5308.GroupFormationTool.survey.SurveyQuestion;
-import CSCI5308.GroupFormationTool.survey.UserAnswer;
-import CSCI5308.GroupFormationTool.survey.matchcriteria.IMatchCriteria;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BacktrackStandardDeviationTest {
 	

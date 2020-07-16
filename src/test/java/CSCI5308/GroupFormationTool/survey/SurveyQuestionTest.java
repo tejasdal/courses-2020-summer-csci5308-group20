@@ -1,14 +1,14 @@
 package CSCI5308.GroupFormationTool.survey;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import CSCI5308.GroupFormationTool.SurveyManagement.SurveyQuestion;
+import CSCI5308.GroupFormationTool.SystemConfig;
+import CSCI5308.GroupFormationTool.survey.matchcriteria.IMatchCriteria;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Date;
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.Test;
-
-import CSCI5308.GroupFormationTool.SystemConfig;
-import CSCI5308.GroupFormationTool.survey.matchcriteria.IMatchCriteria;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SurveyQuestionTest {
 

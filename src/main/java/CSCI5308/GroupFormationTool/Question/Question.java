@@ -19,7 +19,6 @@ public class Question implements IQuestion {
     private int questionType;
     private List<IQuestionOption> questionOptions = new ArrayList<>();
     private Date createdAt;
-    private List<Answers> answers = new ArrayList<>();
 
     public Question() {
     }
@@ -151,16 +150,6 @@ public class Question implements IQuestion {
                 question = null;
         }
         return question;
-    }
-
-    @Override
-    public List<Answers> getAnswers() {
-        return answers;
-    }
-
-    @Override
-    public void setAnswers(List<Answers> answers) {
-        this.answers = answers;
     }
 
     public static Comparator<IQuestion> titleComparator = new Comparator<IQuestion>() {

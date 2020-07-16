@@ -1,8 +1,8 @@
 package CSCI5308.GroupFormationTool.survey.matchcriteria;
 
-import java.util.List;
+import CSCI5308.GroupFormationTool.SurveyManagement.UserAnswer;
 
-import CSCI5308.GroupFormationTool.survey.UserAnswer;
+import java.util.List;
 
 public interface IMatchCriteria {
 

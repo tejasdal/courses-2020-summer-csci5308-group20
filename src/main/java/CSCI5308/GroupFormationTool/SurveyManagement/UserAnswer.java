@@ -1,4 +1,4 @@
-package CSCI5308.GroupFormationTool.survey;
+package CSCI5308.GroupFormationTool.SurveyManagement;
 
 public class UserAnswer {
 	private String answerRaw;
