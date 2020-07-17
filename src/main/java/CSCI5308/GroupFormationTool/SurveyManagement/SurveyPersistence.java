@@ -18,6 +18,7 @@ import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
 import CSCI5308.GroupFormationTool.Database.DatabaseAbstractFactory;
 import CSCI5308.GroupFormationTool.Database.ICallStoredProcedure;
 import CSCI5308.GroupFormationTool.Question.Answers;
+import CSCI5308.GroupFormationTool.Question.IQuestion;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
 
@@ -282,12 +283,19 @@ public class SurveyPersistence implements ISurveyPersistence {
         ICallStoredProcedure proc = null;
         try {
             proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spSubmitAnswers(?,?,?,?,?)");
-            for (Question question : survey.getQuestions()) {
-                for (Answers answers : question.getAnswers()) {
+            for (IQuestion question : survey.getQuestions()) {
+                for (Answers answer : question.getAnswers()) {
                     proc.setParameter(1, surveyId);
                     proc.setParameter(2, bannerId);
                     proc.setParameter(3, question.getId());
-                    proc.setParameter(4, answers.getAnswerValue());
+                    proc.setParameter(4, answer.getAnswerValue());
+                    int value = 0;
+                    try {
+                        value = Integer.parseInt(answer.getAnswerValue());
+                    } catch (Exception e) {
+                        value = 0;
+                    }
+                    proc.setParameter(5, value);
                     proc.addBatch();
                 }
             }
