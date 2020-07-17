@@ -35,9 +35,9 @@ public class QuestionPersistence implements IQuestionPersistence {
         }
     }
 
-    private static void createQuestionOptions(List<IQuestionOption> questionOptions, Long questionId) throws SQLException {
+    private static void createQuestionOptions(List<QuestionOption> questionOptions, Long questionId) throws SQLException {
         ICallStoredProcedure proc = null;
-        try{
+        try {
             proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spCreateQuestionOption( ?, ?, ?)");
             for (IQuestionOption questionOption : questionOptions) {
                 proc.setParameter(1, questionId);

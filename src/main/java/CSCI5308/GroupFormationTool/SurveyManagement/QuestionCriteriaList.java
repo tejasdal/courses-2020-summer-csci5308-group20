@@ -17,7 +17,7 @@ public class QuestionCriteriaList implements IQuestionCriteriaList {
     public QuestionCriteriaList(List<Question> questionList) {
         list = new ArrayList<>();
         questionList.forEach(question -> {
-            list.add(SurveyServiceAbstractFactory.instance().makeQuestionWithCriteriaDetails(question, -1, 0));
+            list.add(SurveyServiceAbstractFactory.instance().makeQuestionWithCriteriaDetails(question, 0, 0));
         });
     }
 

@@ -1,9 +1,11 @@
 package CSCI5308.GroupFormationTool.SurveyManagementTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import CSCI5308.GroupFormationTool.Question.Question;
+import CSCI5308.GroupFormationTool.Question.QuestionOption;
+import CSCI5308.GroupFormationTool.SurveyManagement.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -11,18 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import CSCI5308.GroupFormationTool.Question.Question;
-import CSCI5308.GroupFormationTool.Question.QuestionOption;
-import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyPersistence;
-import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyService;
-import CSCI5308.GroupFormationTool.SurveyManagement.QuestionCriteriaList;
-import CSCI5308.GroupFormationTool.SurveyManagement.Survey;
-import CSCI5308.GroupFormationTool.SurveyManagement.SurveyFactory;
-import CSCI5308.GroupFormationTool.SurveyManagement.SurveyPersistence;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SurveyServiceTest {
 
@@ -132,6 +123,7 @@ public class SurveyServiceTest {
         String bannerId = "B00841234";
         Long surveyId = 1L;
         Survey survey = new Survey();
+        survey.setQuestions(new ArrayList<>());
         Mockito.when(surveyPersistence.submitAnswers(bannerId, surveyId, survey)).thenReturn(true);
         assertTrue(surveyService.submitAnswers(bannerId, surveyId, survey, surveyPersistence));
     }
