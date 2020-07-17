@@ -42,17 +42,6 @@ public class SurveyControllerTest {
     }
 
     @Test
-    public void surveyManagementPageTest() throws Exception {
-        mockMvc.perform(post("/instructor/survey")
-                .param("courseId", courseId)
-                .param("userId", userId))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("courseId", "userId"));
-
-    }
-
-    @Test
     public void deleteQuestionsTest() throws Exception {
         mockMvc.perform(post("/instructor/survey/deletequestion")
                 .param("courseId", courseId)
@@ -93,16 +82,6 @@ public class SurveyControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("courseId"));
-    }
-
-    @Test
-    public void createGroupTest() throws Exception {
-        mockMvc.perform(get("/instructor/survey/creategroup")
-                .param("surveyId", surveyId)
-                .param("courseId", courseId))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("surveyId"));
     }
 
 }

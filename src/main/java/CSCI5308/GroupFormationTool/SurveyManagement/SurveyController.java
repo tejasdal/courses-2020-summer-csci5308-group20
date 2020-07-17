@@ -1,10 +1,7 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
-import CSCI5308.GroupFormationTool.AccessControl.CurrentUser;
 import CSCI5308.GroupFormationTool.AccessControl.User;
-import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.Question;
-import CSCI5308.GroupFormationTool.SystemConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -15,9 +12,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.SQLException;
 import java.util.Map;
 
 @Controller
@@ -26,17 +23,16 @@ public class SurveyController {
     private Logger log = LoggerFactory.getLogger(SurveyController.class);
 
     @RequestMapping(value = "/instructor/survey")
-    public String surveyManagementPage
-            (@RequestParam(name = "userId") Long userId,
-             @RequestParam(name = "courseId") Long courseId,
-             Model model) throws SQLException{
+    public String surveyManagementPage(@RequestParam(name = "userId") Long userId,
+                                       @RequestParam(name = "courseId") Long courseId, Model model) throws SQLException {
         log.info("Processing a request to load a survey management page to instructor with ID: {} for a course with ID: {}",
                 userId, courseId);
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
         ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
-        Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId, SurveyPersistenceAbstractFactory.instance().makePersistence());
+        Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId,
+                SurveyPersistenceAbstractFactory.instance().makePersistence());
 
         if (result != null && result.isEmpty() == false) {
             model.addAttribute("questions", result.get("questions"));
@@ -47,19 +43,17 @@ public class SurveyController {
     }
 
     @GetMapping(value = "/instructor/survey/addquestions")
-    public String addQuestionsToSurvey
-            (@RequestParam(name = "courseId") Long courseId,
-             @RequestParam(name = "surveyId") Long surveyId,
-             @RequestParam(name = "userId") Long userId,
-             Model model) {
+    public String addQuestionsToSurvey(@RequestParam(name = "courseId") Long courseId,
+                                       @RequestParam(name = "surveyId") Long surveyId, @RequestParam(name = "userId") Long userId, Model model) throws SQLException {
         log.info("Processing a request to load a page to add question to a survey with ID: {} by instructor with ID: {} " +
-                "for a course with ID: {}",surveyId, userId, courseId);
+                "for a course with ID: {}", surveyId, userId, courseId);
         model.addAttribute("surveyId", surveyId);
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
         ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
-        Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId, SurveyPersistenceAbstractFactory.instance().makePersistence());
+        Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId,
+                SurveyPersistenceAbstractFactory.instance().makePersistence());
         if (result != null && result.isEmpty() == false) {
             model.addAttribute("available", result.get("availableQuestions"));
             model.addAttribute("added", result.get("addedQuestion"));
@@ -69,22 +63,21 @@ public class SurveyController {
     }
 
     @PostMapping(value = "/instructor/survey/addquestions")
-    public String addQuestions
-            (@RequestParam(name = "courseId") Long courseId,
-             @RequestParam(name = "surveyId") Long surveyId,
-             @RequestParam(name = "userId") Long userId,
-             @RequestParam(name = "questionId") Long questionId,
-             Model model) {
+    public String addQuestions(@RequestParam(name = "courseId") Long courseId,
+                               @RequestParam(name = "surveyId") Long surveyId, @RequestParam(name = "userId") Long userId,
+                               @RequestParam(name = "questionId") Long questionId, Model model) throws SQLException {
         log.info("Processing a request to add question to a survey with ID: {} by instructor with ID: {} for a course with" +
-                " ID: {}",surveyId, userId, courseId);
+                " ID: {}", surveyId, userId, courseId);
         model.addAttribute("surveyId", surveyId);
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
         ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
-        surveyService.addQuestionToSurvey(surveyId, questionId, SurveyPersistenceAbstractFactory.instance().makePersistence());
+        surveyService.addQuestionToSurvey(surveyId, questionId,
+                SurveyPersistenceAbstractFactory.instance().makePersistence());
 
-        Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId, SurveyPersistenceAbstractFactory.instance().makePersistence());
+        Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId,
+                SurveyPersistenceAbstractFactory.instance().makePersistence());
 
         model.addAttribute("available", result.get("availableQuestions"));
         model.addAttribute("added", result.get("addedQuestion"));
@@ -92,12 +85,9 @@ public class SurveyController {
     }
 
     @PostMapping(value = "/instructor/survey/deletequestion")
-    public ModelAndView deleteQuestions
-            (@RequestParam(name = "courseId") Long courseId,
-             @RequestParam(name = "surveyId") Long surveyId,
-             @RequestParam(name = "userId") Long userId,
-             @RequestParam(name = "questionId") Long questionId,
-             ModelMap model) {
+    public ModelAndView deleteQuestions(@RequestParam(name = "courseId") Long courseId,
+                                        @RequestParam(name = "surveyId") Long surveyId, @RequestParam(name = "userId") Long userId,
+                                        @RequestParam(name = "questionId") Long questionId, ModelMap model) {
         log.info("Processing a request to delete question with ID: {} of a survey with ID: {} by instructor with ID: {} " +
                 "for a course with ID: {}", questionId, surveyId, userId, courseId);
         model.addAttribute("surveyId", surveyId);
@@ -105,19 +95,17 @@ public class SurveyController {
         model.addAttribute("userId", userId);
         ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
 
-        surveyService.deleteQuestionFromSurvey(surveyId, questionId, SurveyPersistenceAbstractFactory.instance().makePersistence());
+        surveyService.deleteQuestionFromSurvey(surveyId, questionId,
+                SurveyPersistenceAbstractFactory.instance().makePersistence());
         return new ModelAndView("redirect:/instructor/survey/addquestions", model);
     }
 
     @GetMapping(value = "/instructor/survey/publish")
-    public ModelAndView publishSurvey
-            (@RequestParam(name = "courseId") Long courseId,
-             @RequestParam(name = "surveyId") Long surveyId,
-             @RequestParam(name = "userId") Long userId,
-             ModelMap model,
-             RedirectAttributes redirectAttributes) {
+    public ModelAndView publishSurvey(@RequestParam(name = "courseId") Long courseId,
+                                      @RequestParam(name = "surveyId") Long surveyId, @RequestParam(name = "userId") Long userId, ModelMap model,
+                                      RedirectAttributes redirectAttributes) {
         log.info("Processing a request to publish a survey with ID: {} by instructor with ID: {} for a course with" +
-                " ID: {}",surveyId, userId, courseId);
+                " ID: {}", surveyId, userId, courseId);
         model.addAttribute("surveyId", surveyId);
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
@@ -130,14 +118,11 @@ public class SurveyController {
     }
 
     @GetMapping(value = "/instructor/survey/unpublish")
-    public ModelAndView unpublishSurvey
-            (@RequestParam(name = "courseId") Long courseId,
-             @RequestParam(name = "surveyId") Long surveyId,
-             @RequestParam(name = "userId") Long userId,
-             ModelMap model,
-             RedirectAttributes redirectAttributes) {
+    public ModelAndView unpublishSurvey(@RequestParam(name = "courseId") Long courseId,
+                                        @RequestParam(name = "surveyId") Long surveyId, @RequestParam(name = "userId") Long userId, ModelMap model,
+                                        RedirectAttributes redirectAttributes) {
         log.info("Processing a request to unpublish a survey with ID: {} by instructor with ID: {} for a course with" +
-                " ID: {}",surveyId, userId, courseId);
+                " ID: {}", surveyId, userId, courseId);
         model.addAttribute("surveyId", surveyId);
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
@@ -149,27 +134,27 @@ public class SurveyController {
         return new ModelAndView("redirect:/instructor/survey/", model);
     }
 
-	@GetMapping(value = "/student/survey/questions")
-	public String displaySurveyQuestionToStudent(@RequestParam(name = "courseId") Long courseId, Model model) {
+    @GetMapping(value = "/student/survey/questions")
+    public String displaySurveyQuestionToStudent(@RequestParam(name = "courseId") Long courseId, Model model) {
         log.info("Processing a request to display all survey questions to student for a course with ID: {}", courseId);
         ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
-		model.addAttribute("courseId", courseId);
+        model.addAttribute("courseId", courseId);
         try {
-			Map<String, Object> result = surveyService.displaySurveyQuestionsToStudents(courseId,
-					SurveyPersistenceAbstractFactory.instance().makePersistence());
-			if (result.containsKey("isSurveyPublished")) {
-				model.addAttribute("isSurveyPublished", result.get("isSurveyPublished"));
-			}
-			if (result.containsKey("survey") && result.containsKey("surveyId")) {
-				model.addAttribute("survey", result.get("survey"));
-				model.addAttribute("surveyId", result.get("surveyId"));
-			}
-		}catch (SQLException e) {
-			model.addAttribute("isSurveyPublished", false);
-			model.addAttribute("dbError", true);
-		}
-		return "survey/displaySurveyToStudent";
-	}
+            Map<String, Object> result = surveyService.displaySurveyQuestionsToStudents(courseId,
+                    SurveyPersistenceAbstractFactory.instance().makePersistence());
+            if (result.containsKey("isSurveyPublished")) {
+                model.addAttribute("isSurveyPublished", result.get("isSurveyPublished"));
+            }
+            if (result.containsKey("survey") && result.containsKey("surveyId")) {
+                model.addAttribute("survey", result.get("survey"));
+                model.addAttribute("surveyId", result.get("surveyId"));
+            }
+        } catch (SQLException e) {
+            model.addAttribute("isSurveyPublished", false);
+            model.addAttribute("dbError", true);
+        }
+        return "survey/displaySurveyToStudent";
+    }
 
     @RequestMapping(value = "student/survey/submit")
     public String submitSurvey
@@ -203,24 +188,23 @@ public class SurveyController {
     @PostMapping(value = "/survey/generategroups")
     public String generateGroups(@ModelAttribute QuestionCriteriaList questionCriteriaList,
                                  @RequestParam(name = "surveyId", required = false) Long surveyId,
-                                 @RequestParam(name = "bannerId", required = false) String bannerId, ModelMap model) {
-        log.info("Processing a request to create group of of students for course.");
+                                 @RequestParam(name = "bannerId", required = false) String bannerId, ModelMap model) throws SQLException {
         ISurveyService service = SurveyFactory.instance().createService();
         ISurveyPersistence persistence = SurveyFactory.instance().createPersistence();
         ISurveyResponse surveyResponses = persistence.getSurveyResponses(surveyId);
+        List<Question> questions = persistence.getAllSurveyQuestions(surveyId);
         try {
             service.validateQuestionCriteriaList(questionCriteriaList);
-            List<List<User>> groups = service.createGroups(questionCriteriaList, surveyId,
+            Map<Integer, Map<User, List<String>>> groups = service.createGroups(questionCriteriaList, surveyId,
                     questionCriteriaList.getMembersPerGroup(), surveyResponses, persistence);
-            System.out.println(groups);
             model.addAttribute("groups", groups);
-            model.addAttribute("responses", surveyResponses.getAllUserAnswers());
+            model.addAttribute("questions", questions);
         } catch (IOException e) {
-            log.info("Error while processing a request to create group of of students for course, error: {}", e.getMessage());
+            // Logging required
             e.printStackTrace();
             model.addAttribute("error", "Internal server error. Please try again later.");
         } catch (Exception e) {
-            log.info("Error while processing a request to create group of of students for course, error: {}", e.getMessage());
+            // Logging required
             model.addAttribute("error", e.getMessage());
         }
         return "survey/generatedgroups";

@@ -1,25 +1,21 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import CSCI5308.GroupFormationTool.SystemConfig;
 import CSCI5308.GroupFormationTool.AccessControl.User;
 import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
-
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import CSCI5308.GroupFormationTool.SurveyManagement.algorithm.GroupFormationAlgorithmBuilder;
 import CSCI5308.GroupFormationTool.SurveyManagement.algorithm.IGroupFormationAlgorithm;
 import CSCI5308.GroupFormationTool.SurveyManagement.matchcriteria.IMatchCriteria;
 import CSCI5308.GroupFormationTool.SurveyManagement.matchcriteria.IMatchCriteriaFactory;
+import CSCI5308.GroupFormationTool.SystemConfig;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SurveyService implements ISurveyService {
 
@@ -47,7 +43,7 @@ public class SurveyService implements ISurveyService {
 		return null;
 	}
 
-	public Map<String, Object> addQuestionPage(long courseId, long surveyId, ISurveyPersistence surveyPersistence) {
+	public Map<String, Object> addQuestionPage(long courseId, long surveyId, ISurveyPersistence surveyPersistence) throws SQLException {
 		Map<String, Object> response = new HashMap<>();
 		List<Question> allQuestions = surveyPersistence.getAllInstructorQuestionsUsingCourseId(courseId, surveyId);
 		List<Question> addedQuestions = surveyPersistence.getAllSurveyQuestions(surveyId);
@@ -124,9 +120,7 @@ public class SurveyService implements ISurveyService {
 	}
 
 	@Override
-	public List<List<User>> createGroups(QuestionCriteriaList questionsList, Long surveyId, int maxUsersPerGroup,
-			ISurveyResponse responses, ISurveyPersistence persistence) throws IOException {
-		List<User> users = persistence.getAllParticipants(surveyId);
+	public List<SurveyQuestion> getQuestionsFromCriteriaList(QuestionCriteriaList questionsList, Long surveyId) {
 		List<SurveyQuestion> questions = new ArrayList<>();
 		questionsList.getList().forEach(question -> {
 			int criteriaType = question.getCriteriaType();
@@ -154,9 +148,45 @@ public class SurveyService implements ISurveyService {
 					question.getCreatedAt(), question.getQuestionOptions());
 			questions.add(surveyQuestion);
 		});
+		return questions;
+	}
+
+	@Override
+	public Map<Integer, Map<User, List<String>>> createGroups(QuestionCriteriaList questionsList, Long surveyId,
+															  int maxUsersPerGroup, ISurveyResponse responses, ISurveyPersistence persistence) throws IOException, SQLException {
+		List<User> users = persistence.getAllParticipants(surveyId);
+
 		IGroupFormationAlgorithm algorithm = GroupFormationAlgorithmBuilder.builder().setUsers(users)
-				.setQuestions(questions).setUserAnswers(responses).setMaxUsersPerGroup(maxUsersPerGroup).build();
-		return algorithm.createGroups();
+				.setQuestions(getQuestionsFromCriteriaList(questionsList, surveyId)).setUserAnswers(responses)
+				.setMaxUsersPerGroup(maxUsersPerGroup).build();
+		List<List<User>> groups = algorithm.createGroups();
+		List<Question> questions = persistence.getAllSurveyQuestions(surveyId);
+
+		Map<Integer, Map<User, List<String>>> result = new HashMap<>();
+		for (List<User> group : groups) {
+			Map<User, List<String>> userAnswers = new HashMap<>();
+			result.put(result.size() + 1, userAnswers);
+			for (User user : group) {
+				userAnswers.put(user, new ArrayList<>());
+				for (Question question : questions) {
+					Long questionId = question.getId();
+					List<UserAnswer> list = responses.getAllUserAnswers().get(questionId).get(user.getId());
+					if (list.size() == 1) {
+						userAnswers.get(user).add(list.get(0).getAnswerRaw());
+					} else {
+						StringBuilder answer = new StringBuilder();
+						String separator = "";
+						for (UserAnswer eachAnswer : list) {
+							answer.append(separator).append(eachAnswer.getAnswerRaw());
+							separator = "-";
+						}
+						userAnswers.get(user).add(answer.toString());
+					}
+				}
+			}
+		}
+
+		return result;
 	}
 
 	@Override

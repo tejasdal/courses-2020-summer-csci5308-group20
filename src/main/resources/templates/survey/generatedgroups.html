@@ -1,43 +1,59 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <html lang="en">
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>Add Questions to Survey</title>
 </head>
+
 <body>
 
 <div th:if="${error}">
     <h2 th:text="${error}"></h2>
 </div>
+
+<h2>Group Formation Details</h2>
 <div class="col-md-8">
-    <table class="table table-sm" th:each="students : ${groups}">
+    <table class="table table-sm">
         <thead class="thead-dark">
         <tr>
-            <th>Banner ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
+            <th>Question Title</th>
+            <th>Question Description</th>
         </tr>
         </thead>
-        <tr th:each="student : ${students}">
-            <td th:text="${student.bannerID}"></td>
-            <td th:text="${student.firstName}"></td>
-            <td th:text="${student.lastName}"></td>
-            <!--            <table>-->
-            <!--                <thead class="thead-dark">-->
-            <!--                <tr>-->
-            <!--                    <th>Question</th>-->
-            <!--                    <th>Answer</th>-->
-            <!--                </tr>-->
-            <!--                </thead>-->
-            <!--                <tr th:each="question: ${students.questions}">-->
-            <!--                    <td th:text="${question}"></td>-->
-            <!--                </tr>-->
-            <!--            </table>-->
-        </tr>
-    </table>
-</div>
+        <tr th:each="question : ${questions}">
+            <td th:text="${question}"></td>
+                <td th:text="${question.description}"></td>
+            </tr>
+        </table>
+        <table class="table table-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Banner ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th colspan="4">Responses</th>
+                </tr>
+            </thead>
+            <span th:each="group : ${groups}" style="display:none">
+                <span th:each="member,iterstat:${group.value}" style="display:none">
+                    <tr>
+                        <td th:text="${member.key.bannerID}"></td>
+                        <td th:text="${member.key.firstName}"></td>
+                        <td th:text="${member.key.lastName}"></td>
+                        <span th:each="response,iterstat:${member.value}" style="display:none">
+                            <td th:text="${response}"></td> 
+                        </span>
+            </tr>
+            </span>
+            <tr>
+                <td colspan='4'></td>
+            </tr>
+            </span>
+        </table>
+    </div>
 </body>
+
 </html>
