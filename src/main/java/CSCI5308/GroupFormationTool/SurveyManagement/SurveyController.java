@@ -185,7 +185,7 @@ public class SurveyController {
 
     @GetMapping("instructor/survey/creategroup")
     public String createGroup(@RequestParam(name = "courseId") Long courseId,
-                              @RequestParam(name = "surveyId") Long surveyId, Model model) {
+                              @RequestParam(name = "surveyId") Long surveyId, Model model) throws SQLException {
         log.info("Processing a request to create group of of students for course with ID: {}", courseId);
         ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
         Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId,
