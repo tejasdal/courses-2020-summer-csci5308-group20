@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PasswordPolicyPersistence implements IPasswordPersistence {
+public class PasswordPolicyPersistence implements IPasswordPolicyPersistence {
     @Override
     public List<String> getPasswordHistoryByUserId(String userId, int policyCount) {
         CallStoredProcedure proc = null;

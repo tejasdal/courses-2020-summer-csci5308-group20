@@ -1,16 +1,14 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
+import java.sql.Date;
+import java.util.List;
+
 import CSCI5308.GroupFormationTool.Question.IQuestionOption;
 import CSCI5308.GroupFormationTool.Question.Question;
-import CSCI5308.GroupFormationTool.survey.matchcriteria.IMatchCriteria;
-
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
+import CSCI5308.GroupFormationTool.SurveyManagement.matchcriteria.IMatchCriteria;
 
 public class SurveyQuestion extends Question {
 	private Long surveyId;
-	private List<UserAnswer> userAnswers;
 	private IMatchCriteria matchCriteria;
 
 	public SurveyQuestion(Long surveyId, IMatchCriteria matchCriteria, Long id,
@@ -19,7 +17,6 @@ public class SurveyQuestion extends Question {
 		super(id, title, description, userId, questionType, createdAt, questionOptions);
 		this.surveyId = surveyId;
 		this.matchCriteria = matchCriteria;
-		this.userAnswers = new ArrayList<>();
 	}
 
 	public Long getSurveyId() {
@@ -28,9 +25,5 @@ public class SurveyQuestion extends Question {
 
 	public IMatchCriteria getMatchCriteria() {
 		return matchCriteria;
-	}
-
-	public List<UserAnswer> getUserAnswers() {
-		return userAnswers;
 	}
 }

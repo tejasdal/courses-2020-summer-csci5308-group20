@@ -3,10 +3,12 @@ package CSCI5308.GroupFormationTool.SurveyManagement;
 import java.util.List;
 import java.util.Map;
 
-public interface ISurvey {
-    List<SurveyQuestion> getQuestions();
+import CSCI5308.GroupFormationTool.Question.IQuestion;
 
-    void setQuestions(List<SurveyQuestion> questions);
+public interface ISurvey {
+    List<IQuestion> getQuestions();
+
+    void setQuestions(List<IQuestion> questions);
 
     public Map<Long, Map<String, List<UserAnswer>>> getUserAnswers();
 

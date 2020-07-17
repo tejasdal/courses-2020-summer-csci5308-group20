@@ -5,6 +5,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
+import CSCI5308.GroupFormationTool.AccessControl.IUser;
+import CSCI5308.GroupFormationTool.AccessControlTest.UserTestAbstractFactory;
+import CSCI5308.GroupFormationTool.AccessControlTest.UserTestConcreteFactory;
+import CSCI5308.GroupFormationTool.Courses.ICourse;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.Assert;
@@ -20,13 +26,24 @@ import CSCI5308.GroupFormationTool.SecurityTest.PasswordEncryptionMock;
 @SuppressWarnings("deprecation")
 class StudentCSVImportTest 
 {
+	private static IUser user;
+	private static ICourse course;
+	private static IUserPersistence userDB;
+
+	@BeforeAll
+	public static void setUp()
+	{
+		UserTestAbstractFactory userTestAbstractFactory = new UserTestConcreteFactory();
+		CoursesTestAbstractFactory coursesTestAbstractFactory = new CoursesTestConcreteFactory();
+		user = userTestAbstractFactory.makeUser();
+		course = coursesTestAbstractFactory.makeCourse();
+		userDB = userTestAbstractFactory.makeUserPersistence();
+	}
 
 	@Test
 	public void enrollStudentFromRecord() 
 	{
-		User user = new User();
-		Course course = new Course();
-		IUserPersistence userDB = new UserDBMock();
+
 		IPasswordEncryption passwordEncryption = new PasswordEncryptionMock();
 		Assert.isTrue(user.createUser(userDB, passwordEncryption, null));
 		Assert.isTrue(course.enrollUserInCourse(Role.STUDENT, user) == false);

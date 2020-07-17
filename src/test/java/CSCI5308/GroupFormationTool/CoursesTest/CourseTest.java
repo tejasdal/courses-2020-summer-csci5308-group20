@@ -1,5 +1,7 @@
 package CSCI5308.GroupFormationTool.CoursesTest;
 
+import CSCI5308.GroupFormationTool.Courses.ICourse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.Assert;
@@ -9,16 +11,24 @@ import CSCI5308.GroupFormationTool.Courses.ICoursePersistence;
 
 @SpringBootTest
 @SuppressWarnings("deprecation")
-class CourseTest 
+class CourseTest
 {
+	private static ICourse course;
+	private static ICoursePersistence courseDB;
+
+	@BeforeEach
+	public void setUp(){
+		CoursesTestAbstractFactory coursesTestAbstractFactory = new CoursesTestConcreteFactory();
+		course = coursesTestAbstractFactory.makeCourse();
+		courseDB = coursesTestAbstractFactory.makeCoursePersistence();
+	}
+
 	@Test
 	public void ConstructorTests() 
 	{
-		Course course = new Course();
 		Assert.isTrue(course.getId() == -1);
 		Assert.isTrue(course.getTitle().isEmpty());
 
-		ICoursePersistence courseDB = new CourseDBMock();
 		course = new Course(0, courseDB);
 		Assert.isTrue(course.getId() == 0);
 		Assert.isTrue(course.getTitle().equals("Software Engineering"));
@@ -27,7 +37,6 @@ class CourseTest
 	@Test
 	public void setIdTest() 
 	{
-		Course course = new Course();
 		course.setId(7);
 		Assert.isTrue(course.getId() == 7);
 	}
@@ -35,7 +44,6 @@ class CourseTest
 	@Test
 	public void getIdTest() 
 	{
-		Course course = new Course();
 		course.setId(7);
 		Assert.isTrue(course.getId() == 7);
 	}
@@ -43,7 +51,6 @@ class CourseTest
 	@Test
 	public void setTitleTest() 
 	{
-		Course course = new Course();
 		course.setTitle("Advanced Topics in Software Development");
 		Assert.isTrue(course.getTitle().equals("Advanced Topics in Software Development"));
 	}
@@ -51,7 +58,6 @@ class CourseTest
 	@Test
 	public void getTitleTest() 
 	{
-		Course course = new Course();
 		course.setTitle("Advanced Topics in Software Development");
 		Assert.isTrue(course.getTitle().equals("Advanced Topics in Software Development"));
 	}
@@ -59,7 +65,6 @@ class CourseTest
 	@Test
 	public void deleteCourseTest() 
 	{
-		ICoursePersistence courseDB = new CourseDBMock();
 		boolean status = courseDB.deleteCourse(0);
 		Assert.isTrue(status);
 	}
@@ -67,8 +72,6 @@ class CourseTest
 	@Test
 	public void createCourseTest() 
 	{
-		ICoursePersistence courseDB = new CourseDBMock();
-		Course course = new Course();
 		course.setId(0);
 		course.setTitle("Software Engineering");
 		courseDB.createCourse(course);
