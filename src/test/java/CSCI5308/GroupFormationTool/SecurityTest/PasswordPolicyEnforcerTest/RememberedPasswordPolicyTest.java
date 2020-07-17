@@ -18,7 +18,7 @@ public class RememberedPasswordPolicyTest {
 
     @Test
     public void validate() {
-        IPasswordPolicyPersistence mock = new PasswordPolicyPersistenceMock();
+        IPasswordPolicyPersistence mock = PasswordPolicyEnforcerTestAbstractFactory.instance().makePersistence();
         List<String> oldPasswords = mock.getPasswordHistoryByUserId("TEST", 2);
         boolean passwordPresent = false;
         for (String oldPass : oldPasswords) {

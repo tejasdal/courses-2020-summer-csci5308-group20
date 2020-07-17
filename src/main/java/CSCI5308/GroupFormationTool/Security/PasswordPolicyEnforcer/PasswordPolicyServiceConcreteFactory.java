@@ -13,6 +13,7 @@ public class PasswordPolicyServiceConcreteFactory extends PasswordPolicyServiceA
 
     }
 
+    @Override
     public List<IPasswordPolicy> getPolicy() {
         Map<String, String> allConfig = AdminConfigServiceAbstractFactory.instance().makeAdminConfigService().getAllConfig();
         List<IPasswordPolicy> policies = new ArrayList<>();
