@@ -3,7 +3,7 @@ package CSCI5308.GroupFormationTool.SurveyManagement;
 import java.util.ArrayList;
 import java.util.List;
 
-import CSCI5308.GroupFormationTool.Question.IQuestion;
+import CSCI5308.GroupFormationTool.Question.Question;
 
 public class QuestionCriteriaList {
 
@@ -14,7 +14,7 @@ public class QuestionCriteriaList {
     public QuestionCriteriaList() {
     }
 
-    public QuestionCriteriaList(List<IQuestion> questionList) {
+    public QuestionCriteriaList(List<Question> questionList) {
         list = new ArrayList<>();
         questionList.forEach(question -> {
             list.add(new QuestionWithCriteriaDetails(question, 0, 0));

@@ -1,32 +1,21 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
 import java.util.List;
-import java.util.Map;
 
-import CSCI5308.GroupFormationTool.Question.IQuestion;
+import CSCI5308.GroupFormationTool.Question.Question;
 
 public class Survey implements ISurvey {
 
-    private List<IQuestion> questions;
-    private Map<Long, Map<String, List<UserAnswer>>> userAnswers;
+    private List<Question> questions;
 
     @Override
-    public List<IQuestion> getQuestions() {
+    public List<Question> getQuestions() {
 		return questions;
 	}
 
     @Override
-    public void setQuestions(List<IQuestion> questions) {
+    public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
 
-    @Override
-    public Map<Long, Map<String, List<UserAnswer>>> getUserAnswers() {
-        return userAnswers;
-    }
-
-    @Override
-    public void setUserAnswers(Map<Long, Map<String, List<UserAnswer>>> userAnswers) {
-        this.userAnswers = userAnswers;
-    }
 }

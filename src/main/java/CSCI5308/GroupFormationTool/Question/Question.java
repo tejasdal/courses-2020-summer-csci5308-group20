@@ -22,6 +22,7 @@ public class Question implements IQuestion {
     private List<Answers> answers;
     
     public Question() {
+    	this.answers = new ArrayList<Answers>();
     }
 
     public Question(Long id, String title, String description, Long userId, int questionType, Date createdAt,

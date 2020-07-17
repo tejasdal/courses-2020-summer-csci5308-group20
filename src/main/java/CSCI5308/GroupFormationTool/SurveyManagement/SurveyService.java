@@ -32,7 +32,7 @@ public class SurveyService implements ISurveyService {
 		if (surveyId != (-1)) {
 			boolean status = isSurveyPublished(surveyId, surveyPersistence);
 			response.put("status", status);
-			List<IQuestion> list = surveyPersistence.getAllSurveyQuestions(surveyId);
+			List<Question> list = surveyPersistence.getAllSurveyQuestions(surveyId);
 			if (list != null) {
 				response.put("questions", list);
 				return response;
@@ -43,8 +43,8 @@ public class SurveyService implements ISurveyService {
 
 	public Map<String, Object> addQuestionPage(long courseId, long surveyId, ISurveyPersistence surveyPersistence) {
 		Map<String, Object> response = new HashMap<>();
-		List<IQuestion> allQuestions = surveyPersistence.getAllInstructorQuestionsUsingCourseId(courseId, surveyId);
-		List<IQuestion> addedQuestions = surveyPersistence.getAllSurveyQuestions(surveyId);
+		List<Question> allQuestions = surveyPersistence.getAllInstructorQuestionsUsingCourseId(courseId, surveyId);
+		List<Question> addedQuestions = surveyPersistence.getAllSurveyQuestions(surveyId);
 		response.put("addedQuestion", addedQuestions);
 		response.put("availableQuestions", allQuestions);
 		return response;
@@ -84,8 +84,8 @@ public class SurveyService implements ISurveyService {
         if (surveyId == -1L) {
             response.put("isSurveyPublished", false);
         } else {
-            List<IQuestion> surveyQuestions = surveyPersistence.getAllSurveyQuestions(surveyId);
-            for (IQuestion surveyQuestion : surveyQuestions) {
+            List<Question> surveyQuestions = surveyPersistence.getAllSurveyQuestions(surveyId);
+            for (Question surveyQuestion : surveyQuestions) {
                 if (surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_ONE
                         || surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_MANY) {
 
@@ -111,9 +111,9 @@ public class SurveyService implements ISurveyService {
 
 	@Override
 	public boolean submitAnswers(String bannerId, Long surveyId, Survey survey, ISurveyPersistence surveyPersistence) {
-//        for (Question q : survey.getQuestions()) {
-//            q.getAnswers().removeIf(question -> question.getAnswerValue() == null);
-//        }
+        for (Question q : survey.getQuestions()) {
+            q.getAnswers().removeIf(question -> question.getAnswerValue() == null);
+        }
 		return surveyPersistence.submitAnswers(bannerId, surveyId, survey);
 	}
 

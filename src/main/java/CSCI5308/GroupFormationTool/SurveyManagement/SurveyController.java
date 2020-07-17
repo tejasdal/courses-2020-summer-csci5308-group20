@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import CSCI5308.GroupFormationTool.AccessControl.User;
-import CSCI5308.GroupFormationTool.Question.IQuestion;
+import CSCI5308.GroupFormationTool.Question.Question;
 
 @Controller
 public class SurveyController {
@@ -154,9 +154,9 @@ public class SurveyController {
 		ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
 		Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId,
 				SurveyPersistenceAbstractFactory.instance().makePersistence());
-		List<IQuestion> questions = new ArrayList<>();
+		List<Question> questions = new ArrayList<>();
 		if (result != null && result.get("questions") != null) {
-			questions = (List<IQuestion>) result.get("questions");
+			questions = (List<Question>) result.get("questions");
 		}
 		QuestionCriteriaList questionCriteriaList = new QuestionCriteriaList(questions);
 		model.addAttribute("questions", questionCriteriaList);

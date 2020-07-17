@@ -15,7 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import CSCI5308.GroupFormationTool.Question.IQuestion;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
 import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyPersistence;
@@ -51,7 +50,7 @@ public class SurveyServiceTest {
         long surveyId = 1L;
         Mockito.when(surveyPersistence.getSurveyIdUsingCourseId(courseId)).thenReturn(surveyId);
         Mockito.when(surveyPersistence.getSurveyStatus(surveyId)).thenReturn(0);
-        Mockito.when(surveyPersistence.getAllSurveyQuestions(1L)).thenReturn(new ArrayList<IQuestion>() {
+        Mockito.when(surveyPersistence.getAllSurveyQuestions(1L)).thenReturn(new ArrayList<Question>() {
         });
         Map<String, Object> response = new HashMap<>();
         response.put("surveyId", surveyId);
@@ -66,7 +65,7 @@ public class SurveyServiceTest {
         long courseId = 1;
         long surveyId = 1;
         Mockito.when(surveyPersistence.getAllInstructorQuestionsUsingCourseId(courseId, surveyId)).thenReturn(new ArrayList<>());
-        Mockito.when(surveyPersistence.getAllSurveyQuestions(surveyId)).thenReturn(new ArrayList<IQuestion>() {
+        Mockito.when(surveyPersistence.getAllSurveyQuestions(surveyId)).thenReturn(new ArrayList<Question>() {
         });
         Map<String, Object> response = new HashMap<>();
         response.put("addedQuestion", new ArrayList<Question>());
@@ -119,10 +118,10 @@ public class SurveyServiceTest {
         assertNotNull(response);
         assertTrue( (boolean) response.get("isSurveyPublished"));
         assertTrue( surveyId == (long) response.get("surveyId"));
-        List<IQuestion> surveyQuestionToBeTested = ((Survey) response.get("survey")).getQuestions();
+        List<Question> surveyQuestionToBeTested = ((Survey) response.get("survey")).getQuestions();
         assertNotNull( surveyQuestionToBeTested);
 
-        List<IQuestion> answers = this.getSampleQuestions();
+        List<Question> answers = this.getSampleQuestions();
         assertTrue( answers.get(0).getTitle().equals(surveyQuestionToBeTested.get(0).getTitle()));
         assertTrue( answers.get(1).getQuestionOptions().get(0).getOption().equals(
                 surveyQuestionToBeTested.get(1).getQuestionOptions().get(0).getOption()));
@@ -137,8 +136,8 @@ public class SurveyServiceTest {
         assertTrue(surveyService.submitAnswers(bannerId, surveyId, survey, surveyPersistence));
     }
 
-    private List<IQuestion> getSampleQuestions() {
-        List<IQuestion> questions = new ArrayList<>();
+    private List<Question> getSampleQuestions() {
+        List<Question> questions = new ArrayList<>();
 
         questions.add(new Question(1L, "Test Numeric Question", "What is Test Question?", 1L,
                 Question.NUMERIC, new Date(System.currentTimeMillis()), new ArrayList<>()));
@@ -157,7 +156,7 @@ public class SurveyServiceTest {
 
     @Test
     public void validateQuestionCriteriaListTest() throws Exception {
-    	List<IQuestion> sampleQuestions = getSampleQuestions();
+    	List<Question> sampleQuestions = getSampleQuestions();
     	QuestionCriteriaList list = new QuestionCriteriaList(sampleQuestions);
     	list.setMembersPerGroup(5);
     	assertTrue(SurveyFactory.instance().createService().validateQuestionCriteriaList(list));

@@ -8,8 +8,8 @@ import java.util.List;
 
 import CSCI5308.GroupFormationTool.AccessControl.User;
 import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
+import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.IQuestion;
-import CSCI5308.GroupFormationTool.Question.IQuestionOption;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
 
@@ -144,14 +144,14 @@ public class SurveyPersistence implements ISurveyPersistence {
 		}
 	}
 
-	public List<IQuestion> getAllSurveyQuestions(long surveyId) {
+	public List<Question> getAllSurveyQuestions(long surveyId) {
 		CallStoredProcedure proc = null;
 		try {
 			proc = new CallStoredProcedure("spGetAllSurveyQuestions(?)");
 			proc.setParameter(1, surveyId);
 			ResultSet resultSet = proc.executeWithResults();
 			if (resultSet != null) {
-				List<IQuestion> list = new ArrayList<>();
+				List<Question> list = new ArrayList<>();
 				while (resultSet.next()) {
 					Question question = new Question();
 					Long id = resultSet.getLong(1);
@@ -180,7 +180,7 @@ public class SurveyPersistence implements ISurveyPersistence {
 		}
 	}
 
-	public List<IQuestion> getAllInstructorQuestionsUsingCourseId(long courseId, long surveyId) {
+	public List<Question> getAllInstructorQuestionsUsingCourseId(long courseId, long surveyId) {
 		CallStoredProcedure proc = null;
 		try {
 			proc = new CallStoredProcedure("spGetAllInstructorQuestionsUsingCourseId(?,?)");
@@ -188,7 +188,7 @@ public class SurveyPersistence implements ISurveyPersistence {
 			proc.setParameter(2, surveyId);
 			ResultSet resultSet = proc.executeWithResults();
 			if (resultSet != null) {
-				List<IQuestion> list = new ArrayList<>();
+				List<Question> list = new ArrayList<>();
 				while (resultSet.next()) {
 					Question question = new Question();
 					Long id = resultSet.getLong(1);
@@ -255,17 +255,24 @@ public class SurveyPersistence implements ISurveyPersistence {
 		try {
 			proc = new CallStoredProcedure("spSubmitAnswers(?,?,?,?,?)");
 			for (IQuestion question : survey.getQuestions()) {
-				for (UserAnswer answer : survey.getUserAnswers().get(question.getId()).get(bannerId)) {
+				for (Answers answer : question.getAnswers()) {
 					proc.setParameter(1, surveyId);
 					proc.setParameter(2, bannerId);
 					proc.setParameter(3, question.getId());
-					proc.setParameter(4, answer.getAnswerRaw());
-					proc.setParameter(5, answer.getAnswerIndex());
+					proc.setParameter(4, answer.getAnswerValue());
+					int value = 0;
+					try {
+						value = Integer.parseInt(answer.getAnswerValue());
+					} catch(Exception e) {
+						value = 0;
+					}
+					proc.setParameter(5, value);
 					proc.addBatch();
 				}
 			}
 			proc.executeBatch();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			return false;
 		} finally {
 			if (null != proc) {
