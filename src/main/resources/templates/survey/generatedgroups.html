@@ -10,19 +10,21 @@
 
 <body>
 
-    <div th:if="${error}">
-        <h2 th:text="${error}"></h2>
-    </div>
-    <div class="col-md-8">
-        <table class="table table-sm">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Question Title</th>
-                    <th>Question Description</th>
-                </tr>
-            </thead>
-            <tr th:each="question : ${questions}">
-                <td th:text="${question}"></td>
+<div th:if="${error}">
+    <h2 th:text="${error}"></h2>
+</div>
+
+<h2>Group Formation Details</h2>
+<div class="col-md-8">
+    <table class="table table-sm">
+        <thead class="thead-dark">
+        <tr>
+            <th>Question Title</th>
+            <th>Question Description</th>
+        </tr>
+        </thead>
+        <tr th:each="question : ${questions}">
+            <td th:text="${question}"></td>
                 <td th:text="${question.description}"></td>
             </tr>
         </table>
@@ -32,7 +34,7 @@
                     <th>Banner ID</th>
                     <th>First Name</th>
                     <th>Last Name</th>
-                    <th>Responses</th>
+                    <th colspan="4">Responses</th>
                 </tr>
             </thead>
             <span th:each="group : ${groups}" style="display:none">
