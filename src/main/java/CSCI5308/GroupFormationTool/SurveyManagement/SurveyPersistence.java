@@ -4,8 +4,7 @@ import CSCI5308.GroupFormationTool.AccessControl.User;
 import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
 import CSCI5308.GroupFormationTool.Database.DatabaseAbstractFactory;
 import CSCI5308.GroupFormationTool.Database.ICallStoredProcedure;
-import CSCI5308.GroupFormationTool.Question.IQuestion;
-import CSCI5308.GroupFormationTool.Question.IQuestionOption;
+import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
 
@@ -218,16 +217,16 @@ public class SurveyPersistence implements ISurveyPersistence {
         }
     }
 
-    public List<IQuestionOption> getSurveyQuestionOption(Long questionId) {
+    public List<QuestionOption> getSurveyQuestionOption(Long questionId) {
         ICallStoredProcedure proc = null;
         try {
             proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spGetSurveyQuestionOption(?)");
             proc.setParameter(1, questionId);
             ResultSet resultSet = proc.executeWithResults();
             if (resultSet != null) {
-                List<IQuestionOption> list = new ArrayList<>();
+                List<QuestionOption> list = new ArrayList<>();
                 while (resultSet.next()) {
-                    IQuestionOption questionOption = new QuestionOption();
+                    QuestionOption questionOption = new QuestionOption();
                     Long id = resultSet.getLong(1);
                     Long queId = resultSet.getLong(2);
                     String options = resultSet.getString(3);
@@ -256,13 +255,12 @@ public class SurveyPersistence implements ISurveyPersistence {
         ICallStoredProcedure proc = null;
         try {
             proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spSubmitAnswers(?,?,?,?,?)");
-            for (IQuestion question : survey.getQuestions()) {
-                for (UserAnswer answer : survey.getUserAnswers().get(question.getId()).get(bannerId)) {
+            for (Question question : survey.getQuestions()) {
+                for (Answers answers : question.getAnswers()) {
                     proc.setParameter(1, surveyId);
                     proc.setParameter(2, bannerId);
                     proc.setParameter(3, question.getId());
-                    proc.setParameter(4, answer.getAnswerRaw());
-                    proc.setParameter(5, answer.getAnswerIndex());
+                    proc.setParameter(4, answers.getAnswerValue());
                     proc.addBatch();
                 }
             }

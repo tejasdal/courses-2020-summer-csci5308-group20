@@ -28,9 +28,9 @@ public interface IQuestion {
 
     void setQuestionType(int questionType);
 
-    List<IQuestionOption> getQuestionOptions();
+    List<QuestionOption> getQuestionOptions();
 
-    void setQuestionOptions(List<IQuestionOption> questionOptions);
+    void setQuestionOptions(List<QuestionOption> questionOptions);
 
     Date getCreatedAt();
 

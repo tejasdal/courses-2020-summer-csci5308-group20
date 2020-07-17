@@ -17,15 +17,16 @@ public class Question implements IQuestion {
     private String description;
     private Long userId;
     private int questionType;
-    private List<IQuestionOption> questionOptions = new ArrayList<>();
+    private List<QuestionOption> questionOptions = new ArrayList<>();
     private Date createdAt;
     private List<Answers> answers;
     
     public Question() {
+    	this.answers = new ArrayList<Answers>();
     }
 
     public Question(Long id, String title, String description, Long userId, int questionType, Date createdAt,
-                    List<IQuestionOption> questionOptions) {
+                    List<QuestionOption> questionOptions) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -33,6 +34,7 @@ public class Question implements IQuestion {
         this.questionType = questionType;
         this.questionOptions = questionOptions;
         this.createdAt = createdAt;
+        this.answers = new ArrayList<Answers>();
     }
 
     public static int getNumeric() {
@@ -112,12 +114,12 @@ public class Question implements IQuestion {
     }
 
     @Override
-    public List<IQuestionOption> getQuestionOptions() {
+    public List<QuestionOption> getQuestionOptions() {
         return questionOptions;
     }
 
     @Override
-    public void setQuestionOptions(List<IQuestionOption> questionOptions) {
+    public void setQuestionOptions(List<QuestionOption> questionOptions) {
         this.questionOptions = questionOptions;
     }
 

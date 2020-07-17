@@ -1,16 +1,12 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
 import java.util.List;
-import java.util.Map;
 
-import CSCI5308.GroupFormationTool.Question.IQuestion;
+import CSCI5308.GroupFormationTool.Question.Question;
 
 public interface ISurvey {
-    List<IQuestion> getQuestions();
+    List<Question> getQuestions();
 
-    void setQuestions(List<IQuestion> questions);
+    void setQuestions(List<Question> questions);
 
-    public Map<Long, Map<String, List<UserAnswer>>> getUserAnswers();
-
-    public void setUserAnswers(Map<Long, Map<String, List<UserAnswer>>> userAnswers);
 }

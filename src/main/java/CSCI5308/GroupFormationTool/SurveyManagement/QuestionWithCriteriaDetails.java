@@ -1,5 +1,6 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
+import CSCI5308.GroupFormationTool.Question.IQuestion;
 import CSCI5308.GroupFormationTool.Question.Question;
 
 public class QuestionWithCriteriaDetails extends Question {
@@ -10,7 +11,7 @@ public class QuestionWithCriteriaDetails extends Question {
     public QuestionWithCriteriaDetails() {
     }
 
-    public QuestionWithCriteriaDetails(Question q, int criteriaType, int criteriaValue) {
+    public QuestionWithCriteriaDetails(IQuestion q, int criteriaType, int criteriaValue) {
         super(q.getId(), q.getTitle(), q.getDescription(), q.getUserId(), q.getQuestionType(), q.getCreatedAt(), q.getQuestionOptions());
         this.criteriaType = criteriaType;
         this.criteriaValue = criteriaValue;

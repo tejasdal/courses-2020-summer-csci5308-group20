@@ -86,7 +86,7 @@ public class QuestionController {
         if (next != null){
             return "questions/displayQuestionPrototype";
         }
-        question.getQuestionOptions().add(QuestionServiceAbstractFactory.instance().makeQuestionOption());
+        question.getQuestionOptions().add(new QuestionOption());
         return "questions/addOptionToQuestion";
     }
 
@@ -96,7 +96,7 @@ public class QuestionController {
 
         if ((question.getQuestionType() == Question.getMultipleChoiceChooseOne()
                 || question.getQuestionType() == Question.getMultipleChoiceChooseMany()) && isMcqPrototype != 1){
-            question.getQuestionOptions().add(QuestionServiceAbstractFactory.instance().makeQuestionOption());
+            question.getQuestionOptions().add(new QuestionOption());
             model.addAttribute("question", question);
             return "questions/addOptionToQuestion";
         }

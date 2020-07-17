@@ -1,23 +1,18 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
+import CSCI5308.GroupFormationTool.AccessControl.User;
+import CSCI5308.GroupFormationTool.Question.Question;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import CSCI5308.GroupFormationTool.AccessControl.User;
-import CSCI5308.GroupFormationTool.Question.Question;
 
 @Controller
 public class SurveyController {
@@ -163,51 +158,45 @@ public class SurveyController {
         return "redirect:/";
     }
 
+
     @GetMapping("instructor/survey/creategroup")
     public String createGroup(@RequestParam(name = "courseId") Long courseId,
-                              @RequestParam(name = "surveyId") Long surveyId,
-                              Model model) {
+                              @RequestParam(name = "surveyId") Long surveyId, Model model) {
         ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
-        Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId, SurveyPersistenceAbstractFactory.instance().makePersistence());
-        IQuestionCriteriaList questionCriteriaList = SurveyServiceAbstractFactory.instance().makeQuestionCriteriaListUsingList((List<Question>) result.get("questions"));
+        Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId,
+                SurveyPersistenceAbstractFactory.instance().makePersistence());
+        List<Question> questions = new ArrayList<>();
+        if (result != null && result.get("questions") != null) {
+            questions = (List<Question>) result.get("questions");
+        }
+        QuestionCriteriaList questionCriteriaList = new QuestionCriteriaList(questions);
         model.addAttribute("questions", questionCriteriaList);
         model.addAttribute("surveyId", surveyId);
         return "survey/creategroups";
     }
-	@GetMapping("instructor/survey/creategroup")
-	public String createGroup(@RequestParam(name = "courseId") Long courseId,
-			@RequestParam(name = "surveyId") Long surveyId, Model model) {
-		ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
-		Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId,
-				SurveyPersistenceAbstractFactory.instance().makePersistence());
-		List<Question> questions = new ArrayList<>();
-		if (result != null && result.get("questions") != null) {
-			questions = (List<Question>) result.get("questions");
-		}
-		QuestionCriteriaList questionCriteriaList = new QuestionCriteriaList(questions);
-		model.addAttribute("questions", questionCriteriaList);
-		model.addAttribute("surveyId", surveyId);
-		return "survey/creategroups";
-	}
 
-	@PostMapping(value = "/survey/generategroups")
-	public String generateGroups(@ModelAttribute QuestionCriteriaList questionCriteriaList,
-			@RequestParam(name = "surveyId", required = false) Long surveyId,
-			@RequestParam(name = "bannerId", required = false) String bannerId, ModelMap model) {
-		ISurveyService service = SurveyFactory.instance().createService();
-		ISurveyPersistence persistence = SurveyFactory.instance().createPersistence();
-		try {
-			service.validateQuestionCriteriaList(questionCriteriaList);
-			List<List<User>> groups = service.createGroups(questionCriteriaList, surveyId,
-					questionCriteriaList.getMembersPerGroup(), persistence);
-			model.addAttribute("groups", groups);
-		} catch (IOException e) {
-			// Logging required
-			model.addAttribute("error", "Internal server error. Please try again later.");
-		} catch (Exception e) {
-			// Logging required
-			model.addAttribute("error", e.getMessage());
-		}
-		return "index";
-	}
+    @PostMapping(value = "/survey/generategroups")
+    public String generateGroups(@ModelAttribute QuestionCriteriaList questionCriteriaList,
+                                 @RequestParam(name = "surveyId", required = false) Long surveyId,
+                                 @RequestParam(name = "bannerId", required = false) String bannerId, ModelMap model) {
+        ISurveyService service = SurveyFactory.instance().createService();
+        ISurveyPersistence persistence = SurveyFactory.instance().createPersistence();
+        ISurveyResponse surveyResponses = persistence.getSurveyResponses(surveyId);
+        try {
+            service.validateQuestionCriteriaList(questionCriteriaList);
+            List<List<User>> groups = service.createGroups(questionCriteriaList, surveyId,
+                    questionCriteriaList.getMembersPerGroup(), surveyResponses, persistence);
+            System.out.println(groups);
+            model.addAttribute("groups", groups);
+            model.addAttribute("responses", surveyResponses.getAllUserAnswers());
+        } catch (IOException e) {
+            // Logging required
+            e.printStackTrace();
+            model.addAttribute("error", "Internal server error. Please try again later.");
+        } catch (Exception e) {
+            // Logging required
+            model.addAttribute("error", e.getMessage());
+        }
+        return "survey/generatedgroups";
+    }
 }
