@@ -21,7 +21,7 @@ public class CourseController
 	public String course(Model model, @RequestParam(name = ID) long courseID)
 	{
 		log.info("Processing a request to load a course with ID: {}", courseID);
-		ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+		ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
 		Course course = new Course();
 		courseDB.loadCourseByID(courseID, course);
 		model.addAttribute("course", course);

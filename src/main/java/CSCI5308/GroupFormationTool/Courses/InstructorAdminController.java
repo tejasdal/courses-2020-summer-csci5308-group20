@@ -27,7 +27,7 @@ public class InstructorAdminController {
     @GetMapping("/course/instructoradmin")
     public String instructorAdmin(Model model, @RequestParam(name = ID) long courseID) {
 		log.info("Processing a request to load a course admin page for instructor and ta.");
-        ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+        ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
         Course course = new Course();
         courseDB.loadCourseByID(courseID, course);
         model.addAttribute("course", course);
@@ -53,7 +53,7 @@ public class InstructorAdminController {
             @RequestParam(name = FAILURES, required = false) List<String> failures,
             @RequestParam(name = DISPLAY_RESULTS) boolean displayResults) {
 		log.info("Processing a request to redirect to a course admin page to display results of tas enroll request.");
-        ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+        ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
         Course course = new Course();
         courseDB.loadCourseByID(courseID, course);
         model.addAttribute("course", course);
@@ -73,7 +73,7 @@ public class InstructorAdminController {
     @GetMapping("/course/enrollta")
     public String enrollTA(Model model, @RequestParam(name = ID) long courseID) {
 		log.info("Processing a request to load a page to enroll tas for a course with ID: {}.", courseID);
-        ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+        ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
         Course course = new Course();
         courseDB.loadCourseByID(courseID, course);
         model.addAttribute("course", course);
@@ -88,10 +88,10 @@ public class InstructorAdminController {
     @RequestMapping(value = "/course/uploadcsv", consumes = {"multipart/form-data"})
     public ModelAndView upload(@RequestParam(name = FILE) MultipartFile file, @RequestParam(name = ID) long courseID) {
 		log.info("Processing a request to enroll tas for a course with ID: {}.", courseID);
-        ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+        ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
         Course course = new Course();
         courseDB.loadCourseByID(courseID, course);
-        IStudentCSVParser parser = new StudentCSVParser(file);
+        IStudentCSVParser parser = CourseModelAbstractFactory.instance().makeStudentCSVParser(file);
         StudentCSVImport importer = new StudentCSVImport(parser, course);
         ModelAndView mav = new ModelAndView("redirect:/course/instructoradminresults?id=" + Long.toString(courseID));
         mav.addObject("successful", importer.getSuccessResults());

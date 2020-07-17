@@ -30,7 +30,7 @@ public class RememberedPasswordPolicy implements IPasswordPolicy {
     @Override
     public boolean validate(String password) {
         try {
-            IPasswordPersistence persistence = SystemConfig.instance().getPasswordPersistence();
+            IPasswordPolicyPersistence persistence = PasswordPolicyPersistenceAbstractFactory.instance().makePersistence();
             String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
             if (username.equals("") == false) {
                 List<String> list = persistence.getPasswordHistoryByUserId(username, policyCount);

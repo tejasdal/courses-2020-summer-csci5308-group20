@@ -5,6 +5,8 @@ import java.util.List;
 import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import CSCI5308.GroupFormationTool.Database.DatabaseAbstractFactory;
+import CSCI5308.GroupFormationTool.Database.ICallStoredProcedure;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,14 +16,14 @@ public class CourseDB implements ICoursePersistence
 {
 	private Logger log = LoggerFactory.getLogger(CourseDB.class);
 
-	public List<Course> loadAllCourses()
+	public List<ICourse> loadAllCourses()
 	{
 		log.trace("Loading all courses from database.");
-		List<Course> courses = new ArrayList<Course>();
-		CallStoredProcedure proc = null;
+		List<ICourse> courses = new ArrayList<>();
+		ICallStoredProcedure proc = null;
 		try
 		{
-			proc = new CallStoredProcedure("spLoadAllCourses()");
+			proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spLoadAllCourses()");
 			ResultSet results = proc.executeWithResults();
 			if (null != results)
 			{
@@ -53,10 +55,10 @@ public class CourseDB implements ICoursePersistence
 	public void loadCourseByID(long id, Course course)
 	{
 		log.trace("Loading a course by ID: {} from database.", course.getId());
-		CallStoredProcedure proc = null;
+		ICallStoredProcedure proc = null;
 		try
 		{
-			proc = new CallStoredProcedure("spFindCourseByID(?)");
+			proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spFindCourseByID(?)");
 			proc.setParameter(1, id);
 			ResultSet results = proc.executeWithResults();
 			if (null != results)
@@ -82,13 +84,13 @@ public class CourseDB implements ICoursePersistence
 		}
 	}
 	
-	public boolean createCourse(Course course)
+	public boolean createCourse(ICourse course)
 	{
 		log.trace("Creating a new course with title: {} to database.", course.getTitle());
-		CallStoredProcedure proc = null;
+		ICallStoredProcedure proc = null;
 		try
 		{
-			proc = new CallStoredProcedure("spCreateCourse(?, ?)");
+			proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spCreateCourse(?, ?)");
 			proc.setParameter(1, course.getTitle());
 			proc.registerOutputParameterLong(2);
 			proc.execute();
@@ -111,10 +113,10 @@ public class CourseDB implements ICoursePersistence
 	public boolean deleteCourse(long id)
 	{
 		log.trace("Deleting a course with ID: {} from database.", id);
-		CallStoredProcedure proc = null;
+		ICallStoredProcedure proc = null;
 		try
 		{
-			proc = new CallStoredProcedure("spDeleteCourse(?)");
+			proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spDeleteCourse(?)");
 			proc.setParameter(1, id);
 			proc.execute();
 		}

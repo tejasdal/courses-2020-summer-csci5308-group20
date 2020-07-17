@@ -1,9 +1,10 @@
 package CSCI5308.GroupFormationTool.SecurityTest.PasswordPolicyEnforcerTest;
 
+import CSCI5308.GroupFormationTool.AdminConfig.AdminConfigServiceAbstractFactory;
 import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigService;
 import CSCI5308.GroupFormationTool.AdminConfigTest.AdminConfigPersistenceMock;
 import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.IPasswordPolicyService;
-import CSCI5308.GroupFormationTool.SystemConfig;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.PasswordPolicyServiceAbstractFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,9 +16,9 @@ public class PasswordPolicyServiceTest {
 
     @Test
     public void validateUsingPolicies() throws Exception {
-        IAdminConfigService configService = SystemConfig.instance().getAdminConfigService();
+        IAdminConfigService configService = AdminConfigServiceAbstractFactory.instance().makeAdminConfigService();
         configService.addConfig(minPasswordPolicy, minPasswordPolicyCount, new AdminConfigPersistenceMock());
-        IPasswordPolicyService passwordPolicyService = SystemConfig.instance().getPasswordPolicyService();
+        IPasswordPolicyService passwordPolicyService = PasswordPolicyServiceAbstractFactory.instance().makeService();
         assertTrue(passwordPolicyService.validateUsingPolicies("TestPassword"));
         try {
             passwordPolicyService.validateUsingPolicies("A");

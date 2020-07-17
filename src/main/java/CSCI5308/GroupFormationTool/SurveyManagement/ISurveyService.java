@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ISurveyService {
-	Map<String, Object> getAllSurveyQuestions(long courseID, ISurveyPersistence surveyPersistence);
+	Map<String, Object> getAllSurveyQuestions(long courseID, ISurveyPersistence surveyPersistence) throws SQLException;
 
 	Map<String, Object> addQuestionPage(long courseId, long surveyId, ISurveyPersistence surveyPersistence);
 

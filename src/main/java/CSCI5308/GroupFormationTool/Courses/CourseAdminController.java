@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import CSCI5308.GroupFormationTool.AccessControl.IUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import CSCI5308.GroupFormationTool.SystemConfig;
 import CSCI5308.GroupFormationTool.AccessControl.User;
 
 @Controller
@@ -28,8 +28,8 @@ public class CourseAdminController
 	public String course(Model model)
 	{
 		log.info("Processing a request to get all courses for admin.");
-		ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
-		List<Course> allCourses = courseDB.loadAllCourses();
+		ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
+		List<ICourse> allCourses = courseDB.loadAllCourses();
 		model.addAttribute("courses", allCourses);
 		return "admin/course";
 	}
@@ -38,12 +38,12 @@ public class CourseAdminController
 	public String assignInstructor(Model model, @RequestParam(name = ID) long courseID)
 	{
 		log.info("Processing a request to load page to assign a instructor to course with ID: {}.", courseID);
-		ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+		ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
 		Course c = new Course();
 		courseDB.loadCourseByID(courseID, c);
 		model.addAttribute("course", c);
-		ICourseUserRelationshipPersistence courseUserRelationshipDB = SystemConfig.instance().getCourseUserRelationshipDB();
-		List<User> allUsersNotCurrentlyInstructors = courseUserRelationshipDB.findAllUsersWithoutCourseRole(Role.INSTRUCTOR, courseID);
+		ICourseUserRelationshipPersistence courseUserRelationshipDB = CoursePersistenceAbstractFactory.instance().makeCourseUserRelationshipPersistence();
+		List<IUser> allUsersNotCurrentlyInstructors = courseUserRelationshipDB.findAllUsersWithoutCourseRole(Role.INSTRUCTOR, courseID);
 		model.addAttribute("users", allUsersNotCurrentlyInstructors);
 		return "admin/assigninstructor";
 	}
@@ -52,7 +52,7 @@ public class CourseAdminController
 	public ModelAndView deleteCourse(@RequestParam(name = ID) long courseID)
 	{
 		log.info("Processing a request to delete a course with ID: {}.", courseID);
-		ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+		ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
 		Course c = new Course();
 		c.setId(courseID);
 		c.delete(courseDB);
@@ -64,7 +64,7 @@ public class CourseAdminController
    public ModelAndView createCourse(@RequestParam(name = TITLE) String title)
    {
    		log.info("Processing a request to create a course with title: {}.", title);
-		ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+		ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
 		Course c = new Course();
 		c.setTitle(title);
 		c.createCourse(courseDB);
@@ -80,7 +80,7 @@ public class CourseAdminController
 		Course c = new Course();
 		c.setId(courseID);
 		Iterator<Integer> iter = instructor.iterator();
-		ICourseUserRelationshipPersistence courseUserRelationshipDB = SystemConfig.instance().getCourseUserRelationshipDB();
+		ICourseUserRelationshipPersistence courseUserRelationshipDB = CoursePersistenceAbstractFactory.instance().makeCourseUserRelationshipPersistence();
 		while (iter.hasNext())
 		{
 			User u = new User();

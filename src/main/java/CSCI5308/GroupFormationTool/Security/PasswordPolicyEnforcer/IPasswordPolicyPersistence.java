@@ -2,6 +2,6 @@ package CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer;
 
 import java.util.List;
 
-public interface IPasswordPersistence {
+public interface IPasswordPolicyPersistence {
     List<String> getPasswordHistoryByUserId(String userId, int policyCount);
 }

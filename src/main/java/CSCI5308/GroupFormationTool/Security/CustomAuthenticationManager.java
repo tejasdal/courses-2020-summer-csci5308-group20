@@ -46,7 +46,7 @@ public class CustomAuthenticationManager implements AuthenticationManager
 	
 	private Authentication checkNormal(String password, User u, Authentication authentication) throws AuthenticationException
 	{
-		IPasswordEncryption passwordEncryption = SystemConfig.instance().getPasswordEncryption();
+		IPasswordEncryption passwordEncryption = PasswordEncryptionAbstractFactory.instance().makePasswordEncryption();
 		if (passwordEncryption.matches(password, u.getPassword()))
 		{
 			// Grant USER rights system-wide, this is used to protect controller mappings.
@@ -71,7 +71,7 @@ public class CustomAuthenticationManager implements AuthenticationManager
 	{
 		String bannerID = authentication.getPrincipal().toString();
 		String password = authentication.getCredentials().toString();
-		IUserPersistence userDB = SystemConfig.instance().getUserDB();
+		IUserPersistence userDB = UserPersistenceAbstractFactory.instance().makeUserPersistence();
 		User u;
 		try
 		{

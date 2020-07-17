@@ -3,6 +3,8 @@ package CSCI5308.GroupFormationTool.AdminConfig;
 import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import CSCI5308.GroupFormationTool.Database.DatabaseAbstractFactory;
+import CSCI5308.GroupFormationTool.Database.ICallStoredProcedure;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,9 +19,9 @@ public class AdminConfigPersistence implements IAdminConfigPersistence {
     public Map<String, String> getAllConfig() {
         log.trace("Fetching all configurations from database.");
         Map<String, String> config = new HashMap<>();
-        CallStoredProcedure proc = null;
+        ICallStoredProcedure proc = null;
         try {
-            proc = new CallStoredProcedure("spLoadAllAdminConfig()");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spLoadAllAdminConfig()");
             ResultSet results = proc.executeWithResults();
             if (null != results) {
                 while (results.next()) {
@@ -39,9 +41,9 @@ public class AdminConfigPersistence implements IAdminConfigPersistence {
     @Override
     public boolean setConfig(String key, String value) {
         log.trace("Setting a configuration with key: {} to database.", key);
-        CallStoredProcedure proc = null;
+        ICallStoredProcedure proc = null;
         try {
-            proc = new CallStoredProcedure("spSetConfig(?,?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spSetConfig(?,?)");
             proc.setParameter(1, key);
             proc.setParameter(2, value);
             proc.execute();
@@ -59,9 +61,9 @@ public class AdminConfigPersistence implements IAdminConfigPersistence {
     @Override
     public boolean addConfig(String key, String value) {
         log.trace("Adding a configuration with key: {} to database.", key);
-        CallStoredProcedure proc = null;
+        ICallStoredProcedure proc = null;
         try {
-            proc = new CallStoredProcedure("spAddConfig(?,?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spAddConfig(?,?)");
             proc.setParameter(1, key);
             proc.setParameter(2, value);
             proc.execute();
@@ -79,9 +81,9 @@ public class AdminConfigPersistence implements IAdminConfigPersistence {
     @Override
     public boolean deleteConfig(String key) {
         log.trace("Deleting a configuration with key: {} to database.", key);
-        CallStoredProcedure proc = null;
+        ICallStoredProcedure proc = null;
         try {
-            proc = new CallStoredProcedure("spDeleteConfig(?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spDeleteConfig(?)");
             proc.setParameter(1, key);
             proc.execute();
             return true;

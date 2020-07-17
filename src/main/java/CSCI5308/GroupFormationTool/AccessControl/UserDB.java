@@ -4,6 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
+import CSCI5308.GroupFormationTool.Database.DatabaseAbstractFactory;
+import CSCI5308.GroupFormationTool.Database.ICallStoredProcedure;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,10 +17,10 @@ public class UserDB implements IUserPersistence
 	public void loadUserByID(long id, User user)
 	{
 		log.trace("Loading a user by ID: {} from database.", id);
-		CallStoredProcedure proc = null;
+		ICallStoredProcedure proc = null;
 		try
 		{
-			proc = new CallStoredProcedure("spLoadUser(?)");
+			proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spLoadUser(?)");
 			proc.setParameter(1, id);
 			ResultSet results = proc.executeWithResults();
 			if (null != results)
@@ -55,11 +58,11 @@ public class UserDB implements IUserPersistence
 	public void loadUserByBannerID(String bannerID, User user)
 	{
 		log.trace("Loading user by banner ID: {} from database.", bannerID);
-		CallStoredProcedure proc = null;
+		ICallStoredProcedure proc = null;
 		long userID = -1;
 		try
 		{
-			proc = new CallStoredProcedure("spFindUserByBannerID(?)");
+			proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spFindUserByBannerID(?)");
 			proc.setParameter(1, bannerID);
 			ResultSet results = proc.executeWithResults();
 			if (null != results)
@@ -91,10 +94,10 @@ public class UserDB implements IUserPersistence
 	public boolean createUser(User user)
 	{
 		log.trace("Creating a new user with BannerID: {} in database.", user.getBannerID());
-		CallStoredProcedure proc = null;
+		ICallStoredProcedure proc = null;
 		try
 		{
-			proc = new CallStoredProcedure("spCreateUser(?, ?, ?, ?, ?, ?)");
+			proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spCreateUser(?, ?, ?, ?, ?, ?)");
 			proc.setParameter(1, user.getBannerID());
 			proc.setParameter(2, user.getPassword());
 			proc.setParameter(3, user.getFirstName());

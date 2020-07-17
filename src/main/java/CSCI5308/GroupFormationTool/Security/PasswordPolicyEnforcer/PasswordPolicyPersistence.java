@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PasswordPolicyPersistence implements IPasswordPersistence {
+public class PasswordPolicyPersistence implements IPasswordPolicyPersistence {
 
     private Logger log = LoggerFactory.getLogger(PasswordPolicyPersistence.class);
 
