@@ -1,5 +1,8 @@
 package CSCI5308.GroupFormationTool.AdminConfig;
 
+import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import CSCI5308.GroupFormationTool.Database.DatabaseAbstractFactory;
 import CSCI5308.GroupFormationTool.Database.ICallStoredProcedure;
 
@@ -10,8 +13,11 @@ import java.util.Map;
 
 public class AdminConfigPersistence implements IAdminConfigPersistence {
 
+    private Logger log = LoggerFactory.getLogger(AdminConfigPersistence.class);
+
     @Override
     public Map<String, String> getAllConfig() {
+        log.trace("Fetching all configurations from database.");
         Map<String, String> config = new HashMap<>();
         ICallStoredProcedure proc = null;
         try {
@@ -23,7 +29,7 @@ public class AdminConfigPersistence implements IAdminConfigPersistence {
                 }
             }
         } catch (SQLException e) {
-            // Logging needed.
+            log.error("Error while fetching all configurations from database, error: {}", e.getMessage());
         } finally {
             if (null != proc) {
                 proc.cleanup();
@@ -34,6 +40,7 @@ public class AdminConfigPersistence implements IAdminConfigPersistence {
 
     @Override
     public boolean setConfig(String key, String value) {
+        log.trace("Setting a configuration with key: {} to database.", key);
         ICallStoredProcedure proc = null;
         try {
             proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spSetConfig(?,?)");
@@ -42,8 +49,8 @@ public class AdminConfigPersistence implements IAdminConfigPersistence {
             proc.execute();
             return true;
         } catch (SQLException e) {
+            log.error("Error while setting a configuration with key: {} to database, error: {}", key, e.getMessage());
             return false;
-            // Logging needed.
         } finally {
             if (null != proc) {
                 proc.cleanup();
@@ -53,6 +60,7 @@ public class AdminConfigPersistence implements IAdminConfigPersistence {
 
     @Override
     public boolean addConfig(String key, String value) {
+        log.trace("Adding a configuration with key: {} to database.", key);
         ICallStoredProcedure proc = null;
         try {
             proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spAddConfig(?,?)");
@@ -61,8 +69,8 @@ public class AdminConfigPersistence implements IAdminConfigPersistence {
             proc.execute();
             return true;
         } catch (SQLException e) {
+            log.error("Error while adding a configuration with key: {} to database, error: {}", key, e.getMessage());
             return false;
-            // Logging needed.
         } finally {
             if (null != proc) {
                 proc.cleanup();
@@ -72,6 +80,7 @@ public class AdminConfigPersistence implements IAdminConfigPersistence {
 
     @Override
     public boolean deleteConfig(String key) {
+        log.trace("Deleting a configuration with key: {} to database.", key);
         ICallStoredProcedure proc = null;
         try {
             proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spDeleteConfig(?)");
@@ -79,8 +88,8 @@ public class AdminConfigPersistence implements IAdminConfigPersistence {
             proc.execute();
             return true;
         } catch (SQLException e) {
+            log.error("Error while deleting a configuration with key: {} from database, error: {}", key, e.getMessage());
             return false;
-            // Logging needed.
         } finally {
             if (null != proc) {
                 proc.cleanup();

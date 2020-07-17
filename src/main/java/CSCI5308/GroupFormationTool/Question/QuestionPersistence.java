@@ -1,5 +1,8 @@
 package CSCI5308.GroupFormationTool.Question;
 
+import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import CSCI5308.GroupFormationTool.Database.DatabaseAbstractFactory;
 import CSCI5308.GroupFormationTool.Database.ICallStoredProcedure;
 
@@ -11,8 +14,11 @@ import java.util.List;
 
 public class QuestionPersistence implements IQuestionPersistence {
 
+    private Logger log = LoggerFactory.getLogger(QuestionPersistence.class);
+
     @Override
     public boolean createQuestion(IQuestion question) throws SQLException {
+        log.trace("Creating a question with title: {} in database", question.getTitle());
         ICallStoredProcedure proc = null;
         try{
             proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spCreateQuestion(?,?,?,?,?,?)");
@@ -56,6 +62,7 @@ public class QuestionPersistence implements IQuestionPersistence {
 
     @Override
     public boolean deleteQuestion(Long questionId) {
+        log.trace("Deleting a question with ID: {} from database", questionId);
         ICallStoredProcedure proc = null;
         try{
             proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spDeleteQuestion(?)");
@@ -63,6 +70,7 @@ public class QuestionPersistence implements IQuestionPersistence {
             proc.execute();
         }
         catch(SQLException e){
+            log.error("Error while deleting question with ID: {} from database, error: {}", questionId, e.getMessage());
             return false;
         }
         finally
@@ -77,6 +85,7 @@ public class QuestionPersistence implements IQuestionPersistence {
 
     @Override
     public List<IQuestion> getAllUserQuestions(Long userId) {
+        log.trace("Getting all questions for user with ID: {} from database", userId);
         List<IQuestion> questions = new ArrayList<IQuestion>();
         ICallStoredProcedure proc = null;
         try{
@@ -102,7 +111,7 @@ public class QuestionPersistence implements IQuestionPersistence {
 
         }
         catch(SQLException e){
-            //Logging
+            log.error("Error while getting all questions for user with ID: {} from database, error: {}", userId, e.getMessage());
         }
         finally
         {

@@ -1,6 +1,8 @@
 package CSCI5308.GroupFormationTool.Database;
 
 import CSCI5308.GroupFormationTool.SystemConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,6 +12,7 @@ import java.sql.SQLException;
 public class ConnectionManager implements IConnectionManager {
     private static ConnectionManager uniqueInstance = null;
 
+    private Logger log = LoggerFactory.getLogger(ConnectionManager.class);
     private String dbURL;
     private String dbUserName;
     private String dbPassword;
@@ -32,7 +35,6 @@ public class ConnectionManager implements IConnectionManager {
     public Connection getDBConnection() throws SQLException {
 
         Connection connection = DriverManager.getConnection(dbURL, dbUserName, dbPassword);
-        System.out.println("Connected to: " + dbURL);
         return connection;
     }
 }

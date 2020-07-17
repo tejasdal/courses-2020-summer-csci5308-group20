@@ -1,6 +1,6 @@
 package CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer;
 
-import CSCI5308.GroupFormationTool.CustomExceptions.PasswordPolicyVoidException;
+import CSCI5308.GroupFormationTool.SystemConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 public class PasswordPolicyService implements IPasswordPolicyService {
 
     @Override
-    public boolean validateUsingPolicies(String password) throws PasswordPolicyVoidException {
+    public boolean validateUsingPolicies(String password) throws Exception {
         List<IPasswordPolicy> enforcingPolicies = PasswordPolicyServiceAbstractFactory.instance().getPolicy();
         List<String> errors = new ArrayList<>();
         if (null != enforcingPolicies) {
@@ -18,7 +18,7 @@ public class PasswordPolicyService implements IPasswordPolicyService {
                 }
             }
             if (errors.isEmpty() == false) {
-                throw new PasswordPolicyVoidException(errors.toString());
+                throw new Exception(errors.toString());
             }
         }
         return true;

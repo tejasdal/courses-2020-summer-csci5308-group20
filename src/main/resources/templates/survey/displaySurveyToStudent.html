@@ -23,11 +23,20 @@
 <div class="container">
 
     <br><h4 class="text-center">Course Survey</h4><br>
-    <div th:if="${!isSurveyPublished}" class="alert alert-success" role="alert">
-        <h6>
-            Course survey is not published yet. Please try again after some time! <br>
-            Thank you!
-        </h6>
+    <div th:if="${!isSurveyPublished}" class="alert alert-danger" role="alert">
+        <div th:if="${dbError}">
+            <h6>
+                Oops! Our database server is down. Please try again after one hour! <br>
+                Report this issue at team20@dal.ca.
+                Thank you!
+            </h6>
+        </div>
+        <div th:unless="${dbError}">
+            <h6>
+                Course survey is not published yet. Please try again after some time! <br>
+                Thank you!
+            </h6>
+        </div>
     </div>
 
     <div th:unless="${!isSurveyPublished}">

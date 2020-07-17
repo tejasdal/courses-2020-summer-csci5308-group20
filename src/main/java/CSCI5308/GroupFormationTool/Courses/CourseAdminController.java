@@ -3,6 +3,8 @@ package CSCI5308.GroupFormationTool.Courses;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import CSCI5308.GroupFormationTool.AccessControl.IUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,7 @@ import CSCI5308.GroupFormationTool.AccessControl.User;
 @Controller
 public class CourseAdminController
 {
+	private Logger log = LoggerFactory.getLogger(CourseAdminController.class);
 	private static final String ID = "id";
 	private static final String TITLE = "title";
 	private static final String INSTRUCTOR = "instructor";
@@ -24,6 +27,7 @@ public class CourseAdminController
 	@GetMapping("/admin/course")
 	public String course(Model model)
 	{
+		log.info("Processing a request to get all courses for admin.");
 		ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
 		List<ICourse> allCourses = courseDB.loadAllCourses();
 		model.addAttribute("courses", allCourses);
@@ -33,6 +37,7 @@ public class CourseAdminController
 	@GetMapping("/admin/assigninstructor")
 	public String assignInstructor(Model model, @RequestParam(name = ID) long courseID)
 	{
+		log.info("Processing a request to load page to assign a instructor to course with ID: {}.", courseID);
 		ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
 		Course c = new Course();
 		courseDB.loadCourseByID(courseID, c);
@@ -46,6 +51,7 @@ public class CourseAdminController
 	@GetMapping("/admin/deletecourse")
 	public ModelAndView deleteCourse(@RequestParam(name = ID) long courseID)
 	{
+		log.info("Processing a request to delete a course with ID: {}.", courseID);
 		ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
 		Course c = new Course();
 		c.setId(courseID);
@@ -57,6 +63,7 @@ public class CourseAdminController
 	@RequestMapping(value = "/admin/createcourse", method = RequestMethod.POST) 
    public ModelAndView createCourse(@RequestParam(name = TITLE) String title)
    {
+   		log.info("Processing a request to create a course with title: {}.", title);
 		ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
 		Course c = new Course();
 		c.setTitle(title);
@@ -69,6 +76,7 @@ public class CourseAdminController
    public ModelAndView assignInstructorToCourse(@RequestParam(name = INSTRUCTOR) List<Integer> instructor,
    		@RequestParam(name = ID) long courseID)
    {
+   		log.info("Processing a request to assign a instructor to course with ID: {}.", courseID);
 		Course c = new Course();
 		c.setId(courseID);
 		Iterator<Integer> iter = instructor.iterator();

@@ -13,6 +13,11 @@ import CSCI5308.GroupFormationTool.AccessControl.User;
 import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
+
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import CSCI5308.GroupFormationTool.SurveyManagement.algorithm.GroupFormationAlgorithmBuilder;
 import CSCI5308.GroupFormationTool.SurveyManagement.algorithm.IGroupFormationAlgorithm;
 import CSCI5308.GroupFormationTool.SurveyManagement.matchcriteria.IMatchCriteria;
@@ -20,7 +25,9 @@ import CSCI5308.GroupFormationTool.SurveyManagement.matchcriteria.IMatchCriteria
 
 public class SurveyService implements ISurveyService {
 
-	public Map<String, Object> getAllSurveyQuestions(long courseID, ISurveyPersistence surveyPersistence) {
+    private static final Integer SURVEY_PUBLISHED = 1;
+
+    public Map<String, Object> getAllSurveyQuestions(long courseID, ISurveyPersistence surveyPersistence) throws SQLException {
 
 		Map<String, Object> response = new HashMap<>();
 		long surveyId = surveyPersistence.getSurveyIdUsingCourseId(courseID);
@@ -79,32 +86,32 @@ public class SurveyService implements ISurveyService {
 		return true;
 	}
 
-	public Map<String, Object> displaySurveyQuestionsToStudents(Long courseId, ISurveyPersistence surveyPersistence) {
-		Map<String, Object> response = new HashMap<>();
-		long surveyId = surveyPersistence.getSurveyIdUsingCourseId(courseId);
-		if (surveyId == -1L) {
-			response.put("isSurveyPublished", false);
-		} else {
-			List<Question> surveyQuestions = surveyPersistence.getAllSurveyQuestions(surveyId);
-			for (Question surveyQuestion : surveyQuestions) {
-				if (surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_ONE
-						|| surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_MANY) {
+    public Map<String, Object> displaySurveyQuestionsToStudents(Long courseId, ISurveyPersistence surveyPersistence) throws SQLException {
+        Map<String, Object> response = new HashMap<>();
+        long surveyId = surveyPersistence.getSurveyIdUsingCourseId(courseId);
+        if (surveyId == -1L) {
+            response.put("isSurveyPublished", false);
+        } else {
+            List<Question> surveyQuestions = surveyPersistence.getAllSurveyQuestions(surveyId);
+            for (Question surveyQuestion : surveyQuestions) {
+                if (surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_ONE
+                        || surveyQuestion.getQuestionType() == Question.MULTIPLE_CHOICE_CHOOSE_MANY) {
 
 					List<QuestionOption> options = surveyPersistence.getSurveyQuestionOption(surveyQuestion.getId());
 					for (QuestionOption option : options) {
 						surveyQuestion.getAnswers().add(new Answers());
 					}
 
-					if (null != options) {
-						surveyQuestion.setQuestionOptions(options);
-					}
-				}
-			}
-			response.put("isSurveyPublished", true);
-			response.put("surveyId", surveyId);
-			ISurvey survey = SurveyServiceAbstractFactory.instance().makeSurvey();
-			survey.setQuestions(surveyQuestions);
-			response.put("survey", survey);
+                    if (null != options) {
+                        surveyQuestion.setQuestionOptions(options);
+                    }
+                }
+            }
+            response.put("isSurveyPublished", surveyPersistence.getSurveyStatus(surveyId) == SURVEY_PUBLISHED);
+            response.put("surveyId", surveyId);
+            ISurvey survey = SurveyServiceAbstractFactory.instance().makeSurvey();
+            survey.setQuestions(surveyQuestions);
+            response.put("survey", survey);
 
 		}
 		return response;

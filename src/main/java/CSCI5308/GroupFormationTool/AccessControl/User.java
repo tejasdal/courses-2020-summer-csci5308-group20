@@ -4,8 +4,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import CSCI5308.GroupFormationTool.Security.IPasswordEncryption;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class User implements IUser {
+	private Logger log = LoggerFactory.getLogger(User.class);
 	// This regex comes from here:
 	// https://howtodoinjava.com/regex/java-regex-validate-email-address/
 	private static final String EMAIL_REGEX = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
@@ -144,6 +147,7 @@ public class User implements IUser {
 	{
 		boolean valid = true;
 		if (id == -1) {
+			log.debug("User is not valid.");
 			valid = false;
 		}
 		return valid; 
@@ -155,11 +159,13 @@ public class User implements IUser {
 			IPasswordEncryption passwordEncryption,
 			IUserNotifications notification)
 	{
+		log.trace("Creating a new user with ID: {}", this.getID());
 		String rawPassword = password;
 		this.password = passwordEncryption.encryptPassword(this.password);
 		boolean success = userDB.createUser(this);
 		boolean notificationNotNull = true;
 		if (notification == null) {
+			log.debug("Instance of IUserNotifications is not set.");
 			notificationNotNull = false;
 		}
 		if (success && notificationNotNull)

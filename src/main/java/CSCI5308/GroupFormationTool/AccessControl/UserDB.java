@@ -3,13 +3,20 @@ package CSCI5308.GroupFormationTool.AccessControl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
 import CSCI5308.GroupFormationTool.Database.DatabaseAbstractFactory;
 import CSCI5308.GroupFormationTool.Database.ICallStoredProcedure;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class UserDB implements IUserPersistence
-{	
+{
+	private Logger log = LoggerFactory.getLogger(UserDB.class);
+
 	public void loadUserByID(long id, User user)
 	{
+		log.trace("Loading a user by ID: {} from database.", id);
 		ICallStoredProcedure proc = null;
 		try
 		{
@@ -37,7 +44,7 @@ public class UserDB implements IUserPersistence
 		}
 		catch (SQLException e)
 		{
-			// Logging needed.
+			log.error("Error while loading user by ID: {} from database, error: {}", id, e.getMessage());
 		}
 		finally
 		{
@@ -50,6 +57,7 @@ public class UserDB implements IUserPersistence
 
 	public void loadUserByBannerID(String bannerID, User user)
 	{
+		log.trace("Loading user by banner ID: {} from database.", bannerID);
 		ICallStoredProcedure proc = null;
 		long userID = -1;
 		try
@@ -67,7 +75,7 @@ public class UserDB implements IUserPersistence
 		}
 		catch (SQLException e)
 		{
-			// Logging needed.
+			log.error("Error while loading user by banner ID: {} from database, error: {}", bannerID, e.getMessage());
 		}
 		finally
 		{
@@ -85,6 +93,7 @@ public class UserDB implements IUserPersistence
 	
 	public boolean createUser(User user)
 	{
+		log.trace("Creating a new user with BannerID: {} in database.", user.getBannerID());
 		ICallStoredProcedure proc = null;
 		try
 		{
@@ -99,7 +108,7 @@ public class UserDB implements IUserPersistence
 		}
 		catch (SQLException e)
 		{
-			// Logging needed
+			log.error("Error while creating a new user with ID: {} in database, error: {}", user.getID(), e.getMessage());
 			return false;
 		}
 		finally
@@ -114,7 +123,6 @@ public class UserDB implements IUserPersistence
 	
 	public boolean updateUser(User user)
 	{
-		// Coming in M2!
 		return false;
 	}
 }

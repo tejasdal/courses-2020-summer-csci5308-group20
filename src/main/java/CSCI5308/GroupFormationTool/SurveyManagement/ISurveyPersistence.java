@@ -6,10 +6,13 @@ import CSCI5308.GroupFormationTool.AccessControl.User;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
 
+import java.sql.SQLException;
+import java.util.List;
+
 public interface ISurveyPersistence {
     boolean createSurvey(long courseId);
 
-    long getSurveyIdUsingCourseId(long courseId);
+    long getSurveyIdUsingCourseId(long courseId) throws SQLException;
 
     boolean addQuestionToSurvey(long surveyId, long questionId);
 
@@ -28,8 +31,8 @@ public interface ISurveyPersistence {
     List<QuestionOption> getSurveyQuestionOption(Long questionId);
 
     boolean submitAnswers(String bannerId, Long surveyId, Survey survey);
-    
+
     List<User> getAllParticipants(Long surveyId);
-    
+
     ISurveyResponse getSurveyResponses(Long surveyId);
 }
