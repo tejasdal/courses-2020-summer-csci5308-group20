@@ -40,8 +40,10 @@
     <a th:unless="${status}"
        th:href="@{/instructor/survey/addquestions(courseId=${courseId},surveyId=${surveyId},userId=${userId})}"
        class="btn btn-primary">
-        Add/Edit Questions
-    </a>
+        Add/Edit Questions</a>
+    <a th:if="${status}"
+       th:href="@{/instructor/survey/creategroup(courseId=${courseId},surveyId=${surveyId},userId=${userId})}"
+       class="btn btn-primary">Generate Group</a>
 </div>
 <br>
 <div th:unless="${#lists.isEmpty(questions)}">

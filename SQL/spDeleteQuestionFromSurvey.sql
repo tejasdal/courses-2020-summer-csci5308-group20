@@ -1,3 +1,4 @@
+Delimiter $$
 DROP PROCEDURE IF EXISTS spDeleteQuestionFromSurvey$$
 
 CREATE PROCEDURE spDeleteQuestionFromSurvey (IN survey_id int(11), IN question_id bigint(20))

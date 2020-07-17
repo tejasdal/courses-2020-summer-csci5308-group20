@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -32,16 +35,17 @@ public class SurveyController {
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
-        ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
-        Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId, PersistenceAbstractFactory.instance().makePersistence());
+		ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
+		Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId,
+				SurveyPersistenceAbstractFactory.instance().makePersistence());
 
-        if (result != null && result.isEmpty() == false) {
-            model.addAttribute("questions", result.get("questions"));
-            model.addAttribute("surveyId", result.get("surveyId"));
-            model.addAttribute("status", result.get("status"));
-        }
-        return "survey/surveyquestions";
-    }
+		if (result != null && result.isEmpty() == false) {
+			model.addAttribute("questions", result.get("questions"));
+			model.addAttribute("surveyId", result.get("surveyId"));
+			model.addAttribute("status", result.get("status"));
+		}
+		return "survey/surveyquestions";
+	}
 
     @GetMapping(value = "/instructor/survey/addquestions")
     public String addQuestionsToSurvey
@@ -55,15 +59,16 @@ public class SurveyController {
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
-        ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
-        Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId, PersistenceAbstractFactory.instance().makePersistence());
-        if (result != null && result.isEmpty() == false) {
-            model.addAttribute("available", result.get("availableQuestions"));
-            model.addAttribute("added", result.get("addedQuestion"));
-        }
+		ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
+		Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId,
+				SurveyPersistenceAbstractFactory.instance().makePersistence());
+		if (result != null && result.isEmpty() == false) {
+			model.addAttribute("available", result.get("availableQuestions"));
+			model.addAttribute("added", result.get("addedQuestion"));
+		}
 
-        return "survey/addquestions";
-    }
+		return "survey/addquestions";
+	}
 
     @PostMapping(value = "/instructor/survey/addquestions")
     public String addQuestions
@@ -78,15 +83,17 @@ public class SurveyController {
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
-        ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
-        surveyService.addQuestionToSurvey(surveyId, questionId, PersistenceAbstractFactory.instance().makePersistence());
+		ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
+		surveyService.addQuestionToSurvey(surveyId, questionId,
+				SurveyPersistenceAbstractFactory.instance().makePersistence());
 
-        Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId, PersistenceAbstractFactory.instance().makePersistence());
+		Map<String, Object> result = surveyService.addQuestionPage(courseId, surveyId,
+				SurveyPersistenceAbstractFactory.instance().makePersistence());
 
-        model.addAttribute("available", result.get("availableQuestions"));
-        model.addAttribute("added", result.get("addedQuestion"));
-        return "survey/addquestions";
-    }
+		model.addAttribute("available", result.get("availableQuestions"));
+		model.addAttribute("added", result.get("addedQuestion"));
+		return "survey/addquestions";
+	}
 
     @PostMapping(value = "/instructor/survey/deletequestion")
     public ModelAndView deleteQuestions
@@ -102,9 +109,10 @@ public class SurveyController {
         model.addAttribute("userId", userId);
         ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
 
-        surveyService.deleteQuestionFromSurvey(surveyId, questionId, PersistenceAbstractFactory.instance().makePersistence());
-        return new ModelAndView("redirect:/instructor/survey/addquestions", model);
-    }
+		surveyService.deleteQuestionFromSurvey(surveyId, questionId,
+				SurveyPersistenceAbstractFactory.instance().makePersistence());
+		return new ModelAndView("redirect:/instructor/survey/addquestions", model);
+	}
 
     @GetMapping(value = "/instructor/survey/publish")
     public ModelAndView publishSurvey
@@ -119,12 +127,12 @@ public class SurveyController {
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
-        ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
-        if (surveyService.publishSurvey(surveyId, PersistenceAbstractFactory.instance().makePersistence())) {
-            redirectAttributes.addFlashAttribute("publishSuccess", true);
-        }
-        return new ModelAndView("redirect:/instructor/survey/", model);
-    }
+		ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
+		if (surveyService.publishSurvey(surveyId, SurveyPersistenceAbstractFactory.instance().makePersistence())) {
+			redirectAttributes.addFlashAttribute("publishSuccess", true);
+		}
+		return new ModelAndView("redirect:/instructor/survey/", model);
+	}
 
     @GetMapping(value = "/instructor/survey/unpublish")
     public ModelAndView unpublishSurvey
@@ -139,48 +147,85 @@ public class SurveyController {
         model.addAttribute("courseId", courseId);
         model.addAttribute("userId", userId);
 
-        ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
-        if (surveyService.unpublishSurvey(surveyId, PersistenceAbstractFactory.instance().makePersistence())) {
-            redirectAttributes.addFlashAttribute("unpublishSuccess", true);
-        }
-        return new ModelAndView("redirect:/instructor/survey/", model);
-    }
+		ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
+		if (surveyService.unpublishSurvey(surveyId, SurveyPersistenceAbstractFactory.instance().makePersistence())) {
+			redirectAttributes.addFlashAttribute("unpublishSuccess", true);
+		}
+		return new ModelAndView("redirect:/instructor/survey/", model);
+	}
 
-    @GetMapping(value = "/student/survey/questions")
-    public String displaySurveyQuestionToStudent
-            (@RequestParam(name = "courseId") Long courseId,
-             Model model) {
+	@GetMapping(value = "/student/survey/questions")
+	public String displaySurveyQuestionToStudent(@RequestParam(name = "courseId") Long courseId, Model model) {
         log.info("Processing a request to display all survey questions to student for a course with ID: {}", courseId);
-        ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
-        Map<String, Object> result = null;
-        model.addAttribute("courseId", courseId);
+        ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
+		model.addAttribute("courseId", courseId);
         try {
-            result = surveyService.displaySurveyQuestionsToStudents(courseId,
-                    PersistenceAbstractFactory.instance().makePersistence());
-            if (result.containsKey("isSurveyPublished")) {
-                model.addAttribute("dbError", false);
-                model.addAttribute("isSurveyPublished", result.get("isSurveyPublished"));
-            }
-            if (result.containsKey("survey") && result.containsKey("surveyId")) {
-                model.addAttribute("survey", result.get("survey"));
-                model.addAttribute("surveyId", result.get("surveyId"));
-            }
-        } catch (SQLException e) {
-            model.addAttribute("isSurveyPublished", false);
-            model.addAttribute("dbError", true);
-        }
-        return "survey/displaySurveyToStudent";
-    }
+			Map<String, Object> result = surveyService.displaySurveyQuestionsToStudents(courseId,
+					SurveyPersistenceAbstractFactory.instance().makePersistence());
+			if (result.containsKey("isSurveyPublished")) {
+				model.addAttribute("isSurveyPublished", result.get("isSurveyPublished"));
+			}
+			if (result.containsKey("survey") && result.containsKey("surveyId")) {
+				model.addAttribute("survey", result.get("survey"));
+				model.addAttribute("surveyId", result.get("surveyId"));
+			}
+		}catch (SQLException e) {
+			model.addAttribute("isSurveyPublished", false);
+			model.addAttribute("dbError", true);
+		}
+		return "survey/displaySurveyToStudent";
+	}
 
-    @RequestMapping(value = "student/survey/submit")
-    public String submitSurvey
-            (@ModelAttribute Survey survey,
-             @RequestParam(name = "surveyId") Long surveyId,
-             @RequestParam(name = "bannerId") String bannerId) {
+	@RequestMapping(value = "student/survey/submit")
+	public String submitSurvey(@ModelAttribute Survey survey, @RequestParam(name = "surveyId") Long surveyId,
+			@RequestParam(name = "bannerId") String bannerId) {
         log.info("Processing a request to submit response of a survey with ID: {} by a student with banner ID: {}", surveyId, bannerId);
-        ISurveyService surveyService = ServiceAbstractFactory.instance().makeService();
-        surveyService.submitAnswers(bannerId, surveyId, survey, PersistenceAbstractFactory.instance().makePersistence());
-        return "redirect:/";
-    }
-}
+        ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
+		surveyService.submitAnswers(bannerId, surveyId, survey,
+				SurveyPersistenceAbstractFactory.instance().makePersistence());
+		return "redirect:/";
+	}
 
+	@GetMapping("instructor/survey/creategroup")
+	public String createGroup(@RequestParam(name = "courseId") Long courseId,
+			@RequestParam(name = "surveyId") Long surveyId, Model model) {
+        log.info("Processing a request to create group of of students for course with ID: {}", courseId);
+        ISurveyService surveyService = SurveyServiceAbstractFactory.instance().makeService();
+		Map<String, Object> result = surveyService.getAllSurveyQuestions(courseId,
+				SurveyPersistenceAbstractFactory.instance().makePersistence());
+		List<Question> questions = new ArrayList<>();
+		if (result != null && result.get("questions") != null) {
+			questions = (List<Question>) result.get("questions");
+		}
+		QuestionCriteriaList questionCriteriaList = new QuestionCriteriaList(questions);
+		model.addAttribute("questions", questionCriteriaList);
+		model.addAttribute("surveyId", surveyId);
+		return "survey/creategroups";
+	}
+
+	@PostMapping(value = "/survey/generategroups")
+	public String generateGroups(@ModelAttribute QuestionCriteriaList questionCriteriaList,
+			@RequestParam(name = "surveyId", required = false) Long surveyId,
+			@RequestParam(name = "bannerId", required = false) String bannerId, ModelMap model) {
+        log.info("Processing a request to create group of of students for course.");
+        ISurveyService service = SurveyFactory.instance().createService();
+		ISurveyPersistence persistence = SurveyFactory.instance().createPersistence();
+		ISurveyResponse surveyResponses = persistence.getSurveyResponses(surveyId);
+		try {
+			service.validateQuestionCriteriaList(questionCriteriaList);
+			List<List<User>> groups = service.createGroups(questionCriteriaList, surveyId,
+					questionCriteriaList.getMembersPerGroup(), surveyResponses, persistence);
+			System.out.println(groups);
+			model.addAttribute("groups", groups);
+			model.addAttribute("responses", surveyResponses.getAllUserAnswers());
+		} catch (IOException e) {
+			// Logging required
+			e.printStackTrace();
+			model.addAttribute("error", "Internal server error. Please try again later.");
+		} catch (Exception e) {
+			// Logging required
+			model.addAttribute("error", e.getMessage());
+		}
+		return "survey/generatedgroups";
+	}
+}

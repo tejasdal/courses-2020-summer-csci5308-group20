@@ -1,6 +1,6 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
-public class PersistenceConcreteFactory extends PersistenceAbstractFactory {
+public class SurveyPersistenceConcreteFactory extends SurveyPersistenceAbstractFactory {
     @Override
     public ISurveyPersistence makePersistence() {
         return new SurveyPersistence();

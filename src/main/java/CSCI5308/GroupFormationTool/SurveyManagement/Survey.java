@@ -1,21 +1,21 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
-import CSCI5308.GroupFormationTool.Question.Question;
-
-import java.util.ArrayList;
 import java.util.List;
+
+import CSCI5308.GroupFormationTool.Question.Question;
 
 public class Survey implements ISurvey {
 
-    private List<Question> questions = new ArrayList<>();
+    private List<Question> questions;
 
     @Override
     public List<Question> getQuestions() {
-        return questions;
-    }
+		return questions;
+	}
 
     @Override
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
+
 }

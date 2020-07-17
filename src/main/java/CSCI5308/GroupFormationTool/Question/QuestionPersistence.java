@@ -15,8 +15,12 @@ public class QuestionPersistence implements IQuestionPersistence {
     private Logger log = LoggerFactory.getLogger(QuestionPersistence.class);
 
     @Override
+<<<<<<< HEAD
     public boolean createQuestion(Question question) throws SQLException {
         log.trace("Creating a question with title: {} in database", question.getTitle());
+=======
+    public boolean createQuestion(IQuestion question) throws SQLException {
+>>>>>>> f854309e50bfbd5ccbe06dbd4edcbfab2d69004c
         CallStoredProcedure proc = null;
         try{
             proc = new CallStoredProcedure("spCreateQuestion(?,?,?,?,?,?)");
@@ -43,7 +47,7 @@ public class QuestionPersistence implements IQuestionPersistence {
         CallStoredProcedure proc = null;
         try{
             proc = new CallStoredProcedure("spCreateQuestionOption( ?, ?, ?)");
-            for (QuestionOption questionOption : questionOptions) {
+            for (IQuestionOption questionOption : questionOptions) {
                 proc.setParameter(1, questionId);
                 proc.setParameter(2, questionOption.getOption());
                 proc.setParameter(3, questionOption.getValue());
@@ -82,9 +86,14 @@ public class QuestionPersistence implements IQuestionPersistence {
     }
 
     @Override
+<<<<<<< HEAD
     public List<Question> getAllUserQuestions(Long userId) {
         log.trace("Getting all questions for user with ID: {} from database", userId);
         List<Question> questions = new ArrayList<Question>();
+=======
+    public List<IQuestion> getAllUserQuestions(Long userId) {
+        List<IQuestion> questions = new ArrayList<IQuestion>();
+>>>>>>> f854309e50bfbd5ccbe06dbd4edcbfab2d69004c
         CallStoredProcedure proc = null;
         try{
             proc = new CallStoredProcedure("spGetAllQuestionUser(?)");
@@ -92,7 +101,7 @@ public class QuestionPersistence implements IQuestionPersistence {
             ResultSet rs = proc.executeWithResults();
             if(rs!=null){
                 while(rs.next()){
-                    Question question = new Question();
+                    IQuestion question = QuestionServiceAbstractFactory.instance().makeQuestion();
                     Long id = rs.getLong(1);
                     String title = rs.getString(2);
                     String description = rs.getString(3);

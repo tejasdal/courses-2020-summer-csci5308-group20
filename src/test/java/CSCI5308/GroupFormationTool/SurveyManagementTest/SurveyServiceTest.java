@@ -1,13 +1,9 @@
 package CSCI5308.GroupFormationTool.SurveyManagementTest;
 
-import CSCI5308.GroupFormationTool.Question.Question;
-import CSCI5308.GroupFormationTool.Question.QuestionOption;
-import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyPersistence;
-import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyService;
-import CSCI5308.GroupFormationTool.SurveyManagement.Survey;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -15,7 +11,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import CSCI5308.GroupFormationTool.Question.Question;
+import CSCI5308.GroupFormationTool.Question.QuestionOption;
+import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyPersistence;
+import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyService;
+import CSCI5308.GroupFormationTool.SurveyManagement.QuestionCriteriaList;
+import CSCI5308.GroupFormationTool.SurveyManagement.Survey;
+import CSCI5308.GroupFormationTool.SurveyManagement.SurveyFactory;
+import CSCI5308.GroupFormationTool.SurveyManagement.SurveyPersistence;
 
 public class SurveyServiceTest {
 
@@ -24,8 +31,8 @@ public class SurveyServiceTest {
 
     @BeforeEach
     void initiateObjects() {
-        surveyPersistence = SurveyManagementAbstractFactoryTest.instance().getSurveyPersistenceMock();
-        surveyService = SurveyManagementAbstractFactoryTest.instance().getSurveyService();
+        surveyPersistence = Mockito.mock(SurveyPersistence.class);
+        surveyService = SurveyFactory.instance().createService();
     }
 
 
@@ -121,7 +128,7 @@ public class SurveyServiceTest {
     }
 
     @Test
-    public void submitAnswersTest(){
+    public void submitAnswersTest() {
         String bannerId = "B00841234";
         Long surveyId = 1L;
         Survey survey = new Survey();
@@ -129,7 +136,7 @@ public class SurveyServiceTest {
         assertTrue(surveyService.submitAnswers(bannerId, surveyId, survey, surveyPersistence));
     }
 
-    private List<Question> getSampleQuestions(){
+    private List<Question> getSampleQuestions() {
         List<Question> questions = new ArrayList<>();
 
         questions.add(new Question(1L, "Test Numeric Question", "What is Test Question?", 1L,
@@ -139,7 +146,7 @@ public class SurveyServiceTest {
         return questions;
     }
 
-    private List<QuestionOption> getSampleQuestionOptions(){
+    private List<QuestionOption> getSampleQuestionOptions() {
         List<QuestionOption> options = new ArrayList<>();
         options.add(new QuestionOption(1L, "Test Option 1", 1));
         options.add(new QuestionOption(2L, "Test Option 2", 2));
@@ -147,4 +154,12 @@ public class SurveyServiceTest {
         return options;
     }
 
+    @Test
+    public void validateQuestionCriteriaListTest() throws Exception {
+    	List<Question> sampleQuestions = getSampleQuestions();
+    	QuestionCriteriaList list = new QuestionCriteriaList(sampleQuestions);
+    	list.setMembersPerGroup(5);
+    	assertTrue(SurveyFactory.instance().createService().validateQuestionCriteriaList(list));
+    }
+    
 }

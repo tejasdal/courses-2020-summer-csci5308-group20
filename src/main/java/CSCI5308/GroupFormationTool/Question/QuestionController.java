@@ -14,15 +14,15 @@ import java.util.List;
 public class QuestionController {
 
     private Logger log = LoggerFactory.getLogger(QuestionController.class);
-    
+
     @RequestMapping(value="/instructor/questions")
     public String getAllUserQuestions
             (@RequestParam(name="userId") Long userId,
              Model model){
         log.info("Processing a request to load all questions for instructor with userID: {}", userId);
-        IQuestionService questionService = SystemConfig.instance().getQuestionService();
-        IQuestionPersistence questionPersistence = SystemConfig.instance().getQuestionPersistence();
-        List<Question> questions = questionService.getAllUserQuestions(userId, questionPersistence);
+        IQuestionService questionService = QuestionServiceAbstractFactory.instance().makeService();
+        IQuestionPersistence questionPersistence = QuestionPersistenceAbstractFactory.instance().makePersistence();
+        List<IQuestion> questions = questionService.getAllUserQuestions(userId, questionPersistence);
         model.addAttribute("questions",questions);
         model.addAttribute("userId",userId);
         return "questions/AllUserQuestions";
@@ -33,9 +33,9 @@ public class QuestionController {
             (@RequestParam(name="userId") Long userId,
              Model model){
         log.info("Processing a request to load all questions sorted by title for instructor with userID: {}", userId);
-        IQuestionService questionService = SystemConfig.instance().getQuestionService();
-        IQuestionPersistence questionPersistence = SystemConfig.instance().getQuestionPersistence();
-        List<Question> questions = questionService.getAllUserQuestionsSortedByTitle(userId, questionPersistence);
+        IQuestionService questionService = QuestionServiceAbstractFactory.instance().makeService();
+        IQuestionPersistence questionPersistence = QuestionPersistenceAbstractFactory.instance().makePersistence();
+        List<IQuestion> questions = questionService.getAllUserQuestionsSortedByTitle(userId, questionPersistence);
         model.addAttribute("questions",questions);
         model.addAttribute("userId",userId);
         return "questions/AllUserQuestions";
@@ -46,9 +46,9 @@ public class QuestionController {
             (@RequestParam(name="userId") Long userId,
              Model model){
         log.info("Processing a request to load all questions sorted by created date for instructor with userID: {}", userId);
-        IQuestionService questionService = SystemConfig.instance().getQuestionService();
-        IQuestionPersistence questionPersistence = SystemConfig.instance().getQuestionPersistence();
-        List<Question> questions = questionService.getAllUserQuestionsSortedByDate(userId, questionPersistence);
+        IQuestionService questionService = QuestionServiceAbstractFactory.instance().makeService();
+        IQuestionPersistence questionPersistence = QuestionPersistenceAbstractFactory.instance().makePersistence();
+        List<IQuestion> questions = questionService.getAllUserQuestionsSortedByDate(userId, questionPersistence);
         model.addAttribute("questions",questions);
         model.addAttribute("userId",userId);
         return "questions/AllUserQuestions";
@@ -59,8 +59,8 @@ public class QuestionController {
                                  @RequestParam(name="userId") Long userId,
                                  RedirectAttributes redirectAttributes){
         log.info("Processing a request to delete a question with ID: {} for instructor with userID: {}", questionId, userId);
-        IQuestionService questionService = SystemConfig.instance().getQuestionService();
-        IQuestionPersistence questionPersistence = SystemConfig.instance().getQuestionPersistence();
+        IQuestionService questionService = QuestionServiceAbstractFactory.instance().makeService();
+        IQuestionPersistence questionPersistence = QuestionPersistenceAbstractFactory.instance().makePersistence();
         questionService.deleteQuestion(questionId,questionPersistence);
         redirectAttributes.addAttribute("userId",userId);
         return "redirect:/instructor/questions";
@@ -69,7 +69,7 @@ public class QuestionController {
     @GetMapping("/instructor/{id}/question/create")
     public String createQuestion(Model model, @PathVariable("id") Long instructorId){
         log.info("Processing a request to load a page to create a question for instructor with userID: {}", instructorId);
-        Question question = new Question();
+        IQuestion question = QuestionServiceAbstractFactory.instance().makeQuestion();
         question.setUserId(instructorId);
         model.addAttribute("question",question);
         return "questions/createQuestion";
@@ -79,8 +79,8 @@ public class QuestionController {
     public String createQuestion(Model model,@ModelAttribute Question question, RedirectAttributes redirectAttributes){
         log.info("Processing a request to create a question for instructor.");
         try {
-            IQuestionService questionService = SystemConfig.instance().getQuestionService();
-            questionService.createQuestion(question, SystemConfig.instance().getQuestionPersistence());
+            IQuestionService questionService = QuestionServiceAbstractFactory.instance().makeService();
+            questionService.createQuestion(question, QuestionPersistenceAbstractFactory.instance().makePersistence());
         } catch (Exception e) {
             log.warn("Error while processing a request to create a new question, error: {}", e.getMessage());
             model.addAttribute("errorMessage", e.getMessage());
