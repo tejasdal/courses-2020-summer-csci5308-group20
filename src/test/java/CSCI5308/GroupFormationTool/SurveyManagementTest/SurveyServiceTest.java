@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +37,7 @@ public class SurveyServiceTest {
     }
 
     @Test
-    public void getAllSurveyQuestionsTest() {
+    public void getAllSurveyQuestionsTest() throws SQLException {
         long courseId = 1L;
         long surveyId = 1L;
         Mockito.when(surveyPersistence.getSurveyIdUsingCourseId(courseId)).thenReturn(surveyId);
@@ -52,7 +53,7 @@ public class SurveyServiceTest {
     }
 
     @Test
-    public void addQuestionPageTest() {
+    public void addQuestionPageTest() throws SQLException {
         long courseId = 1;
         long surveyId = 1;
         Mockito.when(surveyPersistence.getAllInstructorQuestionsUsingCourseId(courseId, surveyId)).thenReturn(new ArrayList<>());
@@ -97,7 +98,7 @@ public class SurveyServiceTest {
     }
 
     @Test
-    public void displaySurveyQuestionsToStudentsTest() {
+    public void displaySurveyQuestionsToStudentsTest() throws SQLException {
         long courseId = 1;
         long surveyId = 1;
         Mockito.when(surveyPersistence.getSurveyIdUsingCourseId(courseId)).thenReturn(surveyId);
@@ -107,15 +108,14 @@ public class SurveyServiceTest {
         Map<String, Object> response = surveyService.displaySurveyQuestionsToStudents(1L, surveyPersistence);
 
         assertNotNull(response);
-        assertTrue( (boolean) response.get("isSurveyPublished"));
-        assertTrue( surveyId == (long) response.get("surveyId"));
+        assertFalse((boolean) response.get("isSurveyPublished"));
+        assertEquals(surveyId, (long) response.get("surveyId"));
         List<Question> surveyQuestionToBeTested = ((Survey) response.get("survey")).getQuestions();
-        assertNotNull( surveyQuestionToBeTested);
+        assertNotNull(surveyQuestionToBeTested);
 
         List<Question> answers = this.getSampleQuestions();
-        assertTrue( answers.get(0).getTitle().equals(surveyQuestionToBeTested.get(0).getTitle()));
-        assertTrue( answers.get(1).getQuestionOptions().get(0).getOption().equals(
-                surveyQuestionToBeTested.get(1).getQuestionOptions().get(0).getOption()));
+        assertEquals(answers.get(0).getTitle(), surveyQuestionToBeTested.get(0).getTitle());
+        assertEquals(answers.get(1).getQuestionOptions().get(0).getOption(), surveyQuestionToBeTested.get(1).getQuestionOptions().get(0).getOption());
     }
 
     @Test

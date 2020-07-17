@@ -1,27 +1,21 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import CSCI5308.GroupFormationTool.SystemConfig;
 import CSCI5308.GroupFormationTool.AccessControl.User;
 import CSCI5308.GroupFormationTool.Question.Answers;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
-
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import CSCI5308.GroupFormationTool.SurveyManagement.algorithm.GroupFormationAlgorithmBuilder;
 import CSCI5308.GroupFormationTool.SurveyManagement.algorithm.IGroupFormationAlgorithm;
 import CSCI5308.GroupFormationTool.SurveyManagement.matchcriteria.IMatchCriteria;
 import CSCI5308.GroupFormationTool.SurveyManagement.matchcriteria.IMatchCriteriaFactory;
+import CSCI5308.GroupFormationTool.SystemConfig;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SurveyService implements ISurveyService {
 
@@ -49,7 +43,7 @@ public class SurveyService implements ISurveyService {
 		return null;
 	}
 
-	public Map<String, Object> addQuestionPage(long courseId, long surveyId, ISurveyPersistence surveyPersistence) {
+	public Map<String, Object> addQuestionPage(long courseId, long surveyId, ISurveyPersistence surveyPersistence) throws SQLException {
 		Map<String, Object> response = new HashMap<>();
 		List<Question> allQuestions = surveyPersistence.getAllInstructorQuestionsUsingCourseId(courseId, surveyId);
 		List<Question> addedQuestions = surveyPersistence.getAllSurveyQuestions(surveyId);
@@ -159,7 +153,7 @@ public class SurveyService implements ISurveyService {
 
 	@Override
 	public Map<Integer, Map<User, List<String>>> createGroups(QuestionCriteriaList questionsList, Long surveyId,
-			int maxUsersPerGroup, ISurveyResponse responses, ISurveyPersistence persistence) throws IOException {
+															  int maxUsersPerGroup, ISurveyResponse responses, ISurveyPersistence persistence) throws IOException, SQLException {
 		List<User> users = persistence.getAllParticipants(surveyId);
 
 		IGroupFormationAlgorithm algorithm = GroupFormationAlgorithmBuilder.builder().setUsers(users)
@@ -167,7 +161,7 @@ public class SurveyService implements ISurveyService {
 				.setMaxUsersPerGroup(maxUsersPerGroup).build();
 		List<List<User>> groups = algorithm.createGroups();
 		List<Question> questions = persistence.getAllSurveyQuestions(surveyId);
-		
+
 		Map<Integer, Map<User, List<String>>> result = new HashMap<>();
 		for (List<User> group : groups) {
 			Map<User, List<String>> userAnswers = new HashMap<>();

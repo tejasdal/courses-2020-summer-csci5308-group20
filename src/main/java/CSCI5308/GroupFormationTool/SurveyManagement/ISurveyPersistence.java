@@ -1,7 +1,5 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
-import java.util.List;
-
 import CSCI5308.GroupFormationTool.AccessControl.User;
 import CSCI5308.GroupFormationTool.Question.Question;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
@@ -24,7 +22,7 @@ public interface ISurveyPersistence {
 
     int getSurveyStatus(Long surveyId);
 
-    List<Question> getAllSurveyQuestions(long surveyId);
+    List<Question> getAllSurveyQuestions(long surveyId) throws SQLException;
 
     List<Question> getAllInstructorQuestionsUsingCourseId(long courseId, long surveyId);
 

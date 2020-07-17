@@ -44,7 +44,7 @@ public class SurveyController {
 
     @GetMapping(value = "/instructor/survey/addquestions")
     public String addQuestionsToSurvey(@RequestParam(name = "courseId") Long courseId,
-                                       @RequestParam(name = "surveyId") Long surveyId, @RequestParam(name = "userId") Long userId, Model model) {
+                                       @RequestParam(name = "surveyId") Long surveyId, @RequestParam(name = "userId") Long userId, Model model) throws SQLException {
         log.info("Processing a request to load a page to add question to a survey with ID: {} by instructor with ID: {} " +
                 "for a course with ID: {}", surveyId, userId, courseId);
         model.addAttribute("surveyId", surveyId);
@@ -65,7 +65,7 @@ public class SurveyController {
     @PostMapping(value = "/instructor/survey/addquestions")
     public String addQuestions(@RequestParam(name = "courseId") Long courseId,
                                @RequestParam(name = "surveyId") Long surveyId, @RequestParam(name = "userId") Long userId,
-                               @RequestParam(name = "questionId") Long questionId, Model model) {
+                               @RequestParam(name = "questionId") Long questionId, Model model) throws SQLException {
         log.info("Processing a request to add question to a survey with ID: {} by instructor with ID: {} for a course with" +
                 " ID: {}", surveyId, userId, courseId);
         model.addAttribute("surveyId", surveyId);
@@ -188,7 +188,7 @@ public class SurveyController {
     @PostMapping(value = "/survey/generategroups")
     public String generateGroups(@ModelAttribute QuestionCriteriaList questionCriteriaList,
                                  @RequestParam(name = "surveyId", required = false) Long surveyId,
-                                 @RequestParam(name = "bannerId", required = false) String bannerId, ModelMap model) {
+                                 @RequestParam(name = "bannerId", required = false) String bannerId, ModelMap model) throws SQLException {
         ISurveyService service = SurveyFactory.instance().createService();
         ISurveyPersistence persistence = SurveyFactory.instance().createPersistence();
         ISurveyResponse surveyResponses = persistence.getSurveyResponses(surveyId);
