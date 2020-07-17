@@ -25,8 +25,10 @@ public interface ISurveyService {
 
 	boolean submitAnswers(String bannerId, Long surveyId, Survey survey, ISurveyPersistence surveyPersistence);
 
-	List<List<User>> createGroups(QuestionCriteriaList questionsList, Long surveyId, int maxUsersPerGroup,
+	Map<Integer, Map<User, List<String>>> createGroups(QuestionCriteriaList questionsList, Long surveyId, int maxUsersPerGroup,
 			ISurveyResponse responses, ISurveyPersistence persistence) throws IOException;
 
 	boolean validateQuestionCriteriaList(QuestionCriteriaList questionsList) throws Exception;
+	
+	public List<SurveyQuestion> getQuestionsFromCriteriaList(QuestionCriteriaList questionsList, Long surveyId);
 }
