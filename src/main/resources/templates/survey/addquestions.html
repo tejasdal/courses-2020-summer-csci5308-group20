@@ -9,7 +9,7 @@
 </head>
 <body>
 <h1>Add/Remove Instructor questions to survey</h1>
-<div class="col-md-5">
+<div class="col-md-8">
     <h2>Available Questions</h2>
     <div th:if="${#lists.isEmpty(available)}"><h3>Please add some questions from Question Manager</h3></div>
     <table th:unless="${#lists.isEmpty(available)}" class="table table-sm">
@@ -39,7 +39,7 @@
         </tr>
     </table>
 </div>
-<div class="col-md-5">
+<div class="col-md-8">
     <h2>Survey Questions</h2>
     <div th:if="${#lists.isEmpty(added)}"><h3>No Questions in the Survey - Use Add Option</h3></div>
     <table th:unless="${#lists.isEmpty(added)}" class="table table-sm">

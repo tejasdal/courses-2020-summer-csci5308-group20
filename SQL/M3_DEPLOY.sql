@@ -44,3 +44,6 @@ CREATE TABLE SurveyAnswers (
   FOREIGN KEY (questionId)
   REFERENCES Question (ID)
 );
+
+ALTER TABLE SurveyAnswers
+ADD COLUMN answerIndex INT NULL AFTER answerValue;

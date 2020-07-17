@@ -1,10 +1,10 @@
 package CSCI5308.GroupFormationTool.SurveyManagement;
 
-import CSCI5308.GroupFormationTool.Question.IQuestionOption;
-import CSCI5308.GroupFormationTool.Question.Question;
-import CSCI5308.GroupFormationTool.Question.QuestionOption;
-
 import java.util.List;
+
+import CSCI5308.GroupFormationTool.AccessControl.User;
+import CSCI5308.GroupFormationTool.Question.IQuestion;
+import CSCI5308.GroupFormationTool.Question.IQuestionOption;
 
 public interface ISurveyPersistence {
     boolean createSurvey(long courseId);
@@ -21,11 +21,15 @@ public interface ISurveyPersistence {
 
     int getSurveyStatus(Long surveyId);
 
-    List<Question> getAllSurveyQuestions(long surveyId);
+    List<IQuestion> getAllSurveyQuestions(long surveyId);
 
-    List<Question> getAllInstructorQuestionsUsingCourseId(long courseId, long surveyId);
+    List<IQuestion> getAllInstructorQuestionsUsingCourseId(long courseId, long surveyId);
 
     List<IQuestionOption> getSurveyQuestionOption(Long questionId);
 
     boolean submitAnswers(String bannerId, Long surveyId, Survey survey);
+    
+    List<User> getAllParticipants(Long surveyId);
+    
+    ISurveyResponse getSurveyResponses(Long surveyId);
 }

@@ -37,8 +37,9 @@ public interface IQuestion {
     void setCreatedAt(Date createdAt);
 
     String getQuestionTypeStringMapping(int questionType);
-
+    
+    void setAnswers(List<Answers> answers);
+    
     List<Answers> getAnswers();
 
-    void setAnswers(List<Answers> answers);
 }
