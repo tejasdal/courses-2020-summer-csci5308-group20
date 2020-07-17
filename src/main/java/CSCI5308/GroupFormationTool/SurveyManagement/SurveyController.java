@@ -181,6 +181,6 @@ public class SurveyController {
 			// Logging required
 			model.addAttribute("error", e.getMessage());
 		}
-		return "index";
+		return "survey/generatedgroups";
 	}
 }
