@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Survey Manager</title>
+</head>
+<body>
+<h1>Survey Manager</h1>
+<div th:if="${publishSuccess}" class="alert alert-success" role="alert"><h2>Successfully Published</h2></div>
+<div th:if="${unpublishSuccess}" class="alert alert-danger" role="alert"><h2>Successfully Unpublished</h2></div>
+<div th:if="${status}" class="alert alert-primary">Survey is Published - To make changes Unpublish Survey.</div>
+<div class="col-md-5">
+    <h3>Current List of Questions in the Survey</h3>
+    <div th:if="${#lists.isEmpty(questions)}"><h3>Survey is empty - add questions</h3></div>
+    <table th:unless="${#lists.isEmpty(questions)}" class="table table-sm">
+        <thead class="thead-dark">
+        <tr>
+            <th>Question ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Created on</th>
+            <th>Question Type</th>
+        </tr>
+        </thead>
+        <tr th:each="question : ${questions}">
+            <td th:text="${question.id}"></td>
+            <td th:text="${question.title}"></td>
+            <td th:text="${question.description}"></td>
+            <td th:text="${question.createdAt}"></td>
+            <td th:text="${question.questionTypeString}"></td>
+        </tr>
+    </table>
+</div>
+<br>
+
+<div>
+    <a th:unless="${status}"
+       th:href="@{/instructor/survey/addquestions(courseId=${courseId},surveyId=${surveyId},userId=${userId})}"
+       class="btn btn-primary">
+        Add/Edit Questions</a>
+    <a th:if="${status}"
+       th:href="@{/instructor/survey/creategroup(courseId=${courseId},surveyId=${surveyId},userId=${userId})}"
+       class="btn btn-primary">Generate Group</a>
+</div>
+<br>
+<div th:unless="${#lists.isEmpty(questions)}">
+    <a th:unless="${status}"
+       th:href="@{/instructor/survey/publish(courseId=${courseId},surveyId=${surveyId},userId=${userId})}"
+       class="btn btn-success">Publish Survey</a>
+    <a th:if="${status}"
+       th:href="@{/instructor/survey/unpublish(courseId=${courseId},surveyId=${surveyId},userId=${userId})}"
+       class="btn btn-danger">Unpublish</a>
+</div>
+</body>
+</html>

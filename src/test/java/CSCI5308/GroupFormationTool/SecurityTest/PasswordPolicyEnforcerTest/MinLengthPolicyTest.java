@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MinLengthPolicyTest {
-    String password = "Test123.";
+    private final String password = "Test123.";
 
     @Test
     public void MinLengthPolicyConstructorTest() {

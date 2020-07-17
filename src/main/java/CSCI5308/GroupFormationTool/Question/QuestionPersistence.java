@@ -1,6 +1,10 @@
 package CSCI5308.GroupFormationTool.Question;
 
 import CSCI5308.GroupFormationTool.Database.CallStoredProcedure;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import CSCI5308.GroupFormationTool.Database.DatabaseAbstractFactory;
+import CSCI5308.GroupFormationTool.Database.ICallStoredProcedure;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -10,11 +14,14 @@ import java.util.List;
 
 public class QuestionPersistence implements IQuestionPersistence {
 
+    private Logger log = LoggerFactory.getLogger(QuestionPersistence.class);
+
     @Override
-    public boolean createQuestion(Question question) throws SQLException {
-        CallStoredProcedure proc = null;
+    public boolean createQuestion(IQuestion question) throws SQLException {
+        log.trace("Creating a question with title: {} in database", question.getTitle());
+        ICallStoredProcedure proc = null;
         try{
-            proc = new CallStoredProcedure("spCreateQuestion(?,?,?,?,?,?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spCreateQuestion(?,?,?,?,?,?)");
             proc.setParameter(1, question.getId());
             proc.setParameter(2, question.getTitle());
             proc.setParameter(3, question.getDescription());
@@ -35,10 +42,10 @@ public class QuestionPersistence implements IQuestionPersistence {
     }
 
     private static void createQuestionOptions(List<QuestionOption> questionOptions, Long questionId) throws SQLException {
-        CallStoredProcedure proc = null;
-        try{
-            proc = new CallStoredProcedure("spCreateQuestionOption( ?, ?, ?)");
-            for (QuestionOption questionOption : questionOptions) {
+        ICallStoredProcedure proc = null;
+        try {
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spCreateQuestionOption( ?, ?, ?)");
+            for (IQuestionOption questionOption : questionOptions) {
                 proc.setParameter(1, questionId);
                 proc.setParameter(2, questionOption.getOption());
                 proc.setParameter(3, questionOption.getValue());
@@ -55,13 +62,15 @@ public class QuestionPersistence implements IQuestionPersistence {
 
     @Override
     public boolean deleteQuestion(Long questionId) {
-        CallStoredProcedure proc = null;
+        log.trace("Deleting a question with ID: {} from database", questionId);
+        ICallStoredProcedure proc = null;
         try{
-            proc = new CallStoredProcedure("spDeleteQuestion(?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spDeleteQuestion(?)");
             proc.setParameter(1,questionId);
             proc.execute();
         }
         catch(SQLException e){
+            log.error("Error while deleting question with ID: {} from database, error: {}", questionId, e.getMessage());
             return false;
         }
         finally
@@ -75,16 +84,17 @@ public class QuestionPersistence implements IQuestionPersistence {
     }
 
     @Override
-    public List<Question> getAllUserQuestions(Long userId) {
-        List<Question> questions = new ArrayList<Question>();
-        CallStoredProcedure proc = null;
+    public List<IQuestion> getAllUserQuestions(Long userId) {
+        log.trace("Getting all questions for user with ID: {} from database", userId);
+        List<IQuestion> questions = new ArrayList<IQuestion>();
+        ICallStoredProcedure proc = null;
         try{
-            proc = new CallStoredProcedure("spGetAllQuestionUser(?)");
+            proc = DatabaseAbstractFactory.instance().makeCallStoredProcedure("spGetAllQuestionUser(?)");
             proc.setParameter(1,userId);
             ResultSet rs = proc.executeWithResults();
             if(rs!=null){
                 while(rs.next()){
-                    Question question = new Question();
+                    IQuestion question = QuestionServiceAbstractFactory.instance().makeQuestion();
                     Long id = rs.getLong(1);
                     String title = rs.getString(2);
                     String description = rs.getString(3);
@@ -101,7 +111,7 @@ public class QuestionPersistence implements IQuestionPersistence {
 
         }
         catch(SQLException e){
-            //Logging
+            log.error("Error while getting all questions for user with ID: {} from database, error: {}", userId, e.getMessage());
         }
         finally
         {

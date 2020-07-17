@@ -3,6 +3,8 @@ package CSCI5308.GroupFormationTool.AccessControlTest;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import CSCI5308.GroupFormationTool.AccessControl.IUser;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,16 +15,24 @@ import CSCI5308.GroupFormationTool.AccessControl.User;
 @SuppressWarnings("deprecation")
 public class UserTest
 {
+	private static IUser u;
+	private static IUserPersistence userDBMock;
+
+	@BeforeEach
+	public void setUp(){
+		UserTestAbstractFactory userTestAbstractFactory = new UserTestConcreteFactory();
+		u = userTestAbstractFactory.makeUser();
+		userDBMock = userTestAbstractFactory.makeUserPersistence();
+	}
+
 	@Test
 	public void ConstructorTests()
 	{
-		User u = new User();
 		assertTrue(u.getBannerID().isEmpty());
 		assertTrue(u.getFirstName().isEmpty());
 		assertTrue(u.getLastName().isEmpty());
 		assertTrue(u.getEmail().isEmpty());
 		
-		IUserPersistence userDBMock = new UserDBMock();
 		u = new User(1, userDBMock);
 		assertTrue(u.getBannerID().equals("B00000000"));
 		
@@ -33,7 +43,6 @@ public class UserTest
 	@Test
 	public void setIDTest()
 	{
-		User u = new User();
 		u.setID(10);
 		assertTrue(10 == u.getID());
 	}
@@ -41,7 +50,6 @@ public class UserTest
 	@Test
 	public void getIDTest()
 	{
-		User u = new User();
 		u.setID(10);
 		assertTrue(10 == u.getID());
 	}
@@ -49,7 +57,6 @@ public class UserTest
 	@Test
 	public void setBannerIDTest()
 	{
-		User u = new User();
 		u.setBannerID("B00000000");
 		assertTrue(u.getBannerID().equals("B00000000"));
 	}
@@ -57,7 +64,6 @@ public class UserTest
 	@Test
 	public void getBannerIDTest()
 	{
-		User u = new User();
 		u.setBannerID("B00000000");
 		assertTrue(u.getBannerID().equals("B00000000"));
 	}
@@ -65,7 +71,6 @@ public class UserTest
 	@Test
 	public void setFirstNameTest()
 	{
-		User u = new User();
 		u.setFirstName("Rob");
 		assertTrue(u.getFirstName().equals("Rob"));
 	}
@@ -73,7 +78,6 @@ public class UserTest
 	@Test
 	public void getFirstNameTest()
 	{
-		User u = new User();
 		u.setFirstName("Rob");
 		assertTrue(u.getFirstName().equals("Rob"));
 	}
@@ -81,7 +85,6 @@ public class UserTest
 	@Test
 	public void setLastNameTest()
 	{
-		User u = new User();
 		u.setLastName("Hawkey");
 		assertTrue(u.getLastName().equals("Hawkey"));
 	}
@@ -89,7 +92,6 @@ public class UserTest
 	@Test
 	public void getLastNameTest()
 	{
-		User u = new User();
 		u.setLastName("Hawkey");
 		assertTrue(u.getLastName().equals("Hawkey"));
 	}
@@ -97,7 +99,6 @@ public class UserTest
 	@Test
 	public void setEmailTest()
 	{
-		User u = new User();
 		u.setEmail("rhawkey@dal.ca");
 		assertTrue(u.getEmail().equals("rhawkey@dal.ca"));
 	}
@@ -105,7 +106,6 @@ public class UserTest
 	@Test
 	public void getEmailTest()
 	{
-		User u = new User();
 		u.setEmail("rhawkey@dal.ca");
 		assertTrue(u.getEmail().equals("rhawkey@dal.ca"));
 	}
@@ -113,9 +113,8 @@ public class UserTest
 	@Test
 	public void createUser()
 	{		
-		IUserPersistence userDB = new UserDBMock();
 		User user = new User();
-		userDB.createUser(user);
+		userDBMock.createUser(user);
 		assertTrue(user.getId() == 0);
 		assertTrue(user.getBannerID().equals("B00000000"));
 	}

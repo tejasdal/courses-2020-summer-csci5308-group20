@@ -1,6 +1,6 @@
 package CSCI5308.GroupFormationTool.SecurityTest.PasswordPolicyEnforcerTest;
 
-import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.IPasswordPersistence;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.IPasswordPolicyPersistence;
 import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.RememberedPasswordPolicy;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ public class RememberedPasswordPolicyTest {
 
     @Test
     public void validate() {
-        IPasswordPersistence mock = new PasswordPolicyPersistenceMock();
+        IPasswordPolicyPersistence mock = PasswordPolicyEnforcerTestAbstractFactory.instance().makePersistence();
         List<String> oldPasswords = mock.getPasswordHistoryByUserId("TEST", 2);
         boolean passwordPresent = false;
         for (String oldPass : oldPasswords) {

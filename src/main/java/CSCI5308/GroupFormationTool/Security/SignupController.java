@@ -2,8 +2,11 @@ package CSCI5308.GroupFormationTool.Security;
 
 import CSCI5308.GroupFormationTool.AccessControl.IUserPersistence;
 import CSCI5308.GroupFormationTool.AccessControl.User;
-import CSCI5308.GroupFormationTool.CustomExceptions.PasswordPolicyVoidException;
 import CSCI5308.GroupFormationTool.SystemConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import CSCI5308.GroupFormationTool.AccessControl.UserPersistenceAbstractFactory;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.PasswordPolicyServiceAbstractFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class SignupController {
+
+    private Logger log = LoggerFactory.getLogger(SignupController.class);
     private final String USERNAME = "username";
     private final String PASSWORD = "password";
     private final String PASSWORD_CONFIRMATION = "passwordConfirmation";
@@ -23,6 +28,7 @@ public class SignupController {
 
     @GetMapping("/signup")
     public String displaySignup(Model model) {
+        log.info("Processing a request to load a signup page.");
         return "signup";
     }
 
@@ -34,6 +40,7 @@ public class SignupController {
             @RequestParam(name = FIRST_NAME) String firstName,
             @RequestParam(name = LAST_NAME) String lastName,
             @RequestParam(name = EMAIL) String email) {
+        log.info("Processing a request to signup a user with banner ID: {}.", bannerID);
         boolean success = false;
         ModelAndView m;
         try {
@@ -42,18 +49,19 @@ public class SignupController {
                     User.isFirstNameValid(firstName) &&
                     User.isLastNameValid(lastName) &&
                     password.equals(passwordConfirm) &&
-                    SystemConfig.instance().getPasswordPolicyService().validateUsingPolicies(password)) {
+                    PasswordPolicyServiceAbstractFactory.instance().makeService().validateUsingPolicies(password)) {
                 User u = new User();
                 u.setBannerID(bannerID);
                 u.setPassword(password);
                 u.setFirstName(firstName);
                 u.setLastName(lastName);
                 u.setEmail(email);
-                IUserPersistence userDB = SystemConfig.instance().getUserDB();
-                IPasswordEncryption passwordEncryption = SystemConfig.instance().getPasswordEncryption();
+                IUserPersistence userDB = UserPersistenceAbstractFactory.instance().makeUserPersistence();
+                IPasswordEncryption passwordEncryption = PasswordEncryptionAbstractFactory.instance().makePasswordEncryption();
                 success = u.createUser(userDB, passwordEncryption, null);
             }
-        } catch (PasswordPolicyVoidException e) {
+        } catch (Exception e) {
+            log.info("Failed to singup a user with banner ID: {}, error: {}", e.getMessage());
             //add error messages in model
             m = new ModelAndView("signup");
             m.addObject("errorMessage", e.getMessage());
@@ -61,10 +69,8 @@ public class SignupController {
         }
 
         if (success) {
-            // This is lame, I will improve this with auto-signin for M2.
             m = new ModelAndView("login");
         } else {
-            // Something wrong with the input data.
             m = new ModelAndView("signup");
             m.addObject("errorMessage", "Invalid data, please check your values.");
         }

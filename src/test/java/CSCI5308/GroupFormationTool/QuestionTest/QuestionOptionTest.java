@@ -1,6 +1,8 @@
 package CSCI5308.GroupFormationTool.QuestionTest;
 
+import CSCI5308.GroupFormationTool.Question.IQuestionOption;
 import CSCI5308.GroupFormationTool.Question.QuestionOption;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.Assert;
@@ -10,13 +12,24 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class QuestionOptionTest {
 
+    private static IQuestionOption emptyQuestionOption;
+    private static IQuestionOption questionOption;
+
+    @BeforeAll
+    public static void setUp(){
+        QuestionTestAbstractFactory questionTestAbstractFactory = new QuestionTestConcreteFactory();
+        emptyQuestionOption = questionTestAbstractFactory.makeEmptyQuestionOption();
+        questionOption = questionTestAbstractFactory.makeQuestionOption();
+        questionOption.setQuestionId(5L);
+    }
+
     @Test
     void ConstructorTest()
     {
-        QuestionOption noArgsQuestionOption = new QuestionOption();
+        IQuestionOption noArgsQuestionOption = emptyQuestionOption;
         Assert.notNull(noArgsQuestionOption, "Test case for no-args QuestionOption Constructor is failed!");
 
-        QuestionOption allArgsQuestionOption = this.getAllArgsQuestionOption();
+        IQuestionOption allArgsQuestionOption = questionOption;
         Assert.notNull(allArgsQuestionOption, "Test case for all-args QuestionOption Constructor is failed!");
         Assert.isTrue(1L == allArgsQuestionOption.getId(), "Test case for all-args QuestionOption Constructor is failed!");
     }
@@ -31,35 +44,31 @@ class QuestionOptionTest {
     @Test
     void getOption()
     {
-        QuestionOption questionOption = this.getAllArgsQuestionOption();
         Assert.isTrue("Test Option".equals(questionOption.getOption()), "Test case for Get Option is failed.");
     }
 
     @Test
     void getQuestionId()
     {
-        QuestionOption questionOption = this.getAllArgsQuestionOption();
         Assert.isTrue( 5L == questionOption.getQuestionId(), "Test case for Get QuestionID is failed.");
     }
 
     @Test
     void getValue()
     {
-        QuestionOption questionOption = this.getAllArgsQuestionOption();
         Assert.isTrue( 1 == questionOption.getValue(), "Test case for Get Value is failed.");
     }
 
     @Test
     void getId()
     {
-        QuestionOption questionOption = this.getAllArgsQuestionOption();
         Assert.isTrue(1L == questionOption.getId(), "Test case for Get ID is failed.");
     }
 
     @Test
     void setId()
     {
-        QuestionOption questionOption = new QuestionOption();
+        IQuestionOption questionOption = emptyQuestionOption;
         questionOption.setId(1L);
         Assert.isTrue(1L == questionOption.getId(), "Test case for Set ID is failed.");
     }
@@ -67,7 +76,7 @@ class QuestionOptionTest {
     @Test
     void setQuestionId()
     {
-        QuestionOption questionOption = new QuestionOption();
+        IQuestionOption questionOption = emptyQuestionOption;
         questionOption.setQuestionId(5L);
         Assert.isTrue(5L == questionOption.getQuestionId(), "Test case for Set QuestionID is failed.");
     }
@@ -75,7 +84,7 @@ class QuestionOptionTest {
     @Test
     void setOption()
     {
-        QuestionOption questionOption = new QuestionOption();
+        IQuestionOption questionOption = emptyQuestionOption;
         questionOption.setOption("Test Option");
         Assert.isTrue("Test Option".equals(questionOption.getOption()), "Test case for Set Option is failed.");
     }
@@ -83,7 +92,7 @@ class QuestionOptionTest {
     @Test
     void setValue()
     {
-        QuestionOption questionOption = new QuestionOption();
+        IQuestionOption questionOption = emptyQuestionOption;
         questionOption.setValue(1);
         Assert.isTrue(1 == questionOption.getValue(), "Test case for Set Value is failed.");
     }

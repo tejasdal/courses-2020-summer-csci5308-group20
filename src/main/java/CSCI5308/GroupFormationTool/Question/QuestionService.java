@@ -13,28 +13,28 @@ public class QuestionService implements IQuestionService {
     Logger log = LoggerFactory.getLogger(QuestionService.class);
 
     @Override
-    public void createQuestion(Question question, IQuestionPersistence questionPersistence) throws QuestionException {
+    public void createQuestion(Question question, IQuestionPersistence questionPersistence) throws Exception {
         if (question == null || question.getTitle() == null || question.getTitle().isEmpty()
                 || question.getDescription() == null || question.getDescription().isEmpty()){
-            log.error("Question details is not valid.");
-            throw new QuestionException("Invalid question. Please provide valid details!");
+            log.debug("Question details is not valid.");
+            throw new Exception("Invalid question. Please provide valid details!");
         }
         if (isInvalidQuestionType(question.getQuestionType())){
-            log.error("Question type for given question is not valid.");
-            throw new QuestionException("Invalid question type.");
+            log.debug("Question type for given question is not valid.");
+            throw new Exception("Invalid question type.");
         }
         question.setId(System.currentTimeMillis());
         question.setCreatedAt(new Date(System.currentTimeMillis()));
         try {
             questionPersistence.createQuestion(question);
         } catch (SQLException e) {
-            log.error("Failed to store question: {} in the database.",question.getTitle(), e);
-            throw new QuestionException("Failed to save question:"+ question.getTitle() +". Please contact admin.");
+            log.error("Failed to store question: {} in the database, error: {}",question.getTitle(), e.getMessage());
+            throw new Exception("Failed to save question:"+ question.getTitle() +". Please contact admin.", e);
         }
     }
 
     @Override
-    public List<Question> getAllUserQuestions
+    public List<IQuestion> getAllUserQuestions
             (Long userId, IQuestionPersistence questionPersistence) {
         return questionPersistence.getAllUserQuestions(userId);
     }
@@ -45,15 +45,15 @@ public class QuestionService implements IQuestionService {
     }
 
     @Override
-    public List<Question> getAllUserQuestionsSortedByTitle(Long userId, IQuestionPersistence questionPersistence) {
-        List<Question> questions = questionPersistence.getAllUserQuestions(userId);
+    public List<IQuestion> getAllUserQuestionsSortedByTitle(Long userId, IQuestionPersistence questionPersistence) {
+        List<IQuestion> questions = questionPersistence.getAllUserQuestions(userId);
         Collections.sort(questions,Question.titleComparator);
         return questions;
     }
 
     @Override
-    public List<Question> getAllUserQuestionsSortedByDate(Long userId, IQuestionPersistence questionPersistence) {
-        List<Question> questions = questionPersistence.getAllUserQuestions(userId);
+    public List<IQuestion> getAllUserQuestionsSortedByDate(Long userId, IQuestionPersistence questionPersistence) {
+        List<IQuestion> questions = questionPersistence.getAllUserQuestions(userId);
         Collections.sort(questions,Question.dateComparator);
         return questions;
     }
