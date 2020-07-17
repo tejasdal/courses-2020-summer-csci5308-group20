@@ -2,8 +2,7 @@ package CSCI5308.GroupFormationTool.Database;
 
 import java.sql.*;
 
-public class CallStoredProcedure
-{
+public class CallStoredProcedure implements ICallStoredProcedure {
 	private String storedProcedureName;
 	private Connection connection;
 	private CallableStatement statement;
@@ -24,9 +23,10 @@ public class CallStoredProcedure
 	
 	private void openConnection() throws SQLException
 	{
-		connection = ConnectionManager.instance().getDBConnection();
+		connection = DatabaseAbstractFactory.instance().makeConnectionManager().getDBConnection();
 	}
 	
+	@Override
 	public void cleanup()
 	{
 		try
@@ -49,31 +49,37 @@ public class CallStoredProcedure
 		}
 	}
 	
+	@Override
 	public void setParameter(int paramIndex, String value) throws SQLException
 	{
 		statement.setString(paramIndex, value);
 	}
 
+	@Override
 	public void setParameter(int paramIndex, Date value) throws SQLException
 	{
 		statement.setDate(paramIndex, value);
 	}
 	
+	@Override
 	public void registerOutputParameterString(int paramIndex) throws SQLException
 	{
 		statement.registerOutParameter(paramIndex, java.sql.Types.VARCHAR);
 	}
 	
+	@Override
 	public void setParameter(int paramIndex, long value) throws SQLException
 	{
 		statement.setLong(paramIndex, value);
 	}
 	
+	@Override
 	public void registerOutputParameterLong(int paramIndex) throws SQLException
 	{
 		statement.registerOutParameter(paramIndex, java.sql.Types.BIGINT);
 	}
 	
+	@Override
 	public ResultSet executeWithResults() throws SQLException
 	{
 		if (statement.execute())
@@ -83,15 +89,18 @@ public class CallStoredProcedure
 		return null;
 	}
 	
+	@Override
 	public void execute() throws SQLException
 	{
 		statement.execute();
 	}
 
+	@Override
 	public void addBatch() throws SQLException {
 		statement.addBatch();
 	}
 
+	@Override
 	public void executeBatch() throws SQLException {
 		statement.executeBatch();
 	}
