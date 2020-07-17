@@ -170,13 +170,17 @@ public class SurveyController {
 			@RequestParam(name = "bannerId", required = false) String bannerId, ModelMap model) {
 		ISurveyService service = SurveyFactory.instance().createService();
 		ISurveyPersistence persistence = SurveyFactory.instance().createPersistence();
+		ISurveyResponse surveyResponses = persistence.getSurveyResponses(surveyId);
 		try {
 			service.validateQuestionCriteriaList(questionCriteriaList);
 			List<List<User>> groups = service.createGroups(questionCriteriaList, surveyId,
-					questionCriteriaList.getMembersPerGroup(), persistence);
+					questionCriteriaList.getMembersPerGroup(), surveyResponses, persistence);
+			System.out.println(groups);
 			model.addAttribute("groups", groups);
+			model.addAttribute("responses", surveyResponses.getAllUserAnswers());
 		} catch (IOException e) {
 			// Logging required
+			e.printStackTrace();
 			model.addAttribute("error", "Internal server error. Please try again later.");
 		} catch (Exception e) {
 			// Logging required

@@ -13,6 +13,10 @@ public class SurveyResponse implements ISurveyResponse {
 		allUserAnswers = new HashMap<>();
 	}
 
+	public Map<Long, Map<Long, List<UserAnswer>>> getAllUserAnswers() {
+		return allUserAnswers;
+	}
+	
 	@Override
 	public List<UserAnswer> getUserAnswers(Long questionId, Long userId) throws IOException {
 		if (allUserAnswers.containsKey(questionId) && allUserAnswers.get(questionId).containsKey(userId)) {
