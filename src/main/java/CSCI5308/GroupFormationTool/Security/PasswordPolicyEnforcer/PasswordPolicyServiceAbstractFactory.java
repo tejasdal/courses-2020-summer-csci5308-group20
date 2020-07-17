@@ -1,17 +1,22 @@
 package CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer;
 
+import java.util.List;
+
 public abstract class PasswordPolicyServiceAbstractFactory {
 
     private static PasswordPolicyServiceAbstractFactory uniqueInstance = null;
 
-    protected PasswordPolicyServiceAbstractFactory(){}
+    protected PasswordPolicyServiceAbstractFactory() {
+    }
 
-    public static PasswordPolicyServiceAbstractFactory instance(){
-        if(uniqueInstance == null){
+    public static PasswordPolicyServiceAbstractFactory instance() {
+        if (uniqueInstance == null) {
             uniqueInstance = new PasswordPolicyServiceConcreteFactory();
         }
         return uniqueInstance;
     }
 
-    //Create abstract Methods & implement in concrete class, remove the comment once done
+    public abstract IPasswordPolicyService makeService();
+
+    public abstract List<IPasswordPolicy> getPolicy();
 }

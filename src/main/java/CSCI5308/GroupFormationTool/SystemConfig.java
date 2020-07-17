@@ -2,7 +2,10 @@ package CSCI5308.GroupFormationTool;
 
 import CSCI5308.GroupFormationTool.AccessControl.IUserPersistence;
 import CSCI5308.GroupFormationTool.AccessControl.UserDB;
-import CSCI5308.GroupFormationTool.AdminConfig.*;
+import CSCI5308.GroupFormationTool.AdminConfig.AdminConfigPersistence;
+import CSCI5308.GroupFormationTool.AdminConfig.AdminConfigService;
+import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigPersistence;
+import CSCI5308.GroupFormationTool.AdminConfig.IAdminConfigService;
 import CSCI5308.GroupFormationTool.Courses.CourseDB;
 import CSCI5308.GroupFormationTool.Courses.CourseUserRelationshipDB;
 import CSCI5308.GroupFormationTool.Courses.ICoursePersistence;
@@ -15,15 +18,10 @@ import CSCI5308.GroupFormationTool.Question.QuestionPersistence;
 import CSCI5308.GroupFormationTool.Question.QuestionService;
 import CSCI5308.GroupFormationTool.Security.BCryptPasswordEncryption;
 import CSCI5308.GroupFormationTool.Security.IPasswordEncryption;
-import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.*;
 import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyPersistence;
 import CSCI5308.GroupFormationTool.SurveyManagement.ISurveyService;
 import CSCI5308.GroupFormationTool.SurveyManagement.SurveyPersistence;
 import CSCI5308.GroupFormationTool.SurveyManagement.SurveyService;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /*
  * This is a singleton, we will learn about these when we learn design patterns.
@@ -38,8 +36,8 @@ public class SystemConfig {
     private static SystemConfig uniqueInstance = null;
     private final IAdminConfigService adminConfigService;
     private final IAdminConfigPersistence adminConfigPersistence;
-    private final IPasswordPolicyService passwordPolicyService;
-    private final IPasswordPersistence passwordPersistence;
+    //    private final IPasswordPolicyService passwordPolicyService;
+//    private final IPasswordPersistence passwordPersistence;
     private final IQuestionPersistence questionPersistence;
     private final IQuestionService questionService;
     private IPasswordEncryption passwordEncryption;
@@ -47,13 +45,13 @@ public class SystemConfig {
     private IDatabaseConfiguration databaseConfiguration;
     private ICoursePersistence courseDB;
     private ICourseUserRelationshipPersistence courseUserRelationshipDB;
-    private IPasswordPolicy maxLengthPolicy;
-    private IPasswordPolicy minLengthPolicy;
-    private IPasswordPolicy minLowerCasePolicy;
-    private IPasswordPolicy minSymbolPolicy;
-    private IPasswordPolicy minUpperCasePolicy;
-    private IPasswordPolicy restrictedSymbolCasePolicy;
-    private IPasswordPolicy rememberedPasswordPolicy;
+    //    private IPasswordPolicy maxLengthPolicy;
+//    private IPasswordPolicy minLengthPolicy;
+//    private IPasswordPolicy minLowerCasePolicy;
+//    private IPasswordPolicy minSymbolPolicy;
+//    private IPasswordPolicy minUpperCasePolicy;
+//    private IPasswordPolicy restrictedSymbolCasePolicy;
+//    private IPasswordPolicy rememberedPasswordPolicy;
     private ISurveyService surveyService;
     private ISurveyPersistence surveyPersistence;
 
@@ -71,8 +69,8 @@ public class SystemConfig {
         courseUserRelationshipDB = new CourseUserRelationshipDB();
         adminConfigService = new AdminConfigService();
         adminConfigPersistence = new AdminConfigPersistence();
-        passwordPolicyService = new PasswordPolicyService();
-        passwordPersistence = new PasswordPolicyPersistence();
+//        passwordPolicyService = new PasswordPolicyService();
+//        passwordPersistence = new PasswordPolicyPersistence();
         questionPersistence = new QuestionPersistence();
         questionService = new QuestionService();
         surveyPersistence = new SurveyPersistence();
@@ -136,52 +134,52 @@ public class SystemConfig {
     public IAdminConfigPersistence getAdminConfigPersistence() {
         return adminConfigPersistence;
     }
+//
+//    public IPasswordPolicyService getPasswordPolicyService() {
+//        return passwordPolicyService;
+//    }
 
-    public IPasswordPolicyService getPasswordPolicyService() {
-        return passwordPolicyService;
-    }
+//    public IPasswordPersistence getPasswordPersistence() {
+//        return passwordPersistence;
+//    }
 
-    public IPasswordPersistence getPasswordPersistence() {
-        return passwordPersistence;
-    }
-
-    public List<IPasswordPolicy> getPolicy() {
-        Map<String, String> allConfig = AdminConfigServiceAbstractFactory.instance().makeAdminConfigService().getAllConfig();
-        List<IPasswordPolicy> policies = new ArrayList<>();
-        for (Map.Entry<String, String> entry : allConfig.entrySet()) {
-            if (entry.getKey().startsWith("PASSWORD_")) {
-                switch (entry.getKey()) {
-                    case MinLengthPolicy.POLICY_NAME:
-                        policies.add(new MinLengthPolicy(entry.getValue()));
-                        break;
-                    case MaxLengthPolicy.POLICY_NAME:
-                        policies.add(new MaxLengthPolicy(entry.getValue()));
-                        break;
-                    case MinLowerCasePolicy.POLICY_NAME:
-                        policies.add(new MinLowerCasePolicy(entry.getValue()));
-                        break;
-                    case MinSymbolPolicy.POLICY_NAME:
-                        policies.add(new MinSymbolPolicy(entry.getValue()));
-                        break;
-                    case MinUpperCasePolicy.POLICY_NAME:
-                        policies.add(new MinUpperCasePolicy(entry.getValue()));
-                        break;
-                    case RestrictedSymbolCasePolicy.POLICY_NAME:
-                        policies.add(new RestrictedSymbolCasePolicy(entry.getValue()));
-                        break;
-                    case RememberedPasswordPolicy.POLICY_NAME:
-                        policies.add(new RememberedPasswordPolicy(entry.getValue()));
-                        break;
-                    default:
-                        return null;
-                }
-            }
-        }
-        if (policies.isEmpty()) {
-            return null;
-        }
-        return policies;
-    }
+//    public List<IPasswordPolicy> getPolicy() {
+//        Map<String, String> allConfig = AdminConfigServiceAbstractFactory.instance().makeAdminConfigService().getAllConfig();
+//        List<IPasswordPolicy> policies = new ArrayList<>();
+//        for (Map.Entry<String, String> entry : allConfig.entrySet()) {
+//            if (entry.getKey().startsWith("PASSWORD_")) {
+//                switch (entry.getKey()) {
+//                    case MinLengthPolicy.POLICY_NAME:
+//                        policies.add(new MinLengthPolicy(entry.getValue()));
+//                        break;
+//                    case MaxLengthPolicy.POLICY_NAME:
+//                        policies.add(new MaxLengthPolicy(entry.getValue()));
+//                        break;
+//                    case MinLowerCasePolicy.POLICY_NAME:
+//                        policies.add(new MinLowerCasePolicy(entry.getValue()));
+//                        break;
+//                    case MinSymbolPolicy.POLICY_NAME:
+//                        policies.add(new MinSymbolPolicy(entry.getValue()));
+//                        break;
+//                    case MinUpperCasePolicy.POLICY_NAME:
+//                        policies.add(new MinUpperCasePolicy(entry.getValue()));
+//                        break;
+//                    case RestrictedSymbolCasePolicy.POLICY_NAME:
+//                        policies.add(new RestrictedSymbolCasePolicy(entry.getValue()));
+//                        break;
+//                    case RememberedPasswordPolicy.POLICY_NAME:
+//                        policies.add(new RememberedPasswordPolicy(entry.getValue()));
+//                        break;
+//                    default:
+//                        return null;
+//                }
+//            }
+//        }
+//        if (policies.isEmpty()) {
+//            return null;
+//        }
+//        return policies;
+//    }
 
     public IQuestionPersistence getQuestionPersistence() {
         return questionPersistence;

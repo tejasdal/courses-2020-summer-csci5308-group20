@@ -13,5 +13,5 @@ public abstract class PasswordPolicyPersistenceAbstractFactory {
         return uniqueInstance;
     }
 
-    //Create abstract Methods & implement in concrete class, remove the comment once done
+    public abstract IPasswordPolicyPersistence makePersistence();
 }

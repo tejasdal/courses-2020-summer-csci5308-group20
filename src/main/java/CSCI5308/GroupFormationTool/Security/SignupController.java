@@ -4,7 +4,7 @@ import CSCI5308.GroupFormationTool.AccessControl.IUserPersistence;
 import CSCI5308.GroupFormationTool.AccessControl.User;
 import CSCI5308.GroupFormationTool.AccessControl.UserPersistenceAbstractFactory;
 import CSCI5308.GroupFormationTool.CustomExceptions.PasswordPolicyVoidException;
-import CSCI5308.GroupFormationTool.SystemConfig;
+import CSCI5308.GroupFormationTool.Security.PasswordPolicyEnforcer.PasswordPolicyServiceAbstractFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +43,7 @@ public class SignupController {
                     User.isFirstNameValid(firstName) &&
                     User.isLastNameValid(lastName) &&
                     password.equals(passwordConfirm) &&
-                    SystemConfig.instance().getPasswordPolicyService().validateUsingPolicies(password)) {
+                    PasswordPolicyServiceAbstractFactory.instance().makeService().validateUsingPolicies(password)) {
                 User u = new User();
                 u.setBannerID(bannerID);
                 u.setPassword(password);
@@ -55,17 +55,14 @@ public class SignupController {
                 success = u.createUser(userDB, passwordEncryption, null);
             }
         } catch (PasswordPolicyVoidException e) {
-            //add error messages in model
             m = new ModelAndView("signup");
             m.addObject("errorMessage", e.getMessage());
             return m;
         }
 
         if (success) {
-            // This is lame, I will improve this with auto-signin for M2.
             m = new ModelAndView("login");
         } else {
-            // Something wrong with the input data.
             m = new ModelAndView("signup");
             m.addObject("errorMessage", "Invalid data, please check your values.");
         }
