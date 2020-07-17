@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 // Singleton for retrieving connections.
-public class ConnectionManager {
+public class ConnectionManager implements IConnectionManager {
     private static ConnectionManager uniqueInstance = null;
 
     private String dbURL;
@@ -15,7 +15,7 @@ public class ConnectionManager {
     private String dbPassword;
 
     public ConnectionManager() {
-        IDatabaseConfiguration config = SystemConfig.instance().getDatabaseConfiguration();
+        IDatabaseConfiguration config = DatabaseAbstractFactory.instance().makeDatabaseConfiguration();
         dbURL = config.getDatabaseURL();
         dbUserName = config.getDatabaseUserName();
         dbPassword = config.getDatabasePassword();
@@ -28,6 +28,7 @@ public class ConnectionManager {
         return uniqueInstance;
     }
 
+    @Override
     public Connection getDBConnection() throws SQLException {
 
         Connection connection = DriverManager.getConnection(dbURL, dbUserName, dbPassword);

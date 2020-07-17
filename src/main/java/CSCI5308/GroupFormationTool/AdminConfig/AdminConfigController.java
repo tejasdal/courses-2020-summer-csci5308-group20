@@ -19,7 +19,7 @@ public class AdminConfigController {
 
 	@GetMapping("/admin/config")
 	public String displayAdminConfig(Model model) {
-		IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
+		IAdminConfigService adminConfigService = AdminConfigServiceAbstractFactory.instance().makeAdminConfigService();
 		model.addAttribute("config", adminConfigService.getAllConfig());
 		return "adminconfig";
 	}
@@ -43,8 +43,8 @@ public class AdminConfigController {
 			mav.addObject("errorMessage", "Value is too long");
 			return mav;
 		}
-		IAdminConfigPersistence persistence = SystemConfig.instance().getAdminConfigPersistence();
-		IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
+		IAdminConfigPersistence persistence = AdminConfigPersistenceAbstractFactory.instance().makeAdminConfigPersistence();
+		IAdminConfigService adminConfigService = AdminConfigServiceAbstractFactory.instance().makeAdminConfigService();
 		boolean result = false;
 		try {
 			result = adminConfigService.addConfig(key, value, persistence);
@@ -75,8 +75,8 @@ public class AdminConfigController {
 			mav.addObject("errorMessage", "Value is too long");
 			return mav;
 		}
-		IAdminConfigPersistence persistence = SystemConfig.instance().getAdminConfigPersistence();
-		IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
+		IAdminConfigPersistence persistence = AdminConfigPersistenceAbstractFactory.instance().makeAdminConfigPersistence();
+		IAdminConfigService adminConfigService = AdminConfigServiceAbstractFactory.instance().makeAdminConfigService();
 		boolean result = false;
 		try {
 			result = adminConfigService.updateConfig(key, value, persistence);
@@ -98,8 +98,8 @@ public class AdminConfigController {
 			mav.addObject("errorMessage", "Key is too long");
 			return mav;
 		}
-		IAdminConfigPersistence persistence = SystemConfig.instance().getAdminConfigPersistence();
-		IAdminConfigService adminConfigService = SystemConfig.instance().getAdminConfigService();
+		IAdminConfigPersistence persistence = AdminConfigPersistenceAbstractFactory.instance().makeAdminConfigPersistence();
+		IAdminConfigService adminConfigService = AdminConfigServiceAbstractFactory.instance().makeAdminConfigService();
 		boolean result = false;
 		try {
 			result = adminConfigService.deleteConfig(key, persistence);

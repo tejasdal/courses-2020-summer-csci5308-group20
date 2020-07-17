@@ -25,7 +25,7 @@ public class CurrentUser
 	
 	public User getCurrentAuthenticatedUser()
 	{
-		IUserPersistence userDB = SystemConfig.instance().getUserDB();
+		IUserPersistence userDB = UserPersistenceAbstractFactory.instance().makeUserPersistence();
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication.isAuthenticated())
 		{

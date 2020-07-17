@@ -23,7 +23,7 @@ public class InstructorAdminController {
 
     @GetMapping("/course/instructoradmin")
     public String instructorAdmin(Model model, @RequestParam(name = ID) long courseID) {
-        ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+        ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
         Course course = new Course();
         courseDB.loadCourseByID(courseID, course);
         model.addAttribute("course", course);
@@ -48,7 +48,7 @@ public class InstructorAdminController {
             @RequestParam(name = SUCCESSFUL, required = false) List<String> successful,
             @RequestParam(name = FAILURES, required = false) List<String> failures,
             @RequestParam(name = DISPLAY_RESULTS) boolean displayResults) {
-        ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+        ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
         Course course = new Course();
         courseDB.loadCourseByID(courseID, course);
         model.addAttribute("course", course);
@@ -67,7 +67,7 @@ public class InstructorAdminController {
 
     @GetMapping("/course/enrollta")
     public String enrollTA(Model model, @RequestParam(name = ID) long courseID) {
-        ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+        ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
         Course course = new Course();
         courseDB.loadCourseByID(courseID, course);
         model.addAttribute("course", course);
@@ -81,10 +81,10 @@ public class InstructorAdminController {
 
     @RequestMapping(value = "/course/uploadcsv", consumes = {"multipart/form-data"})
     public ModelAndView upload(@RequestParam(name = FILE) MultipartFile file, @RequestParam(name = ID) long courseID) {
-        ICoursePersistence courseDB = SystemConfig.instance().getCourseDB();
+        ICoursePersistence courseDB = CoursePersistenceAbstractFactory.instance().makeCoursePersistence();
         Course course = new Course();
         courseDB.loadCourseByID(courseID, course);
-        IStudentCSVParser parser = new StudentCSVParser(file);
+        IStudentCSVParser parser = CourseModelAbstractFactory.instance().makeStudentCSVParser(file);
         StudentCSVImport importer = new StudentCSVImport(parser, course);
         ModelAndView mav = new ModelAndView("redirect:/course/instructoradminresults?id=" + Long.toString(courseID));
         mav.addObject("successful", importer.getSuccessResults());
